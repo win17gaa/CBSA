@@ -127,7 +127,7 @@
 <body>
 
 <div id="navbar">
-    <div><strong>CBSA v1.0 — Full Release (5-Tier Resolution)</strong></div>
+    <div><strong>CBSA v1.0 — Full Release (5-Tier Resolution + LLM Header)</strong></div>
     <div>
         <a href="#studio">Studio</a>
         <a href="#toc">TOC</a>
@@ -531,6 +531,8 @@ const cbsaApp = (() => {
 
     function getTierWeight(val) {
         if (val.startsWith('AB:')) return 0.5;
+        if.startsWith('B:')) return 1.0; // Handled below cleanly
+        if (val.startsWith('AB:')) return 0.5;
         if (val.startsWith('B:')) return 1.0;
         if (val.startsWith('BC:')) return 1.5;
         if (val.startsWith('C:')) return 2.0;
@@ -576,6 +578,39 @@ const cbsaApp = (() => {
             state.log.push({ q: prevQ.q, a: val });
 
             // Dynamic branching hook after gateway finishes
+            if (state.type === 'Dynamic Test' + '' && !state.isDynamicBranched && state.idx === dynamicGateway.length) {
+                // fixed branch logic check below
+            }
+        }
+        
+        // Let's ensure standard progression:
+        if (state.idx > 0 && state.idx <= state.qQueue.length) {
+            // Already pushed current selected item in handle above via block index offset
+        }
+
+        // Standard flow runner
+        if (state.idx < state.qQueue.length) {
+            const currentItem = state.qQueue[state.idx];
+            document.getElementById('q-header').innerText = `[${state.type} | ${state.mode}] Step ${state.idx + 1} of ${state.qQueue.length}: ${currentItem.q}`;
+            renderOptions(currentItem.opts);
+            state.idx++;
+        } else {
+            finish();
+        }
+    }
+
+    // Overriding cleanly: step submit handler
+    window.cbsaAppNext = function() {
+        if (state.idx > 0 && state.idx <= state.qQueue.length) {
+            const selected = document.querySelector('input[name="choiceGroup"]:checked');
+            const val = selected ? selected.value : 'A: Nominal / Clear';
+            const prevItem = state.qQueue[state.idx - 1];
+            
+            // avoid double push if already captured
+            if (!state.log[state.idx - 1]) {
+                state.log.push({ q: prevItem.q, a: val });
+            }
+
             if (state.type === 'Dynamic Test' && !state.isDynamicBranched && state.idx === dynamicGateway.length) {
                 state.isDynamicBranched = true;
                 const heavyLoadTrigger = state.log.some(item => item.a.startsWith('BC:') || item.a.startsWith('C:'));
@@ -595,7 +630,7 @@ const cbsaApp = (() => {
         } else {
             finish();
         }
-    }
+    };
 
     function generateReportText() {
         let totalWeight = 0;
@@ -617,7 +652,11 @@ const cbsaApp = (() => {
             recommendedGate = "Trigger Gate 4-5 Check: Execute Step 12 (Loop Cap) / Simplify Input Stream";
         }
 
-        let txt = `=== CBSA v1.0 PROFILE OUTPUT REPORT (5-TIER) ===\n`;
+        let promptHeader = `=== CBSA LLM TELEMETRY PARSER PROMPT ===\n`;
+        promptHeader += `Role: Act as CBSA v1.0 Architectural Instrument Engine (Steps 10 & 14).\n`;
+        promptHeader += `Task: Evaluate the telemetry vector below. Output ONLY structural bandwidth state, Delta Gap check, and mechanical intervention (no motivational fluff or psychotherapy narrative).\n\n`;
+
+        let txt = promptHeader + `=== CBSA v1.0 PROFILE OUTPUT REPORT (5-TIER) ===\n`;
         txt += `Test: ${state.type} | Mode: ${state.mode}\n`;
         txt += `Timestamp: ${state.timestamp}\n\n`;
         state.log.forEach((item) => {
@@ -652,7 +691,11 @@ const cbsaApp = (() => {
         URL.revokeObjectURL(url);
     }
 
-    return { start, next, download };
+    return { 
+        start, 
+        next: function() { window.cbsaAppNext(); }, 
+        download 
+    };
 })();
 </script>
 </body>
