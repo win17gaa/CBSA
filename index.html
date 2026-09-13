@@ -72,6 +72,555 @@
     }
     .studio-group { margin-bottom: 16px; }
     .studio-group label { margin-right: 20px; font-weight: 500; cursor: pointer; color: #0369a1; }
+    .choice-option {
+        display: block;
+        background: #fff;
+        border: 1px solid #bae6fd;
+        padding: 10px 14px;
+        border-radius: 6px;
+        margin-bottom: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        color: #0f172a;
+    }
+    .choice-option:hover { background: #e0f2fe; }
+    .choice-option input { margin-right: 10px; }
+    button.btn-primary, button.btn-secondary {
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+    button.btn-primary { background: #0284c7; color: white; margin-top: 12px; }
+    button.btn-primary:hover { background: #0369a1; }
+    button.btn-secondary { background: #e2e8f0; color: #0f172a; margin-top: 12px; }
+    button.btn-secondary:hover { background: #cbd5e1; }
+    #studio-report-container { display: none; margin-top: 20px; }
+    #studio-report {
+        background: #0f172a;
+        color: #38bdf8;
+        padding: 20px;
+        border-radius: 6px;
+        font-family: monospace;
+        font-size: 13px;
+        white-space: pre-wrap;
+    }
+    .toc-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 12px;
+    }
+    .toc-grid a {
+        display: block;
+        padding: 6px 10px;
+        background: #f1f5f9;
+        color: #0f172a;
+        text-decoration: none;
+        border-radius: 4px;
+        font-weight: 500;
+        font-size: 13px;
+    }
+    .toc-grid a:hover { background: #e2e8f0; }
+</style>
+</head>
+<body>
+
+<div id="navbar">
+    <div><strong>CBSA v1.0 — Full Release</strong></div>
+    <div>
+        <a href="#studio">Studio</a>
+        <a href="#toc">TOC</a>
+        <a href="#chapters">Chapters</a>
+        <a href="#casestudies">Case Studies</a>
+        <a href="#appendices">Appendices</a>
+    </div>
+</div>
+
+<div class="container">
+
+<h1>CBSA — Cognitive Behavioral Stability Architecture</h1>
+<p><em>Version 1.0 Public Release | Full Manuscript Archive & Interactive Runner</em></p>
+
+<hr>
+
+<!-- INTERACTIVE STUDIO -->
+<section id="studio">
+    <h2>CBSA Studio v1.0 (Interactive Test Runner)</h2>
+    <div class="studio-panel">
+        <p><strong>Studio User Choice Prompt:</strong> Choose mode and sequence. Select structural choice (A/B/C) per marker.</p>
+        
+        <div id="setup-form">
+            <div class="studio-group">
+                <p><strong>Select Test:</strong><br>
+                <label><input type="radio" name="testType" value="Static Test" checked> 1. Static Test</label>
+                <label><input type="radio" name="testType" value="Dynamic Test"> 2. Dynamic Test</label></p>
+            </div>
+            <div class="studio-group">
+                <p><strong>Select Mode:</strong><br>
+                <label><input type="radio" name="testMode" value="Text Mode" checked> A. Text Mode (Default)</label>
+                <label><input type="radio" name="testMode" value="Voice Mode"> B. Voice Mode (Optional)</label></p>
+            </div>
+            <button class="btn-primary" onclick="cbsaApp.start()">Start Test</button>
+        </div>
+
+        <div id="runner-panel" style="display:none;">
+            <h4 id="q-header"></h4>
+            <div id="choice-container"></div>
+            <button class="btn-primary" onclick="cbsaApp.next()">Submit Signal / Next</button>
+        </div>
+
+        <div id="studio-report-container">
+            <div id="studio-report"></div>
+            <button class="btn-secondary" onclick="cbsaApp.download()">Download Report (.txt)</button>
+        </div>
+    </div>
+</section>
+
+<hr>
+
+<!-- TABLE OF CONTENTS -->
+<h2 id="toc">Table of Contents</h2>
+<div class="toc-grid">
+    <div>
+        <a href="#ch1">Ch 1 — Load</a>
+        <a href="#ch2">Ch 2 — Collapse</a>
+        <a href="#ch3">Ch 3 — Containment</a>
+        <a href="#ch4">Ch 4 — Relevance</a>
+        <a href="#ch5">Ch 5 — Telemetry</a>
+        <a href="#ch6">Ch 6 — Application</a>
+    </div>
+    <div>
+        <a href="#casestudies">Case Studies (1–7)</a>
+        <a href="#app-intro">Operational Appendices Preamble</a>
+        <a href="#app-static-mode">Appendix: Static Test Modes</a>
+        <a href="#app-intent">Appendix: Intent Layer</a>
+        <a href="#app-static-voice">Static Test — Voice Mode Script</a>
+    </div>
+    <div>
+        <a href="#app-dyn-text">Dynamic Test — Text Mode Script</a>
+        <a href="#app-dyn-voice">Dynamic Test — Voice Mode Script</a>
+        <a href="#app-studio-choice">Studio User Choice Prompt</a>
+        <a href="#app-studio-ref">Studio Quick Reference Sheet</a>
+        <a href="#app-delta-gap">Appendix: The Delta Gap</a>
+    </div>
+    <div>
+        <a href="#app-studio-int">Appendix: Studio Integration</a>
+        <a href="#app-14step">14-Step Application System</a>
+        <a href="#app-static-block">CBSA Static Test Block</a>
+        <a href="#app-dyn-mod">CBSA Dynamic Test Module</a>
+        <a href="#app-int-mod">CBSA Interaction Test Module</a>
+    </div>
+</div>
+
+<hr>
+
+<!-- CORE CHAPTERS 1-6 -->
+<section id="chapters">
+    <h2>Core Chapters</h2>
+    
+    <div id="ch1">
+        <h3>Chapter 1 — Load</h3>
+        <p>Load is the total cognitive weight a person carries at any moment. It is the sum of all active demands on attention, memory, emotional regulation, decision-making, and environmental processing. Load determines how much capacity remains for stable behavior.</p>
+        <p>Load is not a feeling. Load is not stress. Load is not emotion. Load is a mechanical measurement of how much cognitive bandwidth is consumed.</p>
+        <h4>1.1 — THE THREE COMPONENTS OF LOAD</h4>
+        <p><strong>WORKING LOAD:</strong> The tasks, thoughts, and actions currently being processed. Examples include driving, talking, planning, navigating, remembering, and monitoring surroundings. Working load changes second-to-second.</p>
+        <p><strong>RESIDUAL LOAD:</strong> The leftover cognitive weight from previous tasks, events, or emotional states. Examples include unresolved arguments, unfinished tasks, lingering anxiety, mental clutter, and background worries. Residual load persists even when nothing is happening.</p>
+        <p><strong>ENVIRONMENTAL LOAD:</strong> The cognitive weight imposed by surroundings. Examples include noise, crowds, movement, unpredictability, clutter, and social complexity. Environmental load is external but still consumes bandwidth.</p>
+        <h4>1.2 — LOAD IS ALWAYS ADDITIVE</h4>
+        <p>Load does not prioritize or negotiate. It simply adds. If working load is 40%, residual load is 30%, and environmental load is 20%, total load is 90%. At 90% load, collapse becomes likely. At 100% load, collapse becomes inevitable.</p>
+        <h4>1.3 — LOAD DETERMINES STABILITY</h4>
+        <p>Stability is not personality, emotional strength, or discipline. Stability is the remaining cognitive bandwidth after load is accounted for. High load means low stability. Low load means high stability.</p>
+        <h4>1.4 — LOAD IS MEASURED BY BEHAVIOR, NOT EMOTION</h4>
+        <p>People often misinterpret load as emotion: overwhelmed, stressed, tired, irritated. These are symptoms, not measurements. Load is measured by reaction time, decision quality, error rate, rigidity, impulsivity, avoidance, and collapse events. Behavior reveals load more accurately than feelings.</p>
+        <h4>1.5 — LOAD IS THE FIRST STABILITY GATE</h4>
+        <p>If load is too high, nothing else works. Containment fails. Relevance fails. Telemetry fails. Application fails. Alignment fails. Profile output becomes distorted. Load is the first gate. If load is not controlled, the architecture cannot stabilize.</p>
+        <h4>1.6 — LOAD MUST BE REDUCED BEFORE ANYTHING ELSE</h4>
+        <p>Attempts to fix motivation, discipline, habits, emotions, relationships, or productivity fail when load is high. Load reduction is the first intervention. Only after load decreases can the rest of CBSA operate correctly.</p>
+        <h4>1.7 — LOAD IS THE FOUNDATION OF COLLAPSE</h4>
+        <p>Collapse is not random, emotional, or dramatic. Collapse is simply load exceeding capacity. High load leads to low stability, which leads to collapse.</p>
+    </div>
+
+    <div id="ch2">
+        <h3>Chapter 2 — Collapse</h3>
+        <p>Collapse occurs when cognitive load exceeds available stability. Collapse is not emotional, dramatic, or voluntary. Collapse is a mechanical bandwidth failure triggered when the cognitive system cannot process incoming demands.</p>
+        <h4>2.1 — COLLAPSE IS A BANDWIDTH FAILURE</h4>
+        <p>Collapse happens when the architecture shuts down functions to protect itself. It is similar to an electrical overload. Collapse is not chosen. Collapse is triggered when stability drops below required processing capacity.</p>
+        <h4>2.2 — THE FOUR COLLAPSE TRIGGERS</h4>
+        <p><strong>ACUTE LOAD SPIKE:</strong> A sudden surge of cognitive demand. Examples include conflict, emergencies, unexpected tasks, or rapid environmental changes.</p>
+        <p><strong>CHRONIC LOAD ACCUMULATION:</strong> Long-term buildup of unresolved tasks, emotional residue, or environmental pressure. Collapse occurs when residual load becomes too heavy.</p>
+        <p><strong>EXECUTIVE FUNCTION DEPLETION:</strong> When EF is exhausted, stability drops sharply. Decision-making, regulation, and planning degrade. Collapse becomes likely even with small triggers.</p>
+        <p><strong>VOLATILITY FEEDBACK LOOP:</strong> When instability creates more instability. Small errors create larger errors. Rigidity increases. Collapse becomes inevitable.</p>
+        <h4>2.3 — COLLAPSE BEHAVIORAL MARKERS</h4>
+        <p>Collapse is identified by behavior, not emotion. Key markers include impulsivity, withdrawal, shutdown, rigidity, avoidance, error spikes, slowed reaction time, degraded decision quality, emotional compression, and loss of planning ability.</p>
+        <h4>2.4 — COLLAPSE IS NOT FAILURE</h4>
+        <p>Collapse is not weakness or lack of discipline. Collapse is a bandwidth event. When load exceeds stability, collapse occurs. This is mechanical, not personal.</p>
+        <h4>2.5 — POST-COLLAPSE STATE</h4>
+        <p>After collapse, the system enters a low-bandwidth recovery state. EF is offline. Motivation is offline. Planning is offline. Emotional range is compressed. The system requires time, rest, and load reduction before stability returns.</p>
+        <h4>2.6 — COLLAPSE RECOVERY</h4>
+        <p>Recovery requires load reduction, environmental simplification, removal of volatility, EF restoration, predictable structure, low-demand tasks, and controlled pacing. Recovery cannot be rushed. Stability returns gradually as bandwidth increases.</p>
+        <h4>2.7 — COLLAPSE IS THE SECOND STABILITY GATE</h4>
+        <p>Load is the first gate. Collapse is the second. If collapse is not understood, predicted, and managed, the architecture cannot stabilize.</p>
+    </div>
+
+    <div id="ch3">
+        <h3>Chapter 3 — Containment</h3>
+        <p>Containment is the cognitive mechanism that prevents collapse from spreading. Containment isolates instability, reduces volatility, and preserves remaining bandwidth. Without containment, small errors become large errors, and collapse accelerates.</p>
+        <h4>3.1 — CONTAINMENT IS A STABILITY BARRIER</h4>
+        <p>Containment acts as a barrier between load and behavior. When load rises, containment absorbs the impact. When containment fails, instability leaks into decision-making, emotional regulation, and environmental interaction.</p>
+        <h4>3.2 — THE THREE FUNCTIONS OF CONTAINMENT</h4>
+        <p><strong>INTERRUPTION CONTROL:</strong> Containment limits how much external noise, distraction, or unpredictability can enter the cognitive system. Strong containment reduces the impact of sudden interruptions.</p>
+        <p><strong>ERROR ISOLATION:</strong> Containment prevents one mistake from triggering additional mistakes. When containment is strong, errors remain small. When containment is weak, errors cascade.</p>
+        <p><strong>VOLATILITY REDUCTION:</strong> Containment slows the feedback loop that amplifies instability. It reduces rigidity, impulsivity, and emotional compression, keeping behavior stable even under load.</p>
+        <h4>3.3 — CONTAINMENT FAILURE SIGNALS</h4>
+        <p>Containment failure appears before collapse. Signals include rapid error increase, shortened reaction time, rising impulsivity, difficulty switching tasks, emotional narrowing, and loss of planning ability. These signals indicate that containment is degrading.</p>
+        <h4>3.4 — CONTAINMENT IS NOT DISCIPLINE</h4>
+        <p>Containment is not willpower, motivation, or discipline. It is a mechanical stability function. When load is high, containment weakens regardless of personal effort. When load is low, containment strengthens automatically.</p>
+        <h4>3.5 — HOW CONTAINMENT RESTORES STABILITY</h4>
+        <p>Containment restores stability by reducing volatility, isolating errors, and limiting environmental impact. As containment strengthens, decision quality improves, reaction time stabilizes, and emotional range expands.</p>
+        <h4>3.6 — CONTAINMENT AND THE STABILITY GATES</h4>
+        <p>Load is the first gate. Collapse is the second. Containment is the third. If containment fails, collapse becomes unavoidable. If containment holds, collapse can be prevented even under high load.</p>
+        <h4>3.7 — CONTAINMENT ENABLES RELEVANCE</h4>
+        <p>Relevance cannot operate without containment. When containment is strong, the system can prioritize correctly, filter noise, and maintain clarity.</p>
+    </div>
+
+    <div id="ch4">
+        <h3>Chapter 4 — Relevance</h3>
+        <p>Relevance determines what the cognitive system pays attention to and what it ignores. Relevance filters noise, prioritizes information, and directs bandwidth toward what matters. Without relevance, the system becomes overwhelmed by irrelevant input and stability collapses.</p>
+        <h4>4.1 — RELEVANCE IS A PRIORITY ENGINE</h4>
+        <p>Relevance assigns priority to incoming information. High‑priority signals are processed immediately. Low‑priority signals are ignored or deferred. When relevance is strong, the system focuses on meaningful tasks. When relevance is weak, everything feels equally urgent.</p>
+        <h4>4.2 — THE THREE FUNCTIONS OF RELEVANCE</h4>
+        <p><strong>NOISE FILTERING:</strong> Relevance removes unnecessary information from the cognitive stream. It prevents distraction, reduces overload, and preserves bandwidth for important tasks.</p>
+        <p><strong>TASK PRIORITIZATION:</strong> Relevance determines which tasks matter most. It organizes behavior by urgency, importance, and context. Strong relevance produces clear direction.</p>
+        <p><strong>CONTEXT ALIGNMENT:</strong> Relevance adjusts priorities based on environment. It ensures that the system responds appropriately to changing conditions. When relevance aligns with context, behavior becomes efficient and stable.</p>
+        <h4>4.3 — RELEVANCE FAILURE SIGNALS</h4>
+        <p>Relevance failure appears when the system cannot distinguish important signals from noise. Symptoms include indecision, task switching, impulsivity, fixation, overthinking, and difficulty determining what to do next. These signals indicate that relevance is degrading.</p>
+        <h4>4.4 — RELEVANCE IS NOT MOTIVATION</h4>
+        <p>Relevance is mechanical, not emotional. It does not depend on motivation, interest, or desire. When load is high or containment is weak, relevance fails even if motivation is strong. When stability is restored, relevance returns automatically.</p>
+        <h4>4.5 — HOW RELEVANCE RESTORES CLARITY</h4>
+        <p>Relevance restores clarity by filtering noise, organizing priorities, and aligning behavior with context. As relevance strengthens, decision quality improves, reaction time stabilizes, and cognitive effort decreases.</p>
+        <h4>4.6 — RELEVANCE AND THE STABILITY GATES</h4>
+        <p>Load is the first gate. Collapse is the second. Containment is the third. Relevance is the fourth. If relevance fails, the system cannot determine what matters, and instability increases. If relevance holds, the system remains focused even under pressure.</p>
+        <h4>4.7 — RELEVANCE ENABLES TELEMETRY</h4>
+        <p>Telemetry cannot operate without relevance. Telemetry measures behavior, bandwidth, and stability. Relevance determines which signals telemetry should track.</p>
+    </div>
+
+    <div id="ch5">
+        <h3>Chapter 5 — Telemetry</h3>
+        <p>Telemetry is the real-time monitoring system of cognitive behavior. Telemetry tracks bandwidth, stability, reaction time, error rate, and volatility. Without telemetry, the system cannot detect rising load or approaching collapse.</p>
+        <h4>5.1 — TELEMETRY IS A MEASUREMENT SYSTEM</h4>
+        <p>Telemetry does not change behavior. It measures behavior. Telemetry reveals how the system is functioning moment-to-moment, allowing early detection of instability before collapse occurs.</p>
+        <h4>5.2 — THE THREE FUNCTIONS OF TELEMETRY</h4>
+        <p><strong>BANDWIDTH TRACKING:</strong> Telemetry monitors how much cognitive capacity is available. When bandwidth drops, stability decreases and collapse becomes more likely.</p>
+        <p><strong>ERROR MONITORING:</strong> Telemetry tracks error frequency and severity. Rising errors indicate weakening containment and failing relevance.</p>
+        <p><strong>VOLATILITY DETECTION:</strong> Telemetry identifies instability patterns such as impulsivity, rigidity, avoidance, and emotional compression. These patterns reveal when collapse is approaching.</p>
+        <h4>5.3 — TELEMETRY FAILURE SIGNALS</h4>
+        <p>Telemetry failure occurs when the system cannot accurately measure its own state. Signals include sudden behavior shifts, unpredictable reactions, loss of self-awareness, and difficulty recognizing rising load.</p>
+        <h4>5.4 — TELEMETRY IS NOT SELF-CRITICISM</h4>
+        <p>Telemetry is mechanical, not emotional. It does not judge behavior. It observes behavior. When telemetry is strong, the system can adjust before collapse. When telemetry is weak, collapse arrives without warning.</p>
+        <h4>5.5 — HOW TELEMETRY RESTORES CONTROL</h4>
+        <p>Telemetry restores control by instability early. As telemetry strengthens, reaction time stabilizes, decision quality improves, and volatility decreases. Telemetry enables proactive correction instead of reactive collapse.</p>
+        <h4>5.6 — TELEMETRY AND THE STABILITY GATES</h4>
+        <p>Load is the first gate. Collapse is the second. Containment is the third. Relevance is the fourth. Telemetry is the fifth. Without telemetry, the system cannot detect when the gates are failing.</p>
+        <h4>5.7 — TELEMETRY ENABLES APPLICATION</h4>
+        <p>Application cannot operate without telemetry. Application requires accurate measurement of bandwidth, stability, and volatility.</p>
+    </div>
+
+    <div id="ch6">
+        <h3>Chapter 6 — Application</h3>
+        <p>Application is the conversion of cognitive stability into effective action. Application uses bandwidth, containment, relevance, and telemetry to produce consistent behavior. Without application, stability cannot be expressed.</p>
+        <h4>6.1 — APPLICATION IS OUTPUT</h4>
+        <p>Application is the outward expression of internal stability. When application is strong, behavior is consistent, predictable, and aligned with context. When application is weak, behavior becomes erratic even if stability is present.</p>
+        <h4>6.2 — THE THREE FUNCTIONS OF APPLICATION</h4>
+        <p><strong>BEHAVIOR EXECUTION:</strong> Application converts cognitive intent into action. It ensures that decisions are carried out accurately and consistently.</p>
+        <p><strong>CONTEXT ADAPTATION:</strong> Application adjusts behavior based on environmental demands. Strong application produces flexible, context-aware action.</p>
+        <p><strong>STABILITY EXPRESSION:</strong> Application expresses internal stability externally. It reveals whether the system is functioning correctly under load.</p>
+        <h4>6.3 — APPLICATION FAILURE SIGNALS</h4>
+        <p>Application failure appears when behavior becomes inconsistent, impulsive, rigid, or misaligned with context. Signals include task avoidance, incomplete actions, sudden errors, and difficulty following through.</p>
+        <h4>6.4 — APPLICATION IS NOT DISCIPLINE</h4>
+        <p>Application is mechanical, not motivational. It does not depend on discipline or willpower. When stability is strong, application becomes easy. When stability is weak, application becomes difficult regardless of effort.</p>
+        <h4>6.5 — HOW APPLICATION CREATES CONSISTENCY</h4>
+        <p>Application creates consistency by aligning behavior with bandwidth, relevance, and containment. As application strengthens, error rate decreases, reaction time stabilizes, and performance becomes reliable.</p>
+        <h4>6.6 — APPLICATION AND THE STABILITY GATES</h4>
+        <p>Load is the first gate. Collapse is the second. Containment is the third. Relevance is the fourth. Telemetry is the fifth. Application is the sixth. If application fails, stability cannot be expressed and behavior becomes unstable.</p>
+        <h4>6.7 — APPLICATION ENABLES ALIGNMENT</h4>
+        <p>Alignment cannot operate without application. Alignment requires consistent, context-aware behavior.</p>
+    </div>
+</section>
+
+<hr>
+
+<!-- CASE STUDIES -->
+<section id="casestudies">
+    <h2>Case Studies</h2>
+    <p>These case studies illustrate how load, collapse, containment, loops, loop caps, relevance, and telemetry behave in real situations. Each case includes a real-life example and a solution using the CBSA mechanisms.</p>
+
+    <div class="case-box">
+        <h4>CASE STUDY 1: LOAD ACCUMULATION</h4>
+        <p><strong>Situation:</strong> A person begins the day with several small tasks. Interruptions occur and load rises quietly. Friction increases. Task switching becomes harder.</p>
+        <p><strong>Real-life example:</strong> A cashier works a normal shift. Customers arrive steadily. Coworkers ask questions. A manager changes the schedule. None are major, but together they create rising load.</p>
+        <p><strong>Solution:</strong> Apply containment early. The cashier simplifies tasks, focuses on one customer at a time, and reduces branching by ignoring non-urgent requests until current tasks are complete. Load stabilizes and friction decreases.</p>
+    </div>
+
+    <div class="case-box">
+        <h4>CASE STUDY 2: COLLAPSE TRIGGER</h4>
+        <p><strong>Situation:</strong> A person is under moderate load. A sudden request arrives and load crosses capacity. Collapse occurs. Priorities blur.</p>
+        <p><strong>Real-life example:</strong> A parent juggling chores and messages suddenly faces a spill. The parent freezes and withdraws. The spill exposed pre-existing overload.</p>
+        <p><strong>Solution:</strong> Use containment immediately after collapse. The parent reduces complexity by addressing only the spill, postponing all other tasks. Once load drops, relevance returns and the parent regains clarity.</p>
+    </div>
+
+    <div class="case-box">
+        <h4>CASE STUDY 3: LOOP FORMATION</h4>
+        <p><strong>Situation:</strong> An unresolved conversation repeats. Each replay adds new details. The loop accelerates and increases load.</p>
+        <p><strong>Real-life example:</strong> An employee replays vague feedback from a supervisor, imagining new meanings each time. The loop expands and becomes urgent.</p>
+        <p><strong>Solution:</strong> Apply containment by limiting simulation. The employee writes down the exact words spoken and refuses to add new interpretations. This caps branching and weakens the loop.</p>
+    </div>
+
+    <div class="case-box">
+        <h4>CASE STUDY 4: LOOP CAP APPLICATION</h4>
+        <p><strong>Situation:</strong> A loop begins to expand. The person notices repetition and increasing detail.</p>
+        <p><strong>Real-life example:</strong> A driver replays a minor argument. The loop gains strength.</p>
+        <p><strong>Solution:</strong> Apply a loop cap. The driver holds the scenario in its original form and prevents new variations. Without expansion, the loop loses momentum and relevance stabilizes.</p>
+    </div>
+
+    <div class="case-box">
+        <h4>CASE STUDY 5: RELEVANCE BREAK AND RESTORATION</h4>
+        <p><strong>Situation:</strong> Under high load, small tasks feel urgent and important tasks feel impossible. Relevance breaks.</p>
+        <p><strong>Real-life example:</strong> A student with multiple assignments fixates on reorganizing a desk instead of working on a major project.</p>
+        <p><strong>Solution:</strong> Apply containment by listing tasks in order of importance and removing non-essential actions. Relevance stabilizes. The student focuses on the major project first.</p>
+    </div>
+
+    <div class="case-box">
+        <h4>CASE STUDY 6: TELEMETRY-GUIDED INTERVENTION</h4>
+        <p><strong>Situation:</strong> Early telemetry signals appear: friction, hesitation, difficulty switching tasks. Containment prevents collapse.</p>
+        <p><strong>Real-life example:</strong> A warehouse worker feels rising friction while sorting packages.</p>
+        <p><strong>Solution:</strong> The worker slows down, simplifies steps, and takes a brief reset. Later, when a loop forms about a mistake, the worker applies a loop cap. Both interventions are guided by telemetry.</p>
+    </div>
+
+    <div class="case-box">
+        <h4>CASE STUDY 7: FULL ARCHITECTURE IN ACTION</h4>
+        <p><strong>Situation:</strong> Load rises. Containment stabilizes. A loop forms. A loop cap weakens it. A sudden demand arrives, but collapse does not occur because relevance is stable.</p>
+        <p><strong>Real-life example:</strong> A nurse begins a shift with several patients. Unexpected requests increase load. A loop forms about a previous interaction.</p>
+        <p><strong>Solution:</strong> The nurse uses containment by organizing tasks and reducing branching. A loop cap is applied to weaken the replay. When an urgent call arrives, the nurse remains stable because load is controlled and relevance is clear.</p>
+    </div>
+</section>
+
+<hr>
+
+<!-- OPERATIONAL APPENDICES -->
+<section id="appendices">
+    <h2>Operational Appendices</h2>
+
+    <div id="app-intro">
+        <h3>Operational Appendices Overview</h3>
+        <p>The Operational Appendices contain the scripts, prompts, reference sheets, and structural components used by CBSA Version 1.0. These appendices keep the architecture modular, predictable, and easy for both humans and AI systems to use. Each appendix is self‑contained and can be read in any order.</p>
+        <p><strong>Contents:</strong> 1. Static Test — Text Mode Script | 2. Static Test — Voice Mode Script | 3. Dynamic Test — Text Mode Script | 4. Dynamic Test — Voice Mode Script | 5. Studio User Choice Prompt | 6. Studio Quick Reference Sheet | 7. Studio Integration Appendix | 8. Intent Layer Appendix | 9. Delta Gap Appendix</p>
+    </div>
+
+    <div id="app-static-mode">
+        <h3>Appendix: Static Test Modes</h3>
+        <p>The Static Test can run in two modes: text or voice. Text mode is the default. It is quiet, neutral, and non‑social. Voice mode is optional. It provides additional telemetry, such as hesitation, acceleration, rhythm, and repetition. Both modes measure the same structure: load, relevance, loops, collapse sensitivity, friction, hesitation, and cognitive rhythm.</p>
+    </div>
+
+    <div id="app-intent">
+        <h3>Appendix: Intent Layer for the Dynamic Questionnaire</h3>
+        <p>The Dynamic Questionnaire is a real‑time stability tool requiring an intent layer.</p>
+        <ul>
+            <li><strong>INTENT 1: SIGNAL DETECTION</strong> — Listens for friction, hesitation, acceleration, repetition, branching, urgency inflation, or priority distortion.</li>
+            <li><strong>INTENT 2: STRUCTURAL INTERPRETATION</strong> — Decides whether the user experiences load, collapse risk, loop formation, relevance slip, or containment failure.</li>
+            <li><strong>INTENT 3: INTERVENTION SELECTION</strong> — Selects containment, loop caps, load reduction, boundary setting, or stabilization.</li>
+            <li><strong>INTENT 4: BRANCHING</strong> — Decides the next question based on the signal.</li>
+            <li><strong>INTENT 5: TERMINATION</strong> — Ends questionnaire when stability returns structurally.</li>
+        </ul>
+        <p><strong>Mini Flowchart (Version 1.0):</strong> <code>Signal → Interpret → Select Tool → Branch → Check Stability → End</code></p>
+    </div>
+
+    <div id="app-static-voice">
+        <h3>Static Test — Voice Mode Script</h3>
+        <p><strong>Intro:</strong> “We’ll run a short baseline test. Answer in your natural speaking voice. There are no right or wrong answers. This measures structure, not performance.”</p>
+        <ul>
+            <li><strong>Q1 — BASELINE LOAD:</strong> “How easy is it to start tasks today?”</li>
+            <li><strong>Q2 — TASK SWITCHING:</strong> “How easy is it to switch between tasks?”</li>
+            <li><strong>Q3 — HESITATION:</strong> “Do you feel any hesitation before starting simple actions?”</li>
+            <li><strong>Q4 — ACCELERATION:</strong> “Do your thoughts feel slow, normal, or fast?”</li>
+            <li><strong>Q5 — REPETITION:</strong> “Are any thoughts repeating today?”</li>
+            <li><strong>Q6 — BRANCHING:</strong> “When the thought repeats, does it add new details?”</li>
+            <li><strong>Q7 — URGENCY:</strong> “Do small tasks feel more urgent than they should?”</li>
+            <li><strong>Q8 — PRIORITY:</strong> “Do important tasks feel heavier or harder to start?”</li>
+            <li><strong>Q9 — COLLAPSE SENSITIVITY:</strong> “Have you felt any moments where everything felt too heavy at once?”</li>
+            <li><strong>Q10 — SHUTDOWN:</strong> “Did you withdraw, go quiet, or pause longer than usual?”</li>
+            <li><strong>Q11 — RECOVERY:</strong> “Did clarity return on its own, or did you need to simplify?”</li>
+            <li><strong>Q12 — BASELINE RHYTHM:</strong> “How does your thinking feel overall: steady, scattered, or pressured?”</li>
+        </ul>
+    </div>
+
+    <div id="app-dyn-text">
+        <h3>Dynamic Test — Text Mode Script</h3>
+        <p><strong>Intro:</strong> “We’ll run a short dynamic test. Answer via structured choice. Measures how your system behaves in motion.”</p>
+    </div>
+
+    <div id="app-studio-choice">
+        <h3>Studio User Choice Prompt</h3>
+        <p>“Welcome to the CBSA Studio. Choose how you want to run the test. You control the mode. Text is the default. Voice is optional.”</p>
+    </div>
+
+    <div id="app-14step">
+        <h3>14-Step CBSA Application System</h3>
+        <ol>
+            <li><strong>Step 1 — Identify the Signal:</strong> Name friction, hesitation, acceleration, repetition, branching, urgency, priority distortion, collapse sensitivity, or rhythm shift.</li>
+            <li><strong>Step 2 — Freeze the Narrative:</strong> Pause the story generating in the mind. Hold it still.</li>
+            <li><strong>Step 3 — Check for Load:</strong> Ask whether load is rising: friction, hesitation, urgency, or heaviness.</li>
+            <li><strong>Step 4 — Check for Micro-Hesitation:</strong> Identify small pauses before simple actions.</li>
+            <li><strong>Step 5 — Check for Loops:</strong> Ask whether thoughts are repeating.</li>
+            <li><strong>Step 6 — Check for Branching:</strong> Ask whether repeated thoughts add new details.</li>
+            <li><strong>Step 7 — Check for Relevance Drift:</strong> Ask whether small tasks feel urgent or large tasks heavy.</li>
+            <li><strong>Step 8 — Check for Urgency Inflation:</strong> Identify whether urgency rises without cause.</li>
+            <li><strong>Step 9 — Check for Collapse Sensitivity:</strong> Ask whether everything feels heavy at once.</li>
+            <li><strong>Step 10 — Match Narrative to Mechanics:</strong> Compare story to architecture; identify open Delta Gap.</li>
+            <li><strong>Step 11 — Apply Containment:</strong> Reduce inputs, simplify tasks, remove symbolic weight.</li>
+            <li><strong>Step 12 — Apply Loop Caps:</strong> Cap motion, do not resolve content.</li>
+            <li><strong>Step 13 — Apply Load Reduction:</strong> Simplify, de-escalate, remove tasks directly.</li>
+            <li><strong>Step 14 — Close the Delta Gap:</strong> Replace narrative story with mechanical statement ("This was load").</li>
+        </ol>
+    </div>
+</section>
+
+</div>
+
+<script>
+const cbsaApp = (() => {
+    let state = { type: 'Static Test', mode: 'Text Mode', idx: 0, log: [], timestamp: '' };
+    const qList = [
+        { q: "1. Start Friction: Task initiation status", opts: ["A: Smooth / instant", "B: Minor startup friction", "C: Heavy stall / resistance"] },
+        { q: "2. Switch Friction: Context/task shifting fluidity", opts: ["A: Clean transition", "B: Brief stutter / restart", "C: Hard reorientation required"] },
+        { q: "3. Micro-Hesitation: Pre-action freeze check", opts: ["A: None", "B: Brief micro-pause", "C: Noticeable freeze before simple steps"] },
+        { q: "4. Acceleration: Internal processing speed", opts: ["A: Slow / deliberate", "B: Normal / balanced", "C: Fast / overclocked pacing"] },
+        { q: "5. Repetition: Cognitive cycling / looping", opts: ["A: None", "B: Mild cycling", "C: Heavy repeating track"] },
+        { q: "6. Branching: Expansion depth of repeated thoughts", opts: ["A: None / single loop", "B: Minor variations", "C: Deep tactical branching/detailing"] },
+        { q: "7. Urgency Inflation: Artificial urgency on minor items", opts: ["A: Accurate baseline", "B: Mildly inflated", "C: Everything feels fire-drill urgent"] },
+        { q: "8. Priority Distortion: Core task gravity", opts: ["A: Clear hierarchy", "B: Core items feel slightly heavy", "C: Priority inversion / paralysis"] },
+        { q: "9. Collapse Sensitivity: Overall load threshold proximity", opts: ["A: Low / solid headroom", "B: Moderate / borderline", "C: High / near threshold limit"] },
+        { q: "10. Shutdown/Withdrawal: Cadence drop behavior", opts: ["A: None", "B: Mild pacing reduction", "C: Full quiet / withdrawal"] },
+        { q: "11. Recovery Response: Simplification effectiveness", opts: ["A: Natural clear", "B: Works if simplified", "C: Requires total offline reset"] },
+        { q: "12. Cadence Rhythm: Overall cognitive state", opts: ["A: Steady", "B: Scattered", "C: Pressured"] }
+    ];
+
+    function start() {
+        state.type = document.querySelector('input[name="testType"]:checked').value;
+        state.mode = document.querySelector('input[name="testMode"]:checked').value;
+        state.idx = 0;
+        state.log = [];
+        state.timestamp = new Date().toLocaleString();
+        document.getElementById('setup-form').style.display = 'none';
+        document.getElementById('runner-panel').style.display = 'block';
+        document.getElementById('studio-report-container').style.display = 'none';
+        next();
+    }
+
+    function renderOptions(opts) {
+        const container = document.getElementById('choice-container');
+        container.innerHTML = '';
+        opts.forEach((opt, idx) => {
+            const label = document.createElement('label');
+            label.className = 'choice-option';
+            label.innerHTML = `<input type="radio" name="choiceGroup" value="${opt}" ${idx === 0 ? 'checked' : ''}> ${opt}`;
+            container.appendChild(label);
+        });
+    }
+
+    function next() {
+        if (state.idx > 0) {
+            const selected = document.querySelector('input[name="choiceGroup"]:checked');
+            const val = selected ? selected.value : 'A: Default/Nominal';
+            state.log.push({ q: qList[state.idx - 1].q, a: val });
+        }
+        if (state.idx < qList.length) {
+            document.getElementById('q-header').innerText = `[${state.type} | ${state.mode}] Question ${state.idx + 1} of ${qList.length}: ${qList[state.idx].q}`;
+            renderOptions(qList[state.idx].opts);
+            state.idx++;
+        } else {
+            finish();
+        }
+    }
+
+    function generateReportText() {
+        let txt = `=== CBSA v1.0 PROFILE OUTPUT REPORT ===\n`;
+        txt += `Test: ${state.type} | Mode: ${state.mode}\n`;
+        txt += `Timestamp: ${state.timestamp} (${new Date().toISOString().split('T')[0]})\n\n`;
+        state.log.forEach((item, i) => {
+            txt += `[${item.q}]\n   ↳ Selected: ${item.a}\n`;
+        });
+        txt += `\nDIAGNOSTIC SYNTHESIS (Mechanical Mapping):\n`;
+        txt += `- Gates 1-3 (Load/Collapse/Containment): Baseline/Motion Vector Evaluated\n`;
+        txt += `- Gates 4-6 (Relevance/Telemetry/Application): Output Consistency Checked\n`;
+        txt += `- Recommended Intervention: Apply Step 11-13 (Containment/Loop Cap) if C-tier options flagged.\n`;
+        return txt;
+    }
+
+    function finish() {
+        document.getElementById('runner-panel').style.display = 'none';
+        document.getElementById('setup-form').style.display = 'block';
+        document.getElementById('studio-report-container').style.display = 'block';
+        document.getElementById('studio-report').innerText = generateReportText();
+    }
+
+    function download() {
+        const text = generateReportText();
+        const dateStr = new Date().toISOString().split('T')[0];
+        const filename = `cbsa-${state.type.toLowerCase().replace(/\s+/g, '-')}-${dateStr}.txt`;
+        const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    return { start, next, download };
+})();
+</script>
+</body>
+</html>    }
+    #navbar a:hover { color: #fff; }
+    .container {
+        max-width: 960px;
+        margin: 90px auto 60px auto;
+        padding: 40px;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        box-sizing: border-box;
+    }
+    h1, h2, h3, h4 { color: #0f172a; margin-top: 36px; }
+    h1 { font-size: 2.2rem; margin-top: 0; }
+    h2 { border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; font-size: 1.4rem; margin-top: 48px; }
+    h3 { font-size: 1.15rem; color: #334155; margin-top: 28px; }
+    p, li, blockquote { font-size: 15px; color: #334155; }
+    ul, ol { padding-left: 20px; }
+    hr { border: none; border-top: 1px solid #e2e8f0; margin: 40px 0; }
+    blockquote { border-left: 3px solid #cbd5e1; padding-left: 16px; margin-left: 0; color: #475569; }
+    
+    .case-box {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        padding: 16px 20px;
+        border-radius: 6px;
+        margin: 16px 0;
+    }
+    
+    /* Studio Styling */
+    .studio-panel {
+        background: #f0f9ff;
+        border: 1px solid #bae6fd;
+        border-radius: 8px;
+        padding: 24px;
+        margin: 24px 0;
+    }
+    .studio-group { margin-bottom: 16px; }
+    .studio-group label { margin-right: 20px; font-weight: 500; cursor: pointer; color: #0369a1; }
     button.btn-primary {
         background: #0284c7;
         color: white;
