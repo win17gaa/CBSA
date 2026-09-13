@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CBSA — Human-First Stability Runner</title>
+<title>CBSA — Cognitive Behavioral Stability Architecture (Version 1.0)</title>
+<meta name="description" content="CBSA — Cognitive Behavioral Stability Architecture Version 1.0. Complete Public Manuscript & Interactive Studio.">
 <style>
     body {
         margin: 0;
@@ -24,67 +25,79 @@
     #navbar a { color: #94a3b8; margin-left: 14px; text-decoration: none; font-size: 13px; font-weight: 600; }
     #navbar a:hover { color: #fff; }
     .container {
-        max-width: 800px;
+        max-width: 960px;
         margin: 90px auto 60px auto;
-        padding: 40px;
-        background: #fff;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        padding: 40px; background: #fff;
+        border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         box-sizing: border-box;
     }
     h1, h2, h3, h4 { color: #0f172a; margin-top: 36px; }
-    h1 { font-size: 2rem; margin-top: 0; }
+    h1 { font-size: 2.2rem; margin-top: 0; }
+    h2 { border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; font-size: 1.4rem; margin-top: 48px; }
+    h3 { font-size: 1.15rem; color: #334155; margin-top: 28px; }
+    p, li, blockquote { font-size: 15px; color: #334155; }
+    ul, ol { padding-left: 20px; }
     hr { border: none; border-top: 1px solid #e2e8f0; margin: 40px 0; }
-    .studio-panel {
-        background: #f8fafc;
-        border: 1px solid #cbd5e1;
-        border-radius: 8px;
-        padding: 24px;
-        margin: 24px 0;
-    }
+    blockquote { border-left: 3px solid #cbd5e1; padding-left: 16px; margin-left: 0; color: #475569; }
+    .case-box { background: #f8fafc; border: 1px solid #e2e8f0; padding: 16px 20px; border-radius: 6px; margin: 16px 0; }
+    
+    /* Studio Styling */
+    .studio-panel { background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; padding: 24px; margin: 24px 0; }
     .studio-group { margin-bottom: 16px; }
+    .studio-group label { margin-right: 20px; font-weight: 500; cursor: pointer; color: #0369a1; }
     .choice-option {
-        display: block; background: #fff; border: 1px solid #cbd5e1;
+        display: block; background: #fff; border: 1px solid #bae6fd;
         padding: 10px 14px; border-radius: 6px; margin-bottom: 8px;
         cursor: pointer; font-size: 14px; color: #0f172a;
     }
-    .choice-option:hover { background: #f1f5f9; }
+    .choice-option:hover { background: #e0f2fe; }
     .choice-option input { margin-right: 10px; }
     button.btn-primary, button.btn-secondary {
-        border: none; padding: 10px 20px; border-radius: 6px;
-        font-weight: 600; cursor: pointer;
+        border: none; padding: 10px 20px; border-radius: 6px; font-weight: 600; cursor: pointer;
     }
-    button.btn-primary { background: #0f172a; color: white; margin-top: 12px; }
-    button.btn-primary:hover { background: #334155; }
+    button.btn-primary { background: #0284c7; color: white; margin-top: 12px; }
+    button.btn-primary:hover { background: #0369a1; }
     button.btn-secondary { background: #e2e8f0; color: #0f172a; margin-top: 12px; }
     button.btn-secondary:hover { background: #cbd5e1; }
     #studio-report-container { display: none; margin-top: 20px; }
     #studio-report {
-        background: #0f172a; color: #f8fafc;
-        padding: 24px; border-radius: 6px;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: #0f172a; color: #f8fafc; padding: 20px;
+        border-radius: 6px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         font-size: 14px; line-height: 1.7; white-space: pre-wrap;
     }
+    .toc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+    .toc-grid a { display: block; padding: 6px 10px; background: #f1f5f9; color: #0f172a; text-decoration: none; border-radius: 4px; font-weight: 500; font-size: 13px; }
+    .toc-grid a:hover { background: #e2e8f0; }
 </style>
 </head>
 <body>
 
 <div id="navbar">
-    <div><strong>CBSA — Practical Session Runner</strong></div>
-    <div><a href="#studio">Runner</a></div>
+    <div><strong>CBSA v1.0 — Full Manuscript & Human-First Studio</strong></div>
+    <div>
+        <a href="#studio">Studio</a>
+        <a href="#toc">TOC</a>
+        <a href="#chapters">Chapters</a>
+        <a href="#casestudies">Case Studies</a>
+        <a href="#appendices">Appendices</a>
+    </div>
 </div>
 
 <div class="container">
-<h1>CBSA Session Instrument</h1>
-<p><em>Low-friction baseline read. Pick the closest 5-point match.</em></p>
+<h1>CBSA — Cognitive Behavioral Stability Architecture</h1>
+<p><em>Version 1.0 Public Release | Full Manuscript Archive & Interactive Studio</em></p>
 <hr>
 
+<!-- INTERACTIVE STUDIO -->
 <section id="studio">
+    <h2>CBSA Studio v1.0 (5-Tier Human-First Runner)</h2>
     <div class="studio-panel">
+        <p><strong>Select scale per checkpoint (5-point resolution):</strong></p>
         <div id="setup-form">
             <div class="studio-group">
-                <p><strong>Select Runner:</strong><br>
-                <label><input type="radio" name="testType" value="Static Test" checked> Standard Morning Read</label></p>
+                <p><strong>Select Mode:</strong><br>
+                <label><input type="radio" name="testMode" value="Text Mode" checked> Text Mode (Default)</label>
+                <label><input type="radio" name="testMode" value="Voice Mode"> Voice Mode (Optional)</label></p>
             </div>
             <button class="btn-primary" onclick="cbsaApp.start()">Start Check</button>
         </div>
@@ -101,18 +114,56 @@
         </div>
     </div>
 </section>
+
+<hr>
+
+<!-- TABLE OF CONTENTS -->
+<h2 id="toc">Table of Contents</h2>
+<div class="toc-grid">
+    <div><a href="#ch1">Ch 1 — Load</a><a href="#ch2">Ch 2 — Collapse</a><a href="#ch3">Ch 3 — Containment</a><a href="#ch4">Ch 4 — Relevance</a><a href="#ch5">Ch 5 — Telemetry</a><a href="#ch6">Ch 6 — Application</a></div>
+    <div><a href="#casestudies">Case Studies (1–7)</a><a href="#app-intro">Operational Appendices Preamble</a><a href="#app-intent">Appendix: Intent Layer</a></div>
+</div>
+
+<hr>
+
+<!-- CORE CHAPTERS 1-6 -->
+<section id="chapters">
+    <h2>Core Chapters</h2>
+    <div id="ch1"><h3>Chapter 1 — Load</h3><p>Total cognitive weight carried at any moment (working, residual, environmental). Additive and mechanical.</p></div>
+    <div id="ch2"><h3>Chapter 2 — Collapse</h3><p>Bandwidth failure triggered when load exceeds available stability.</p></div>
+    <div id="ch3"><h3>Chapter 3 — Containment</h3><p>Barrier preventing collapse from spreading, isolating errors, capping loops.</p></div>
+    <div id="ch4"><h3>Chapter 4 — Relevance</h3><p>Priority engine filtering noise and directing focus.</p></div>
+    <div id="ch5"><h3>Chapter 5 — Telemetry</h3><p>Real-time measurement of friction, hesitation, and output stability.</p></div>
+    <div id="ch6"><h3>Chapter 6 — Application</h3><p>Conversion of stability into consistent output behavior.</p></div>
+</section>
+
+<hr>
+
+<!-- CASE STUDIES -->
+<section id="casestudies">
+    <h2>Case Studies</h2>
+    <div class="case-box"><h4>CASE STUDY 1-7 SUMMARY</h4><p>Managed via mechanical containment, loop capping, and immediate simplification.</p></div>
+</section>
+
+<hr>
+
+<!-- OPERATIONAL APPENDICES -->
+<section id="appendices">
+    <h2>Operational Appendices</h2>
+    <div id="app-intro"><h3>Operational Appendices Overview</h3><p>Modular scripts and 14-step framework reference.</p></div>
+</section>
 </div>
 
 <script>
 const cbsaApp = (() => {
-    let state = { type: 'Static Test', qQueue: [], idx: 0, log: [], timestamp: '' };
+    let state = { mode: 'Text Mode', qQueue: [], idx: 0, log: [], timestamp: '' };
 
     const opts5 = [
-        "1: Smooth / Zero friction",
-        "1.5: Minor hesitation / Soft drag",
-        "2: Noticeable drag / Pause required",
-        "2.5: High friction / Replaying or stalling",
-        "3: Hard block / Shut down or spin-out"
+        "A: Nominal / Smooth zero friction",
+        "AB: Borderline / Minor startup drift",
+        "B: Moderate / Noticeable drag or pause",
+        "BC: High friction / Replaying or near saturation",
+        "C: Severe / Hard stall or shutdown"
     ];
 
     const questions = [
@@ -123,13 +174,17 @@ const cbsaApp = (() => {
         { id: 'Q5', q: "Overall operational rhythm right now:" }
     ];
 
-    function getValNum(valStr) {
-        return parseFloat(valStr.split(':')[0]);
+    function getTierWeight(val) {
+        if (val.startsWith('AB:')) return 0.5;
+        if (val.startsWith('B:')) return 1.0;
+        if (val.startsWith('BC:')) return 1.5;
+        if (val.startsWith('C:')) return 2.0;
+        return 0;
     }
 
     function start() {
-        state.idx = 0;
-        state.log = [];
+        state.mode = document.querySelector('input[name="testMode"]:checked').value;
+        state.idx = 0; state.log = [];
         state.timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         state.qQueue = [...questions];
         document.getElementById('setup-form').style.display = 'none';
@@ -156,41 +211,37 @@ const cbsaApp = (() => {
             const prevItem = state.qQueue[state.idx - 1];
             state.log.push({ q: prevItem.q, a: val });
         }
-
         if (state.idx < state.qQueue.length) {
             const currentItem = state.qQueue[state.idx];
             document.getElementById('q-header').innerText = `Step ${state.idx + 1} of ${state.qQueue.length}: ${currentItem.q}`;
             renderOptions(opts5);
             state.idx++;
-        } else {
-            finish();
-        }
+        } else { finish(); }
     };
 
     function generateReportText() {
-        let sumScore = 0;
-        let highCount = 0;
+        let totalW = 0, highCount = 0;
         state.log.forEach(item => {
-            const num = getValNum(item.a);
-            sumScore += num;
-            if (num >= 2.0) highCount++;
+            const w = getTierWeight(item.a);
+            totalW += w;
+            if (w >= 1.5) highCount++;
         });
 
         let habit = "System running smooth; parallel task switching is clean with minimal drag.";
         let tax = "Near-zero baseline energy loss.";
-        let fix = "Keep lid open, run current task list straight through.";
+        let fix = "Keep current execution stream straight through.";
 
-        if (sumScore >= 10.0 || highCount >= 3) {
+        if (totalW >= 8.0 || highCount >= 3) {
             habit = "Brain is spinning duplicate background simulations and treating minor inputs as urgent fires.";
-            tax = "Bleeding 40% working memory before noon on phantom priority inflation.";
+            tax = "Bleeding working memory before noon on phantom priority inflation.";
             fix = "Close the laptop lid for 3 minutes, physical stretch, clear browser tabs down to 1 window, write down maximum 2 deliverables for the next 2 hours on paper.";
-        } else if (sumScore >= 5.0 || highCount >= 1) {
+        } else if (totalW >= 3.0 || highCount >= 1) {
             habit = "Initiation friction is catching on minor context switches or unfinished open loops.";
-            tax = "Slow drag on task startup; losing 10-15 minutes per switch re-orienting.";
+            tax = "Slow drag on task startup; losing minutes per switch re-orienting.";
             fix = "Put phone face down out of arm's reach, open raw text doc, write the next single physical sentence or sub-task, execute.";
         }
 
-        let txt = `CBSA READ (${state.timestamp})\n\n`;
+        let txt = `CBSA READ (${state.timestamp} | Mode: ${state.mode})\n\n`;
         txt += `1. THE HABIT: ${habit}\n`;
         txt += `2. THE TAX: ${tax}\n`;
         txt += `3. THE FIX: ${fix}\n`;
@@ -209,10 +260,8 @@ const cbsaApp = (() => {
         const filename = `cbsa-read-${new Date().toISOString().split('T')[0]}.txt`;
         const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
         const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url; a.download = filename;
-        document.body.appendChild(a); a.click();
-        document.body.removeChild(a); URL.revokeObjectURL(url);
+        const a = document.createElement('a'); a.href = url; a.download = filename;
+        document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
     }
 
     return { start, next: function() { window.cbsaAppNext(); }, download };
