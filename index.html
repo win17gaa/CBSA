@@ -434,7 +434,7 @@
         <section id="valve-input">
             <h2>Valve Active Entry Panel</h2>
             <div class="content-block">
-                <span class="label">User Identifier</span>
+                <span class="label">User Identifier (Matches your folder name)</span>
                 <input type="text" id="input-user-id" value="example_user" placeholder="Enter user identifier...">
             </div>
 
@@ -672,7 +672,7 @@
         });
     }
 
-    // GitHub Commit Action
+    // GitHub Commit Action (Targeting docs/data/[username]/)
     document.getElementById('btn-submit-entry').addEventListener('click', async () => {
         const owner = localStorage.getItem('cbsa_gh_owner');
         const repo = localStorage.getItem('cbsa_gh_repo');
@@ -685,7 +685,7 @@
             return;
         }
 
-        const userId = document.getElementById('input-user-id').value || "anonymous";
+        const userId = document.getElementById('input-user-id').value.trim() || "anonymous";
         const rawVent = rawVentInput.value.trim();
         const workCheck = document.getElementById('input-work-check').value;
         const temporalPos = document.getElementById('input-temporal-pos').value;
@@ -725,7 +725,8 @@
         syncStatusEl.style.color = "var(--warning)";
         syncStatusEl.textContent = "Committing entry directly to GitHub...";
 
-        const fileName = `data/entry_${Date.now()}.json`;
+        // Organized directly into your docs/data/[username]/ folder structure
+        const fileName = `docs/data/${userId}/entry_${Date.now()}.json`;
         const fileContentBase64 = btoa(unescape(encodeURIComponent(JSON.stringify(entryPayload, null, 2))));
         const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${fileName}`;
 
@@ -738,7 +739,7 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    message: `CBSA Studio entry: ${userId} at ${new Date().toLocaleString()}`,
+                    message: `CBSA Studio entry for ${userId} at ${new Date().toLocaleString()}`,
                     content: fileContentBase64
                 })
             });
@@ -749,7 +750,7 @@
             }
 
             syncStatusEl.style.color = "var(--success)";
-            syncStatusEl.textContent = "Success: Entry committed directly to your private GitHub repository!";
+            syncStatusEl.textContent = "Success: Entry committed to docs/data/" + userId + "/!";
             
             appendLocalHistory(entryPayload);
 
