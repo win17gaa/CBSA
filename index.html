@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VALVE // TENSILE — CBSA Studio (Character-Bounded Edition)</title>
+    <title>VALVE // TENSILE — CBSA Studio (Reactive Reflection Edition)</title>
     <style>
         :root {
             --bg: #0b0b0c;
@@ -397,7 +397,7 @@
         <header>
             <div>
                 <h1>VALVE // TENSILE</h1>
-                <div class="subtitle">Cognitive Boundary & Stability Architecture (Bounded Edition)</div>
+                <div class="subtitle">Cognitive Boundary & Stability Architecture (Reactive Reflection Edition)</div>
             </div>
             <div class="status-badge" id="header-status">Local Active</div>
         </header>
@@ -411,16 +411,16 @@
             </div>
 
             <div class="content-block">
-                <span class="label">Raw Vent (Zero-Friction Somatic Log) — Target: 50 to 400 characters</span>
-                <textarea id="input-raw-vent" rows="3" maxlength="500" placeholder="Type raw vent input here..."></textarea>
+                <span class="label">1. Raw Vent (Zero-Friction Somatic Log)</span>
+                <textarea id="input-raw-vent" rows="3" maxlength="500" placeholder="Type general somatic noise or background state here..."></textarea>
                 <div class="char-counter"><span id="char-count">0</span> / 500 chars (Min 40 required)</div>
                 <div class="example-hint">
-                    <strong>Format Example:</strong> <code>"Small interruptions felt heavier than usual today. Low physical pacing in the morning, high mental friction around midday."</code>
+                    <strong>Format Example:</strong> <code>"Small interruptions felt heavier than usual today. Low physical pacing in the morning."</code>
                 </div>
             </div>
 
             <div class="content-block">
-                <span class="label">Work / Structural Check</span>
+                <span class="label">2. Work / Structural Check</span>
                 <textarea id="input-work-check" rows="2" maxlength="300" placeholder="Record daily operational check..."></textarea>
                 <div class="example-hint">
                     <strong>Format Example:</strong> <code>"Core task finished, but administrative drag ate up buffer time."</code>
@@ -428,7 +428,7 @@
             </div>
             
             <div class="content-block">
-                <span class="label">Temporal Position Assessment</span>
+                <span class="label">3. Temporal Position Assessment</span>
                 <input type="text" id="input-temporal-pos" maxlength="150" placeholder="Where is your mind anchored today?">
                 <div class="example-hint">
                     <strong>Format Example:</strong> <code>"Mostly present due to active project deadlines, minor pull toward past friction."</code>
@@ -441,6 +441,15 @@
 
                 <div class="chart-container">
                     <div class="bar-chart" id="temporal-sliders-container"></div>
+                </div>
+            </div>
+
+            <!-- 4. REACTIVE SITUATIONS & HANDLING LOG -->
+            <div class="content-block" style="border-color: var(--accent);">
+                <span class="label" style="color: var(--accent);">4. Reactive Situations & Friction Handling</span>
+                <textarea id="input-reactive-log" rows="3" maxlength="400" placeholder="Describe any reactive triggers from today and evaluate how you handled them..."></textarea>
+                <div class="example-hint">
+                    <strong>Format Example:</strong> <code>"Trigger: Sudden shift in project requirements mid-day. Handling: Initial defensive spike, but caught it within 10 minutes and recalibrated scope cleanly."</code>
                 </div>
             </div>
 
@@ -528,7 +537,7 @@
         </section>
 
         <footer>
-            CBSA STUDIO &mdash; Bounded Local-First Implementation Layer
+            CBSA STUDIO &mdash; Reactive Reflection Implementation Layer
         </footer>
     </main>
 </div>
@@ -654,9 +663,9 @@
                 item.className = 'history-item';
                 item.innerHTML = `
                     <strong>[#${entries.length - idx}] User: ${entry.user}</strong> (${entry.local_date_string})<br>
-                    <span style="color: var(--text-muted);">Vent (${entry.raw_vent.length} chars):</span> ${entry.raw_vent}<br>
-                    <span style="color: var(--text-muted);">Temporal Anchor:</span> ${entry.temporal_position || 'None'}
-                    ${entry.loads ? '<br><span style="color: var(--accent);">[Includes 6-Load Deep Diagnostic Data]</span>' : ''}
+                    <span style="color: var::text-muted);">Vent:</span> ${entry.raw_vent}<br>
+                    <span style="color: var(--accent);">Reactive Log:</span> ${entry.reactive_log || 'None recorded'}<br>
+                    ${entry.loads ? '<span style="color: var(--success);">[Includes 6-Load Deep Diagnostic Data]</span>' : ''}
                 `;
                 container.appendChild(item);
             });
@@ -672,6 +681,7 @@
         const rawVent = rawVentInput.value.trim();
         const workCheck = document.getElementById('input-work-check').value;
         const temporalPos = document.getElementById('input-temporal-pos').value;
+        const reactiveLog = document.getElementById('input-reactive-log').value;
         const syncStatusEl = document.getElementById('sync-status');
 
         if (rawVent.length < 40) {
@@ -701,6 +711,7 @@
             raw_vent: rawVent,
             work_check: workCheck,
             temporal_position: temporalPos,
+            reactive_log: reactiveLog,
             loads: loadsData,
             telemetry: state.telemetry,
             temporal_distribution: state.temporal.reduce((obj, item) => ({ ...obj, [item.id]: item.value }), {})
@@ -725,6 +736,7 @@
         charCountEl.textContent = "0";
         document.getElementById('input-work-check').value = "";
         document.getElementById('input-temporal-pos').value = "";
+        document.getElementById('input-reactive-log').value = "";
         ['somatic', 'cognitive', 'temporal', 'relational', 'environmental', 'operational'].forEach(l => {
             document.getElementById(`load-${l}`).value = "";
         });
