@@ -1,0 +1,44 @@
+{
+  "version": "1.0",
+  "user": "example_user",
+  "nightly_entry": {
+    "raw_vent": "",
+    "work_check": "",
+    "temporal_position": ""
+  },
+  "daily_processing": {
+    "D_t": null,
+    "S_t": null,
+    "B_t": null,
+    "C_t": null,
+    "I_t": null,
+    "V_t": null
+  },
+  "weekly_snapshot": {
+    "line_1": "",
+    "line_2": "",
+    "line_3": ""
+  },
+  "discovery": {
+    "status": "ready",
+    "file": "docs/DISCOVERY.md"
+  },
+  "architecture_map": {
+    "core_engines": [
+      "Drift_Engine",
+      "Stability_Engine",
+      "Bandwidth_Engine",
+      "Containment_Engine"
+    ],
+    "dynamic_regulators": [
+      "Identity_Coherence_Regulator",
+      "Volatility_Regulator",
+      "Load_Regulator"
+    ],
+    "processing_engines": [
+      "Daily_Processing_Engine",
+      "Weekly_Processing_Engine",
+      "Collapse_Processing_Engine"
+    ]
+  }
+}
