@@ -31,7 +31,7 @@
         }
 
         .container {
-            max-width: 860px;
+            max-width: 900px;
             margin: 0 auto;
         }
 
@@ -136,18 +136,8 @@
 
         .sub-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 1rem;
-        }
-
-        pre {
-            background: var(--bg);
-            border: 1px solid var(--border);
-            padding: 1rem;
-            font-family: var(--font-mono);
-            font-size: 12px;
-            overflow-x: auto;
-            color: var(--text-main);
         }
 
         footer {
@@ -166,9 +156,9 @@
     <header>
         <div>
             <h1>VALVE // TENSILE</h1>
-            <div class="subtitle">Cognitive Boundary & Stability Architecture (CSS-SPEC v0.2.1)</div>
+            <div class="subtitle">Cognitive Boundary & Stability Architecture (CSS-SPEC v0.2.1) — Final Studio Build</div>
         </div>
-        <div class="status-badge">Inline Mode</div>
+        <div class="status-badge" id="val-collapse-badge">Stable</div>
     </header>
 
     <!-- SYSTEM STATUS -->
@@ -184,7 +174,7 @@
                 <div class="metric-value" id="val-version">--</div>
             </div>
             <div class="metric-card">
-                <span class="metric-label">Collapse Status</span>
+                <span class="metric-label">Collapse State</span>
                 <div class="metric-value" id="val-collapse">--</div>
             </div>
             <div class="metric-card">
@@ -212,9 +202,9 @@
         <h2>Drift Slope & Collapse Thresholds</h2>
         <div class="sub-grid">
             <div class="content-block">
-                <span class="label">Drift Slope Parameters</span>
-                <p><strong>Values:</strong> <span id="ds-values">--</span></p>
-                <p><strong>Slope:</strong> <span id="ds-slope">--</span></p>
+                <span class="label">Drift Slope Data</span>
+                <p><strong>Values Array:</strong> <span id="ds-values">--</span></p>
+                <p><strong>Calculated Slope:</strong> <span id="ds-slope">--</span></p>
             </div>
             <div class="content-block">
                 <span class="label">Collapse Thresholds</span>
@@ -225,15 +215,15 @@
         </div>
     </section>
 
-    <!-- REGULATORS & LOAD CURVES -->
+    <!-- REGULATOR DYNAMICS & LOAD CURVES -->
     <section>
         <h2>Regulator Dynamics & Load Curves</h2>
         <div class="sub-grid">
             <div class="content-block">
-                <span class="label">Regulator Dynamics</span>
-                <p><strong>Identity Array:</strong> <span id="reg-identity">--</span></p>
-                <p><strong>Volatility Array:</strong> <span id="reg-volatility">--</span></p>
-                <p><strong>Load Array:</strong> <span id="reg-load">--</span></p>
+                <span class="label">Regulator Arrays</span>
+                <p><strong>Identity:</strong> <span id="reg-identity">--</span></p>
+                <p><strong>Volatility:</strong> <span id="reg-volatility">--</span></p>
+                <p><strong>Load:</strong> <span id="reg-load">--</span></p>
             </div>
             <div class="content-block">
                 <span class="label">Load Curves & Coherence</span>
@@ -241,6 +231,18 @@
                 <p><strong>Containment Curve:</strong> <span id="lc-containment">--</span></p>
                 <p><strong>Temporal Alignment:</strong> <span id="tc-alignment">--</span></p>
             </div>
+        </div>
+    </section>
+
+    <!-- WEEKLY SNAPSHOT -->
+    <section>
+        <h2>Weekly Snapshot Buffer</h2>
+        <div class="content-block">
+            <span class="label">Lines</span>
+            <p><strong>Line 1:</strong> <span id="ws-l1">--</span></p>
+            <p><strong>Line 2:</strong> <span id="ws-l2">--</span></p>
+            <p><strong>Line 3:</strong> <span id="ws-l3">--</span></p>
+            <p><strong>History Count:</strong> <span id="ws-history">--</span></p>
         </div>
     </section>
 
@@ -265,8 +267,8 @@
     <section>
         <h2>Rolling History Buffer</h2>
         <div class="content-block">
-            <span class="label">Logged Nightly Entries Count</span>
-            <p id="history-count">-- entries recorded</p>
+            <span class="label">Nightly Entries Archive</span>
+            <p id="history-summary">--</p>
         </div>
     </section>
 
@@ -275,9 +277,9 @@
         <h2>Discovery Viewer & Architecture Map</h2>
         <div class="sub-grid">
             <div class="content-block">
-                <span class="label">Discovery Reference</span>
-                <p><strong>Target File:</strong> <span id="disc-file">--</span></p>
-                <p><strong>Status:</strong> <span id="disc-content">--</span></p>
+                <span class="label">Discovery Viewer</span>
+                <p><strong>File Target:</strong> <span id="disc-file">--</span></p>
+                <p><strong>Content State:</strong> <span id="disc-content">--</span></p>
             </div>
             <div class="content-block">
                 <span class="label">Architecture Map</span>
@@ -380,10 +382,11 @@
       }
     };
 
-    // Hydrate UI from complete JSON schema
+    // Hydration
     document.getElementById('val-user').textContent = data.user;
     document.getElementById('val-version').textContent = data.version;
     document.getElementById('val-collapse').textContent = data.collapse_state.status;
+    document.getElementById('val-collapse-badge').textContent = data.collapse_state.status.toUpperCase();
     document.getElementById('val-tier').textContent = data.temporal_coherence.tier;
 
     document.getElementById('metric-d').textContent = data.daily_processing.D_t;
@@ -408,14 +411,19 @@
     document.getElementById('lc-containment').textContent = JSON.stringify(data.load_curve.containment);
     document.getElementById('tc-alignment').textContent = data.temporal_coherence.alignment;
 
+    document.getElementById('ws-l1').textContent = data.weekly_snapshot.line_1 || '(empty)';
+    document.getElementById('ws-l2').textContent = data.weekly_snapshot.line_2 || '(empty)';
+    document.getElementById('ws-l3').textContent = data.weekly_snapshot.line_3 || '(empty)';
+    document.getElementById('ws-history').textContent = data.weekly_snapshot.history.length + ' entries';
+
     document.getElementById('entry-vent').textContent = data.nightly_entry.raw_vent;
     document.getElementById('entry-work').textContent = data.nightly_entry.work_check;
     document.getElementById('entry-temporal').textContent = data.nightly_entry.temporal_position;
 
-    document.getElementById('history-count').textContent = data.history.nightly_entries.length + ' entry recorded in buffer';
+    document.getElementById('history-summary').textContent = data.history.nightly_entries.length + ' entry loaded in rolling archive buffer.';
 
     document.getElementById('disc-file').textContent = data.discovery_viewer.file;
-    document.getElementById('disc-content').textContent = data.discovery_viewer.content ? data.discovery_viewer.content : 'Linked & Ready';
+    document.getElementById('disc-content').textContent = data.discovery_viewer.content ? data.discovery_viewer.content : 'Ready (Empty Content String)';
 
     document.getElementById('engines-core').textContent = data.architecture_map.core_engines.join(' // ');
     document.getElementById('engines-regulators').textContent = data.architecture_map.dynamic_regulators.join(' // ');
