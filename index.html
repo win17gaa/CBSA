@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VALVE // TENSILE — CBSA Studio (Release-Ready Spec v1.0)</title>
+    <title>VALVE // TENSILE — CBSA Studio (Final Spec v1.0 Edition)</title>
     <style>
         :root {
             --bg: #0b0b0c;
@@ -33,7 +33,7 @@
         }
 
         .studio-layout {
-            max-width: 1280px;
+            max-width: 1320px;
             margin: 0 auto;
             display: grid;
             grid-template-columns: 240px 1fr;
@@ -291,16 +291,22 @@
     <!-- Navigation Sidebar -->
     <aside>
         <h2>Studio Navigation</h2>
-        <ul class="nav-links">
+        <ul class="nav-links" id="nav-list">
             <li><a href="#status">System Status</a></li>
-            <li><a href="#vectors">Telemetry Input Sliders</a></li>
-            <li><a href="#temporal">Temporal Distribution</a></li>
-            <li><a href="#dynamics">Regulators & Thresholds</a></li>
+            <li><a href="#telemetry">Telemetry Input</a></li>
+            <li><a href="#daily">Daily Processing</a></li>
+            <li><a href="#temporal-dist">Temporal Distribution</a></li>
+            <li><a href="#temporal-coh">Temporal Coherence</a></li>
             <li><a href="#snapshot">Weekly Snapshot</a></li>
-            <li><a href="#prediction">Prediction Model Spec</a></li>
+            <li><a href="#drift">Drift Slope & Regression</a></li>
+            <li><a href="#collapse">Collapse State</a></li>
+            <li><a href="#regulators">Regulator Dynamics</a></li>
+            <li><a href="#loads">Load Curves</a></li>
+            <li><a href="#prediction">Prediction Model</a></li>
             <li><a href="#nightly">Latest Nightly Entry</a></li>
-            <li><a href="#history">Rolling History</a></li>
-            <li><a href="#architecture">Architecture & Extensions</a></li>
+            <li><a href="#history">History Buffer</a></li>
+            <li><a href="#viewer">Discovery Viewer</a></li>
+            <li><a href="#architecture">Architecture Map</a></li>
         </ul>
     </aside>
 
@@ -308,15 +314,15 @@
     <main>
         <header>
             <div>
-                <h1>VALVE // TENSILE</h1>
-                <div class="subtitle">Cognitive Boundary & Stability Architecture (v1.0 Release Spec)</div>
+                <h1 id="header-title">VALVE // TENSILE</h1>
+                <div class="subtitle" id="header-sub">Cognitive Boundary & Stability Architecture (v1.0 Final JSON Spec)</div>
             </div>
             <div class="status-badge" id="header-status">Stable</div>
         </header>
 
         <!-- SYSTEM STATUS -->
         <section id="status">
-            <h2>System Status</h2>
+            <h2>System Status & Core Config</h2>
             <div class="grid">
                 <div class="metric-card">
                     <span class="metric-label">User</span>
@@ -327,8 +333,8 @@
                     <div class="metric-value" id="val-version">--</div>
                 </div>
                 <div class="metric-card">
-                    <span class="metric-label">Collapse State</span>
-                    <div class="metric-value" id="val-collapse">--</div>
+                    <span class="metric-label">Theme</span>
+                    <div class="metric-value" id="val-theme">--</div>
                 </div>
                 <div class="metric-card">
                     <span class="metric-label">Risk Band</span>
@@ -338,108 +344,152 @@
         </section>
 
         <!-- TELEMETRY INPUT SLIDERS -->
-        <section id="vectors">
-            <h2>Telemetry Input Sliders (Grouped)</h2>
-            <div class="grid">
-                <div class="metric-card">
-                    <span class="metric-label">Drift (D)</span>
-                    <div class="metric-value" id="disp-drift">0.2</div>
-                    <div class="slider-group">
-                        <label><span>Adjust</span><span id="lbl-drift">0.2</span></label>
-                        <input type="range" id="slider-drift" min="0" max="1" step="0.05" value="0.2">
-                    </div>
+        <section id="telemetry">
+            <h2>Telemetry Input (Grouped Sliders)</h2>
+            <div class="grid" id="telemetry-grid">
+                <!-- Populated via JS -->
+            </div>
+        </section>
+
+        <!-- DAILY PROCESSING -->
+        <section id="daily">
+            <h2>Daily Processing Engine</h2>
+            <div class="sub-grid">
+                <div class="content-block">
+                    <span class="label">Normalized Vectors (t)</span>
+                    <p><strong>D_t:</strong> <span id="dt-d">--</span> | <strong>S_t:</strong> <span id="dt-s">--</span> | <strong>B_t:</strong> <span id="dt-b">--</span></p>
+                    <p><strong>C_t:</strong> <span id="dt-c">--</span> | <strong>I_t:</strong> <span id="dt-i">--</span> | <strong>V_t:</strong> <span id="dt-v">--</span></p>
                 </div>
-                <div class="metric-card">
-                    <span class="metric-label">Stability (S)</span>
-                    <div class="metric-value" id="disp-stability">0.8</div>
-                    <div class="slider-group">
-                        <label><span>Adjust</span><span id="lbl-stability">0.8</span></label>
-                        <input type="range" id="slider-stability" min="0" max="1" step="0.05" value="0.8">
-                    </div>
-                </div>
-                <div class="metric-card">
-                    <span class="metric-label">Bandwidth (B)</span>
-                    <div class="metric-value" id="disp-bandwidth">0.75</div>
-                    <div class="slider-group">
-                        <label><span>Adjust</span><span id="lbl-bandwidth">0.75</span></label>
-                        <input type="range" id="slider-bandwidth" min="0" max="1" step="0.05" value="0.75">
-                    </div>
-                </div>
-                <div class="metric-card">
-                    <span class="metric-label">Containment (C)</span>
-                    <div class="metric-value" id="disp-containment">0.85</div>
-                    <div class="slider-group">
-                        <label><span>Adjust</span><span id="lbl-containment">0.85</span></label>
-                        <input type="range" id="slider-containment" min="0" max="1" step="0.05" value="0.85">
-                    </div>
-                </div>
-                <div class="metric-card">
-                    <span class="metric-label">Identity (I)</span>
-                    <div class="metric-value" id="disp-identity">0.9</div>
-                    <div class="slider-group">
-                        <label><span>Adjust</span><span id="lbl-identity">0.9</span></label>
-                        <input type="range" id="slider-identity" min="0" max="1" step="0.05" value="0.9">
-                    </div>
-                </div>
-                <div class="metric-card">
-                    <span class="metric-label">Volatility (V)</span>
-                    <div class="metric-value" id="disp-volatility">0.15</div>
-                    <div class="slider-group">
-                        <label><span>Adjust</span><span id="lbl-volatility">0.15</span></label>
-                        <input type="range" id="slider-volatility" min="0" max="1" step="0.05" value="0.15">
-                    </div>
+                <div class="content-block">
+                    <span class="label">Flags & Risk Score</span>
+                    <p><strong>Computed Flags:</strong> <span id="dt-flags">[]</span></p>
+                    <p><strong>Risk Score:</strong> <span id="dt-risk">null</span></p>
                 </div>
             </div>
         </section>
 
         <!-- TEMPORAL DISTRIBUTION -->
-        <section id="temporal">
-            <h2>Temporal Distribution (Stacked Slider Spec)</h2>
+        <section id="temporal-dist">
+            <h2>Temporal Distribution (Stacked UI Component)</h2>
+            <div class="content-block">
+                <p><strong>Enforced Total:</strong> <span id="td-total">100</span> | <strong>Bias Index:</strong> <span id="td-bias">null</span> | <strong>Regime:</strong> <span id="td-regime">null</span></p>
+            </div>
             <div class="chart-container">
                 <div class="bar-chart" id="temporal-bars"></div>
             </div>
         </section>
 
-        <!-- REGULATORS & THRESHOLDS -->
-        <section id="dynamics">
-            <h2>Regulator Dynamics & Collapse Thresholds</h2>
+        <!-- TEMPORAL COHERENCE -->
+        <section id="temporal-coh">
+            <h2>Temporal Coherence Spec</h2>
             <div class="sub-grid">
                 <div class="content-block">
-                    <span class="label">Regulator Arrays & Slopes</span>
-                    <p><strong>Identity Array:</strong> <span id="reg-identity">--</span></p>
-                    <p><strong>Volatility Array:</strong> <span id="reg-volatility">--</span></p>
-                    <p><strong>Load Array:</strong> <span id="reg-load">--</span></p>
-                    <p><strong>Identity Slope:</strong> <span id="trend-is">--</span></p>
+                    <span class="label">Coherence Tier</span>
+                    <p><strong>Tier:</strong> <span id="tc-tier">--</span></p>
+                    <p><strong>Alignment:</strong> <span id="tc-align">--</span></p>
                 </div>
                 <div class="content-block">
-                    <span class="label">Collapse Threshold Limits</span>
-                    <p><strong>Drift Limit:</strong> <span id="th-drift">--</span></p>
-                    <p><strong>Volatility Limit:</strong> <span id="th-vol">--</span></p>
-                    <p><strong>Bandwidth Floor:</strong> <span id="th-bw">--</span></p>
+                    <span class="label">Biases & Anchors</span>
+                    <p><strong>Drift Bias:</strong> <span id="tc-db">null</span></p>
+                    <p><strong>Future Bias:</strong> <span id="tc-fb">null</span></p>
+                    <p><strong>Present Anchor:</strong> <span id="tc-pa">null</span></p>
                 </div>
             </div>
         </section>
 
         <!-- WEEKLY SNAPSHOT -->
         <section id="snapshot">
-            <h2>Weekly Snapshot & Aggregation Rules</h2>
+            <h2>Weekly Snapshot Buffer</h2>
             <div class="content-block">
-                <span class="label">Snapshot Lines</span>
+                <span class="label">Lines & Aggregations</span>
                 <p><strong>Line 1:</strong> <span id="ws-l1">(empty)</span></p>
                 <p><strong>Line 2:</strong> <span id="ws-l2">(empty)</span></p>
                 <p><strong>Line 3:</strong> <span id="ws-l3">(empty)</span></p>
-                <p><strong>Aggregation Rules:</strong> Window size 7 days | Drift Avg: <span id="agg-drift">null</span> | Collapse Events: <span id="agg-events">0</span></p>
+                <p><strong>Drift Average:</strong> <span id="ws-da">null</span> | <strong>Stability Average:</strong> <span id="ws-sa">null</span> | <strong>Collapse Events:</strong> <span id="ws-ce">0</span></p>
             </div>
         </section>
 
-        <!-- PREDICTION MODEL SPEC -->
+        <!-- DRIFT SLOPE & REGRESSION -->
+        <section id="drift">
+            <h2>Drift Slope & Regression Engine</h2>
+            <div class="sub-grid">
+                <div class="content-block">
+                    <span class="label">Slope Parameters</span>
+                    <p><strong>Values Array:</strong> <span id="ds-vals">--</span></p>
+                    <p><strong>Slope:</strong> <span id="ds-slope">null</span> | <strong>Window Days:</strong> <span id="ds-window">7</span></p>
+                </div>
+                <div class="content-block">
+                    <span class="label">Regression Config</span>
+                    <p><strong>Enabled:</strong> <span id="ds-reg-en">false</span></p>
+                    <p><strong>Coefficients:</strong> <span id="ds-coef">null</span> | <strong>R2:</strong> <span id="ds-r2">null</span></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- COLLAPSE STATE -->
+        <section id="collapse">
+            <h2>Collapse State & Threshold Limits</h2>
+            <div class="sub-grid">
+                <div class="content-block">
+                    <span class="label">Status & Events</span>
+                    <p><strong>Status:</strong> <span id="col-status">--</span></p>
+                    <p><strong>Last Event:</strong> <span id="col-last">null</span></p>
+                    <p><strong>Events Log:</strong> <span id="col-events">[]</span></p>
+                </div>
+                <div class="content-block">
+                    <span class="label">Threshold Limits</span>
+                    <p><strong>Drift Threshold:</strong> <span id="th-drift">--</span></p>
+                    <p><strong>Volatility Threshold:</strong> <span id="th-vol">--</span></p>
+                    <p><strong>Bandwidth Floor:</strong> <span id="th-bw">--</span></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- REGULATOR DYNAMICS -->
+        <section id="regulators">
+            <h2>Regulator Dynamics & Trends</h2>
+            <div class="sub-grid">
+                <div class="content-block">
+                    <span class="label">Arrays</span>
+                    <p><strong>Identity:</strong> <span id="reg-id">--</span></p>
+                    <p><strong>Volatility:</strong> <span id="reg-vol">--</span></p>
+                    <p><strong>Load:</strong> <span id="reg-load">[]</span></p>
+                </div>
+                <div class="content-block">
+                    <span class="label">Trends</span>
+                    <p><strong>Identity Slope:</strong> <span id="tr-is">null</span></p>
+                    <p><strong>Volatility Slope:</strong> <span id="tr-vs">null</span></p>
+                    <p><strong>Load Slope:</strong> <span id="tr-ls">null</span></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- LOAD CURVE -->
+        <section id="loads">
+            <h2>Load Curve & Smoothers</h2>
+            <div class="sub-grid">
+                <div class="content-block">
+                    <span class="label">Raw Curves</span>
+                    <p><strong>Bandwidth:</strong> <span id="lc-bw">--</span></p>
+                    <p><strong>Containment:</strong> <span id="lc-cont">--</span></p>
+                </div>
+                <div class="content-block">
+                    <span class="label">Smoothed Curves</span>
+                    <p><strong>Smoothed Bandwidth:</strong> <span id="lc-sbw">[]</span></p>
+                    <p><strong>Smoothed Containment:</strong> <span id="lc-scont">[]</span></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- PREDICTION MODEL -->
         <section id="prediction">
-            <h2>Prediction Model Specification</h2>
+            <h2>Prediction Model Spec</h2>
             <div class="content-block">
-                <span class="label">Model Status</span>
-                <p><strong>Enabled:</strong> <span id="pred-enabled">false</span></p>
-                <p><strong>Model Inputs:</strong> <span id="pred-inputs">--</span></p>
-                <p><strong>Outputs (Next 7 Days):</strong> Risk: <span id="pred-risk">null</span> | Drift Trend: <span id="pred-drift-trend">null</span></p>
+                <span class="label">Model Configuration</span>
+                <p><strong>Enabled:</strong> <span id="pred-en">false</span></p>
+                <p><strong>Inputs Array:</strong> <span id="pred-in">--</span></p>
+                <p><strong>Outputs (Next 7 Days):</strong> Risk: <span id="pred-out-risk">null</span> | Drift Trend: <span id="pred-out-dt">null</span></p>
+                <p><strong>Notes:</strong> <span id="pred-notes">(empty)</span></p>
             </div>
         </section>
 
@@ -458,36 +508,53 @@
                 <span class="label">Temporal Position</span>
                 <p id="entry-temporal">--</p>
             </div>
+            <div class="content-block">
+                <span class="label">Meta & Flags</span>
+                <p><strong>Tags:</strong> <span id="entry-tags">[]</span> | <strong>Collapse Flags:</strong> <span id="entry-cflags">[]</span></p>
+                <p><strong>Notes:</strong> <span id="entry-notes">(empty)</span></p>
+            </div>
         </section>
 
         <!-- ROLLING HISTORY -->
         <section id="history">
-            <h2>Rolling History Buffer</h2>
+            <h2>History Buffer Spec</h2>
             <div class="content-block">
-                <span class="label">Archive Specs</span>
-                <p id="history-summary">--</p>
+                <span class="label">Buffer Settings</span>
+                <p><strong>Max Entries Capacity:</strong> <span id="hist-max">365</span></p>
+                <p><strong>Loaded Archive Count:</strong> <span id="hist-count">1</span></p>
             </div>
         </section>
 
-        <!-- ARCHITECTURE & EXTENSIONS -->
+        <!-- DISCOVERY VIEWER -->
+        <section id="viewer">
+            <h2>Discovery Viewer Spec</h2>
+            <div class="content-block">
+                <span class="label">File Target</span>
+                <p><strong>File Path:</strong> <span id="disc-file">--</span></p>
+                <p><strong>Cache Enabled:</strong> <span id="disc-cache">false</span></p>
+                <p><strong>Content:</strong> <span id="disc-content">(empty)</span></p>
+            </div>
+        </section>
+
+        <!-- ARCHITECTURE MAP -->
         <section id="architecture">
             <h2>Architecture Map & Future Extensions</h2>
             <div class="sub-grid">
                 <div class="content-block">
-                    <span class="label">System Engines</span>
-                    <p><strong>Core:</strong> <span id="engines-core">--</span></p>
-                    <p><strong>Regulators:</strong> <span id="engines-regulators">--</span></p>
-                    <p><strong>Processing:</strong> <span id="engines-processing">--</span></p>
+                    <span class="label">Engines Map</span>
+                    <p><strong>Core Engines:</strong> <span id="arch-core">--</span></p>
+                    <p><strong>Dynamic Regulators:</strong> <span id="arch-reg">--</span></p>
+                    <p><strong>Processing Engines:</strong> <span id="arch-proc">--</span></p>
                 </div>
                 <div class="content-block">
                     <span class="label">Future Extensions</span>
-                    <p id="engines-extensions">--</p>
+                    <p id="arch-ext">--</p>
                 </div>
             </div>
         </section>
 
         <footer>
-            CSS-SPEC v1.0 &mdash; Release-Ready Intent Architecture
+            CSS-SPEC v1.0 &mdash; Complete Final JSON Schema Hydration Engine
         </footer>
     </main>
 </div>
@@ -515,135 +582,332 @@
           "identity": 0.9,
           "volatility": 0.15
         },
-        "range": { "min": 0.0, "max": 1.0, "step": 0.05 }
+        "range": {
+          "min": 0.0,
+          "max": 1.0,
+          "step": 0.05
+        }
       },
       "daily_processing": {
-        "D_t": 0.2, "S_t": 0.8, "B_t": 0.75, "C_t": 0.85, "I_t": 0.9, "V_t": 0.15,
-        "computed_flags": [], "risk_score": null
+        "D_t": 0.2,
+        "S_t": 0.8,
+        "B_t": 0.75,
+        "C_t": 0.85,
+        "I_t": 0.9,
+        "V_t": 0.15,
+        "computed_flags": [],
+        "risk_score": null
       },
       "temporal_distribution": {
         "interactive": true,
-        "type": "stacked_slider",
-        "enforce_total": 100,
-        "segments": { "way_past": 1, "near_past": 3, "present": 65, "near_future": 20, "far_future": 11 },
-        "bias_index": null, "regime": null
+        "ui": {
+          "component": "stacked_slider",
+          "enforce_total": 100,
+          "segments": [
+            { "id": "way_past", "label": "Way Past", "value": 1 },
+            { "id": "near_past", "label": "Near Past", "value": 3 },
+            { "id": "present", "label": "Present", "value": 65 },
+            { "id": "near_future", "label": "Near Future", "value": 20 },
+            { "id": "far_future", "label": "Far Future", "value": 11 }
+          ]
+        },
+        "data": {
+          "way_past": 1,
+          "near_past": 3,
+          "present": 65,
+          "near_future": 20,
+          "far_future": 11
+        },
+        "bias_index": null,
+        "regime": null
       },
-      "temporal_coherence": { "tier": "III", "alignment": 0.0, "drift_bias": null, "future_bias": null, "present_anchor": null },
+      "temporal_coherence": {
+        "tier": "III",
+        "alignment": 0.0,
+        "drift_bias": null,
+        "future_bias": null,
+        "present_anchor": null
+      },
       "weekly_snapshot": {
-        "line_1": "", "line_2": "", "line_3": "", "history": [],
-        "aggregation_rules": { "drift_avg": null, "stability_avg": null, "collapse_events": 0 }
+        "line_1": "",
+        "line_2": "",
+        "line_3": "",
+        "history": [],
+        "aggregation_rules": {
+          "drift_avg": null,
+          "stability_avg": null,
+          "collapse_events": 0
+        }
       },
       "drift_slope": {
-        "values": [0.2], "slope": null, "window_days": 7,
-        "regression": { "enabled": false, "coefficients": null, "r2": null }
+        "values": [0.2],
+        "slope": null,
+        "window_days": 7,
+        "regression": {
+          "enabled": false,
+          "coefficients": null,
+          "r2": null
+        }
       },
       "collapse_state": {
         "status": "stable",
-        "thresholds": { "drift": 0.65, "volatility": 0.45, "bandwidth": 0.30 },
-        "events": [], "last_event": null, "risk_band": "low"
+        "thresholds": {
+          "drift": 0.65,
+          "volatility": 0.45,
+          "bandwidth": 0.30
+        },
+        "events": [],
+        "last_event": null,
+        "risk_band": "low"
       },
       "regulator_dynamics": {
-        "identity": [0.9], "volatility": [0.15], "load": [],
-        "trend": { "identity_slope": null, "volatility_slope": null, "load_slope": null }
+        "identity": [0.9],
+        "volatility": [0.15],
+        "load": [],
+        "trend": {
+          "identity_slope": null,
+          "volatility_slope": null,
+          "load_slope": null
+        }
       },
-      "load_curve": { "bandwidth": [0.75], "containment": [0.85], "smoothed": { "bandwidth": [], "containment": [] } },
+      "load_curve": {
+        "bandwidth": [0.75],
+        "containment": [0.85],
+        "smoothed": {
+          "bandwidth": [],
+          "containment": []
+        }
+      },
       "history": {
-        "nightly_entries": [{
-          "raw_vent": "I got slightly irritated driving doordash today...",
-          "work_check": "I only had the gym, doordash...",
-          "temporal_position": "my mind spent a lot of time thinking about CBSA...",
-          "D_t": 0.2, "S_t": 0.8, "B_t": 0.75, "C_t": 0.85, "I_t": 0.9, "V_t": 0.15,
-          "temporal_distribution": { "way_past": 1, "near_past": 3, "present": 65, "near_future": 20, "far_future": 11 },
-          "collapse_state": "stable", "tags": [], "date": null
-        }],
+        "nightly_entries": [
+          {
+            "raw_vent": "I got slightly irritated driving doordash today...",
+            "work_check": "I only had the gym, doordash...",
+            "temporal_position": "my mind spent a lot of time thinking about CBSA...",
+            "D_t": 0.2,
+            "S_t": 0.8,
+            "B_t": 0.75,
+            "C_t": 0.85,
+            "I_t": 0.9,
+            "V_t": 0.15,
+            "temporal_distribution": {
+              "way_past": 1,
+              "near_past": 3,
+              "present": 65,
+              "near_future": 20,
+              "far_future": 11
+            },
+            "collapse_state": "stable",
+            "tags": [],
+            "date": null
+          }
+        ],
         "max_entries": 365
       },
       "prediction_model": {
         "enabled": false,
-        "inputs": ["D_t", "S_t", "B_t", "C_t", "I_t", "V_t", "temporal_distribution", "regulator_dynamics", "collapse_state"],
-        "outputs": { "collapse_risk_next_7_days": null, "drift_trend_next_7_days": null },
+        "inputs": [
+          "D_t",
+          "S_t",
+          "B_t",
+          "C_t",
+          "I_t",
+          "V_t",
+          "temporal_distribution",
+          "regulator_dynamics",
+          "collapse_state"
+        ],
+        "outputs": {
+          "collapse_risk_next_7_days": null,
+          "drift_trend_next_7_days": null
+        },
         "notes": ""
       },
-      "ui_settings": { "theme": "dark", "navigation": "sidebar", "show_graphs": true, "show_raw_vent": true, "compact_mode": false, "inline_mode": false },
-      "discovery_viewer": { "file": "docs/DISCOVERY.md", "content": "", "cache_enabled": false },
+      "ui_settings": {
+        "theme": "dark",
+        "navigation": "sidebar",
+        "show_graphs": true,
+        "show_raw_vent": true,
+        "compact_mode": false,
+        "inline_mode": false
+      },
+      "discovery_viewer": {
+        "file": "docs/DISCOVERY.md",
+        "content": "",
+        "cache_enabled": false
+      },
       "architecture_map": {
-        "core_engines": ["Drift_Engine", "Stability_Engine", "Bandwidth_Engine", "Containment_Engine"],
-        "dynamic_regulators": ["Identity_Coherence_Regulator", "Volatility_Regulator", "Load_Regulator"],
-        "processing_engines": ["Daily_Processing_Engine", "Weekly_Processing_Engine", "Collapse_Processing_Engine", "Prediction_Engine"],
-        "future_extensions": ["Clinical_Validation_Module", "Multi_Day_Regression_Module", "Collapse_Event_Classifier", "Temporal_Regime_Detector"]
+        "core_engines": [
+          "Drift_Engine",
+          "Stability_Engine",
+          "Bandwidth_Engine",
+          "Containment_Engine"
+        ],
+        "dynamic_regulators": [
+          "Identity_Coherence_Regulator",
+          "Volatility_Regulator",
+          "Load_Regulator"
+        ],
+        "processing_engines": [
+          "Daily_Processing_Engine",
+          "Weekly_Processing_Engine",
+          "Collapse_Processing_Engine",
+          "Prediction_Engine"
+        ],
+        "future_extensions": [
+          "Clinical_Validation_Module",
+          "Multi_Day_Regression_Module",
+          "Collapse_Event_Classifier",
+          "Temporal_Regime_Detector"
+        ]
       }
     };
 
-    // Hydrate UI
+    // Hydration
     document.getElementById('val-user').textContent = data.user;
     document.getElementById('val-version').textContent = data.version;
-    document.getElementById('val-collapse').textContent = data.collapse_state.status;
-    document.getElementById('header-status').textContent = data.collapse_state.status.toUpperCase();
+    document.getElementById('val-theme').textContent = data.ui_settings.theme;
     document.getElementById('val-risk-band').textContent = data.collapse_state.risk_band;
+    document.getElementById('header-status').textContent = data.collapse_state.status.toUpperCase();
 
-    document.getElementById('reg-identity').textContent = JSON.stringify(data.regulator_dynamics.identity);
-    document.getElementById('reg-volatility').textContent = JSON.stringify(data.regulator_dynamics.volatility);
-    document.getElementById('reg-load').textContent = data.regulator_dynamics.load.length ? JSON.stringify(data.regulator_dynamics.load) : '[] (empty)';
-    document.getElementById('trend-is').textContent = data.regulator_dynamics.trend.identity_slope !== null ? data.regulator_dynamics.trend.identity_slope : 'null';
+    // Telemetry Sliders
+    const telGrid = document.getElementById('telemetry-grid');
+    const metricsObj = data.teleletry_input?.metrics || data.telemetry_input.metrics;
+    const rConfig = data.telemetry_input.range;
+    for (const [key, val] of Object.entries(metricsObj)) {
+        const card = document.createElement('div');
+        card.className = 'metric-card';
+        card.innerHTML = `
+            <span class="metric-label">${key}</span>
+            <div class="metric-value" id="disp-${key}">${val}</div>
+            <div class="slider-group">
+                <label><span>Adjust</span><span id="lbl-${key}">${val}</span></label>
+                <input type="range" id="slider-${key}" min="${rConfig.min}" max="${rConfig.max}" step="${rConfig.step}" value="${val}">
+            </div>
+        `;
+        telGrid.appendChild(card);
 
+        // Bind interactive event
+        setTimeout(() => {
+            const slider = document.getElementById(`slider-${key}`);
+            const disp = document.getElementById(`disp-${key}`);
+            const lbl = document.getElementById(`lbl-${key}`);
+            if(slider) {
+                slider.addEventListener('input', (e) => {
+                    const v = parseFloat(e.target.value).toFixed(2);
+                    disp.textContent = v;
+                    lbl.textContent = v;
+                });
+            }
+        }, 0);
+    }
+
+    // Daily Processing
+    document.getElementById('dt-d').textContent = data.daily_processing.D_t;
+    document.getElementById('dt-s').textContent = data.daily_processing.S_t;
+    document.getElementById('dt-b').textContent = data.daily_processing.B_t;
+    document.getElementById('dt-c').textContent = data.daily_processing.C_t;
+    document.getElementById('dt-i').textContent = data.daily_processing.I_t;
+    document.getElementById('dt-v').textContent = data.daily_processing.V_t;
+    document.getElementById('dt-flags').textContent = JSON.stringify(data.daily_processing.computed_flags);
+    document.getElementById('dt-risk').textContent = data.daily_processing.risk_score;
+
+    // Temporal Distribution UI & Data
+    document.getElementById('td-total').textContent = data.temporal_distribution.ui.enforce_total;
+    document.getElementById('td-bias').textContent = data.temporal_distribution.bias_index;
+    document.getElementById('td-regime').textContent = data.temporal_distribution.regime;
+
+    const temporalContainer = document.getElementById('temporal-bars');
+    const segs = data.temporal_distribution.ui.segments;
+    const totalSeg = segs.reduce((acc, s) => acc + s.value, 0);
+    segs.forEach(s => {
+        const pct = Math.round((s.value / totalSeg) * 100);
+        const row = document.createElement('div');
+        row.className = 'bar-row';
+        row.innerHTML = `
+            <div class="bar-label">${s.label}</div>
+            <div class="bar-track">
+                <div class="bar-fill" style="width: ${pct}%"></div>
+            </div>
+            <div class="bar-val">${s.value}%</div>
+        `;
+        temporalContainer.appendChild(row);
+    });
+
+    // Temporal Coherence
+    document.getElementById('tc-tier').textContent = data.temporal_coherence.tier;
+    document.getElementById('tc-align').textContent = data.temporal_coherence.alignment;
+    document.getElementById('tc-db').textContent = data.temporal_coherence.drift_bias;
+    document.getElementById('tc-fb').textContent = data.temporal_coherence.future_bias;
+    document.getElementById('tc-pa').textContent = data.temporal_coherence.present_anchor;
+
+    // Weekly Snapshot
+    document.getElementById('ws-l1').textContent = data.weekly_snapshot.line_1 || '(empty)';
+    document.getElementById('ws-l2').textContent = data.weekly_snapshot.line_2 || '(empty)';
+    document.getElementById('ws-l3').textContent = data.weekly_snapshot.line_3 || '(empty)';
+    document.getElementById('ws-da').textContent = data.weekly_snapshot.aggregation_rules.drift_avg;
+    document.getElementById('ws-sa').textContent = data.weekly_snapshot.aggregation_rules.stability_avg;
+    document.getElementById('ws-ce').textContent = data.weekly_snapshot.aggregation_rules.collapse_events;
+
+    // Drift Slope
+    document.getElementById('ds-vals').textContent = JSON.stringify(data.drift_slope.values);
+    document.getElementById('ds-slope').textContent = data.drift_slope.slope;
+    document.getElementById('ds-window').textContent = data.drift_slope.window_days;
+    document.getElementById('ds-reg-en').textContent = data.drift_slope.regression.enabled;
+    document.getElementById('ds-coef').textContent = data.drift_slope.regression.coefficients;
+    document.getElementById('ds-r2').textContent = data.drift_slope.regression.r2;
+
+    // Collapse State
+    document.getElementById('col-status').textContent = data.collapse_state.status;
+    document.getElementById('col-last').textContent = data.collapse_state.last_event;
+    document.getElementById('col-events').textContent = JSON.stringify(data.collapse_state.events);
     document.getElementById('th-drift').textContent = data.collapse_state.thresholds.drift;
     document.getElementById('th-vol').textContent = data.collapse_state.thresholds.volatility;
     document.getElementById('th-bw').textContent = data.collapse_state.thresholds.bandwidth;
 
-    document.getElementById('ws-l1').textContent = data.weekly_snapshot.line_1 || '(empty)';
-    document.getElementById('ws-l2').textContent = data.weekly_snapshot.line_2 || '(empty)';
-    document.getElementById('ws-l3').textContent = data.weekly_snapshot.line_3 || '(empty)';
-    document.getElementById('agg-drift').textContent = data.weekly_snapshot.aggregation_rules.drift_avg !== null ? data.weekly_snapshot.aggregation_rules.drift_avg : 'null';
-    document.getElementById('agg-events').textContent = data.weekly_snapshot.aggregation_rules.collapse_events;
+    // Regulator Dynamics
+    document.getElementById('reg-id').textContent = JSON.stringify(data.regulator_dynamics.identity);
+    document.getElementById('reg-vol').textContent = JSON.stringify(data.regulator_dynamics.volatility);
+    document.getElementById('reg-load').textContent = JSON.stringify(data.regulator_dynamics.load);
+    document.getElementById('tr-is').textContent = data.regulator_dynamics.trend.identity_slope;
+    document.getElementById('tr-vs').textContent = data.regulator_dynamics.trend.volatility_slope;
+    document.getElementById('tr-ls').textContent = data.regulator_dynamics.trend.load_slope;
 
-    document.getElementById('pred-enabled').textContent = data.prediction_model.enabled;
-    document.getElementById('pred-inputs').textContent = data.prediction_model.inputs.join(', ');
-    document.getElementById('pred-risk').textContent = data.prediction_model.outputs.collapse_risk_next_7_days !== null ? data.prediction_model.outputs.collapse_risk_next_7_days : 'null';
-    document.getElementById('pred-drift-trend').textContent = data.prediction_model.outputs.drift_trend_next_7_days !== null ? data.prediction_model.outputs.drift_trend_next_7_days : 'null';
+    // Load Curve
+    document.getElementById('lc-bw').textContent = JSON.stringify(data.load_curve.bandwidth);
+    document.getElementById('lc-cont').textContent = JSON.stringify(data.load_curve.containment);
+    document.getElementById('lc-sbw').textContent = JSON.stringify(data.load_curve.smoothed.bandwidth);
+    document.getElementById('lc-scont').textContent = JSON.stringify(data.load_curve.smoothed.containment);
 
+    // Prediction Model
+    document.getElementById('pred-en').textContent = data.prediction_model.enabled;
+    document.getElementById('pred-in').textContent = data.prediction_model.inputs.join(', ');
+    document.getElementById('pred-out-risk').textContent = data.prediction_model.outputs.collapse_risk_next_7_days;
+    document.getElementById('pred-out-dt').textContent = data.prediction_model.outputs.drift_trend_next_7_days;
+    document.getElementById('pred-notes').textContent = data.prediction_model.notes || '(empty)';
+
+    // Nightly Entry
     document.getElementById('entry-vent').textContent = data.nightly_entry.raw_vent;
     document.getElementById('entry-work').textContent = data.nightly_entry.work_check;
     document.getElementById('entry-temporal').textContent = data.nightly_entry.temporal_position;
+    document.getElementById('entry-tags').textContent = JSON.stringify(data.nightly_entry.tags);
+    document.getElementById('entry-cflags').textContent = JSON.stringify(data.nightly_entry.collapse_flags);
+    document.getElementById('entry-notes').textContent = data.nightly_entry.notes || '(empty)';
 
-    document.getElementById('history-summary').textContent = `Max buffer capacity: ${data.history.max_entries} entries. Current loaded archive: ${data.history.nightly_entries.length} entry.`;
+    // History Buffer
+    document.getElementById('hist-max').textContent = data.history.max_entries;
+    document.getElementById('hist-count').textContent = data.history.nightly_entries.length;
 
-    document.getElementById('engines-core').textContent = data.architecture_map.core_engines.join(' // ');
-    document.getElementById('engines-regulators').textContent = data.architecture_map.dynamic_regulators.join(' // ');
-    document.getElementById('engines-processing').textContent = data.architecture_map.processing_engines.join(' // ');
-    document.getElementById('engines-extensions').textContent = data.architecture_map.future_extensions.join(' // ');
+    // Discovery Viewer
+    document.getElementById('disc-file').textContent = data.discovery_viewer.file;
+    document.getElementById('disc-cache').textContent = data.discovery_viewer.cache_enabled;
+    document.getElementById('disc-content').textContent = data.discovery_viewer.content || '(empty)';
 
-    // Render Temporal Distribution Stacked Segments
-    const temporalContainer = document.getElementById('temporal-bars');
-    const segs = data.temporal_distribution.segments;
-    const totalSeg = Object.values(segs).reduce((a, b) => a + b, 0);
-
-    for (const [key, val] of Object.entries(segs)) {
-        const pct = Math.round((val / totalSeg) * 100);
-        const row = document.createElement('div');
-        row.className = 'bar-row';
-        row.innerHTML = `
-            <div class="bar-label">${key.replace('_', ' ')}</div>
-            <div class="bar-track">
-                <div class="bar-fill" style="width: ${pct}%"></div>
-            </div>
-            <div class="bar-val">${val}%</div>
-        `;
-        temporalContainer.appendChild(row);
-    }
-
-    // Telemetry Sliders Interaction Bindings
-    const metricsKeys = ['drift', 'stability', 'bandwidth', 'containment', 'identity', 'volatility'];
-    metricsKeys.forEach(m => {
-        const slider = document.getElementById(`slider-${m}`);
-        const disp = document.getElementById(`disp-${m}`);
-        const lbl = document.getElementById(`lbl-${m}`);
-
-        slider.addEventListener('input', (e) => {
-            const val = parseFloat(e.target.value).toFixed(2);
-            disp.textContent = val;
-            lbl.textContent = val;
-        });
-    });
+    // Architecture Map
+    document.getElementById('arch-core').textContent = data.architecture_map.core_engines.join(' // ');
+    document.getElementById('arch-reg').textContent = data.architecture_map.dynamic_regulators.join(' // ');
+    document.getElementById('arch-proc').textContent = data.architecture_map.processing_engines.join(' // ');
+    document.getElementById('arch-ext').textContent = data.architecture_map.future_extensions.join(' // ');
 </script>
 
 </body>
