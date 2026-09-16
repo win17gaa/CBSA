@@ -39,6 +39,9 @@
             border-bottom: 1px solid var(--border);
             padding-bottom: 1.5rem;
             margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
         }
 
         h1 {
@@ -52,6 +55,15 @@
         .subtitle {
             color: var(--text-muted);
             font-size: 12px;
+        }
+
+        .status-badge {
+            font-size: 11px;
+            text-transform: uppercase;
+            padding: 0.25rem 0.5rem;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: #4ade80;
         }
 
         section {
@@ -136,8 +148,11 @@
 
 <div class="container">
     <header>
-        <h1>VALVE // TENSILE</h1>
-        <div class="subtitle">Cognitive Boundary & Stability Architecture (CSS-SPEC v0.2.1)</div>
+        <div>
+            <h1>VALVE // TENSILE</h1>
+            <div class="subtitle">Cognitive Boundary & Stability Architecture (CSS-SPEC v0.2.1)</div>
+        </div>
+        <div class="status-badge">Inline Mode</div>
     </header>
 
     <section>
@@ -316,7 +331,7 @@
       }
     };
 
-    // Hydrate UI from updated JSON payload
+    // Hydrate UI from embedded JSON
     document.getElementById('val-user').textContent = data.user;
     document.getElementById('val-version').textContent = data.version;
     document.getElementById('val-collapse').textContent = data.collapse_state.status;
