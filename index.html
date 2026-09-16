@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VALVE // TENSILE — CBSA Studio (Cloud-Ready Edition)</title>
+    <title>VALVE // TENSILE — CBSA Studio (Local-First Edition)</title>
     <style>
         :root {
             --bg: #0b0b0c;
@@ -220,6 +220,13 @@
             opacity: 0.9;
         }
 
+        .btn-secondary {
+            background: var(--surface);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            margin-left: 0.5rem;
+        }
+
         /* Graphs & Visualizations */
         .chart-container {
             background: var(--bg);
@@ -302,6 +309,14 @@
             margin-bottom: 0;
         }
 
+        .history-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            font-size: 11px;
+        }
+
         footer {
             text-align: center;
             color: var(--text-muted);
@@ -325,7 +340,7 @@
             <li><a href="#telemetry">Telemetry Readouts</a></li>
             <li><a href="#temporal-dist">Temporal Distribution</a></li>
             <li><a href="#collapse">Collapse State</a></li>
-            <li><a href="#history">Cloud History Buffer</a></li>
+            <li><a href="#history">Local History Buffer</a></li>
         </ul>
     </aside>
 
@@ -334,9 +349,9 @@
         <header>
             <div>
                 <h1>VALVE // TENSILE</h1>
-                <div class="subtitle">Cognitive Boundary & Stability Architecture (Cloud-Ready)</div>
+                <div class="subtitle">Cognitive Boundary & Stability Architecture (Local-First Edition)</div>
             </div>
-            <div class="status-badge" id="header-status">Stable</div>
+            <div class="status-badge" id="header-status">Local Active</div>
         </header>
 
         <!-- VALVE ACTIVE INPUT PANEL -->
@@ -359,7 +374,8 @@
                 <input type="text" id="input-temporal-pos" placeholder="Where is your mind anchored today?">
                 <p style="margin-top: 0.5rem; font-size: 11px; color: var(--accent);">👉 Note: Remember to adjust the temporal sliders further down the page so they balance and equal 100%.</p>
             </div>
-            <button class="btn" id="btn-submit-entry">Commit Entry & Sync to Cloud</button>
+            <button class="btn" id="btn-submit-entry">Commit Entry to Local Storage</button>
+            <button class="btn btn-secondary" id="btn-export-data">Export JSON Data</button>
             <p id="sync-status" style="margin-top: 0.75rem; font-size: 11px; color: var(--text-muted);"></p>
         </section>
 
@@ -376,8 +392,8 @@
                     <div class="metric-value">1.0</div>
                 </div>
                 <div class="metric-card">
-                    <span class="metric-label">Cloud Sync</span>
-                    <div class="metric-value" id="val-sync-status" style="font-size: 14px; color: var(--accent);">Ready</div>
+                    <span class="metric-label">Storage Mode</span>
+                    <div class="metric-value" id="val-sync-status" style="font-size: 14px; color: var(--success);">Local Browser</div>
                 </div>
                 <div class="metric-card">
                     <span class="metric-label">Risk Band</span>
@@ -419,50 +435,21 @@
             </div>
         </section>
 
-        <!-- CLOUD HISTORY BUFFER -->
+        <!-- LOCAL HISTORY BUFFER -->
         <section id="history">
-            <h2>Cloud History Buffer (Loaded Entries)</h2>
+            <h2>Local History Buffer (Stored Entries)</h2>
             <div class="content-block" id="history-log-container">
-                <p style="color: var(--text-muted);">No entries loaded from cloud yet.</p>
+                <p style="color: var(--text-muted);">No entries stored in this browser yet.</p>
             </div>
         </section>
 
         <footer>
-            CBSA STUDIO &mdash; Secure Cloud-Ready Implementation Layer
+            CBSA STUDIO &mdash; Local-First Implementation Layer
         </footer>
     </main>
 </div>
 
-<!-- Firebase SDK Imports (Modular v10 CDN) -->
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-    // ==========================================
-    // FIREBASE CONFIGURATION PLACEHOLDERS
-    // ==========================================
-    const firebaseConfig = {
-        apiKey: "YOUR_API_KEY_HERE",
-        authDomain: "YOUR_AUTH_DOMAIN_HERE",
-        projectId: "YOUR_PROJECT_ID_HERE",
-        storageBucket: "YOUR_STORAGE_BUCKET_HERE",
-        messagingSenderId: "YOUR_MESSAGING_SENDER_ID_HERE",
-        appId: "YOUR_APP_ID_HERE"
-    };
-
-    let db = null;
-    let isFirebaseInitialized = false;
-
-    try {
-        const app = initializeApp(firebaseConfig);
-        db = getFirestore(app);
-        isFirebaseInitialized = true;
-        document.getElementById('val-sync-status').textContent = "Connected";
-    } catch (e) {
-        console.warn("Firebase not configured yet. Running in local simulation mode.");
-        document.getElementById('val-sync-status').textContent = "Offline Mode";
-    }
-
+<script>
     // Baseline state model
     const state = {
         telemetry: { drift: 0.2, stability: 0.8, bandwidth: 0.75, containment: 0.85, identity: 0.9, volatility: 0.15 },
@@ -534,9 +521,45 @@
     updateSum();
 
     // ==========================================
-    // SUBMIT WIRING & TIMESTAMPS
+    // LOCAL STORAGE HISTORY MANAGEMENT
     // ==========================================
-    document.getElementById('btn-submit-entry').addEventListener('click', async () => {
+    const STORAGE_KEY = "cbsa_studio_entries";
+
+    function loadHistory() {
+        const container = document.getElementById('history-log-container');
+        const rawData = localStorage.getItem(STORAGE_KEY);
+        if (!rawData) {
+            container.innerHTML = '<p style="color: var(--text-muted);">No entries stored in this browser yet.</p>';
+            return;
+        }
+
+        try {
+            const entries = JSON.parse(rawData);
+            if (entries.length === 0) {
+                container.innerHTML = '<p style="color: var(--text-muted);">No entries stored in this browser yet.</p>';
+                return;
+            }
+
+            container.innerHTML = "";
+            entries.reverse().forEach((entry, idx) => {
+                const item = document.createElement('div');
+                item.className = 'history-item';
+                item.innerHTML = `
+                    <strong>[#${entries.length - idx}] User: ${entry.user}</strong> (${entry.local_date_string})<br>
+                    <span style="color: var(--text-muted);">Vent:</span> ${entry.raw_vent}<br>
+                    <span style="color: var(--text-muted);">Temporal Anchor:</span> ${entry.temporal_position || 'None'}
+                `;
+                container.appendChild(item);
+            });
+        } catch (e) {
+            container.innerHTML = '<p style="color: #ef4444;">Error reading local history storage.</p>';
+        }
+    }
+
+    // Load existing history on startup
+    loadHistory();
+
+    document.getElementById('btn-submit-entry').addEventListener('click', () => {
         const userId = document.getElementById('input-user-id').value || "anonymous";
         const rawVent = document.getElementById('input-raw-vent').value;
         const workCheck = document.getElementById('input-work-check').value;
@@ -550,6 +573,7 @@
         }
 
         const entryPayload = {
+            id: Date.now(),
             user: userId,
             timestamp: new Date().toISOString(),
             local_date_string: new Date().toLocaleString(),
@@ -560,29 +584,42 @@
             temporal_distribution: state.temporal.reduce((obj, item) => ({ ...obj, [item.id]: item.value }), {})
         };
 
-        syncStatusEl.style.color = "var(--text-muted)";
-        syncStatusEl.textContent = "Committing entry and syncing...";
-
+        // Fetch existing entries or initialize empty array
+        let existingEntries = [];
         try {
-            if (isFirebaseInitialized && db) {
-                await addDoc(collection(db, "users", userId, "nightly_entries"), entryPayload);
-                syncStatusEl.style.color = "var(--success)";
-                syncStatusEl.textContent = "Success: Entry securely synced to cloud off-site storage.";
-            } else {
-                console.log("Simulated Cloud Push:", entryPayload);
-                syncStatusEl.style.color = "var(--success)";
-                syncStatusEl.textContent = "Success: Entry logged locally (Configure Firebase keys to push live).";
-            }
-            
-            document.getElementById('input-raw-vent').value = "";
-            document.getElementById('input-work-check').value = "";
-            document.getElementById('input-temporal-pos').value = "";
-
-        } catch (error) {
-            console.error("Cloud sync failed:", error);
-            syncStatusEl.style.color = "#ef4444";
-            syncStatusEl.textContent = "Sync failed: " + error.message;
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (stored) existingEntries = JSON.parse(stored);
+        } catch (e) {
+            existingEntries = [];
         }
+
+        existingEntries.push(entryPayload);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(existingEntries));
+
+        syncStatusEl.style.color = "var(--success)";
+        syncStatusEl.textContent = "Success: Entry saved locally to browser storage!";
+
+        // Clear entry fields and refresh view
+        document.getElementById('input-raw-vent').value = "";
+        document.getElementById('input-work-check').value = "";
+        document.getElementById('input-temporal-pos').value = "";
+        loadHistory();
+    });
+
+    // Export JSON feature for gathering files from other computers
+    document.getElementById('btn-export-data').addEventListener('click', () => {
+        const rawData = localStorage.getItem(STORAGE_KEY);
+        if (!rawData) {
+            alert("No local data to export.");
+            return;
+        }
+        const blob = new Blob([rawData], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `cbsa_entries_${document.getElementById('input-user-id').value || 'export'}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
     });
 
     document.getElementById('val-user').textContent = document.getElementById('input-user-id').value;
