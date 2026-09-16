@@ -31,7 +31,7 @@
         }
 
         .container {
-            max-width: 720px;
+            max-width: 860px;
             margin: 0 auto;
         }
 
@@ -85,7 +85,7 @@
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
             gap: 1rem;
         }
 
@@ -134,6 +134,22 @@
             margin-bottom: 0;
         }
 
+        .sub-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        pre {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            padding: 1rem;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            overflow-x: auto;
+            color: var(--text-main);
+        }
+
         footer {
             text-align: center;
             color: var(--text-muted);
@@ -155,6 +171,7 @@
         <div class="status-badge">Inline Mode</div>
     </header>
 
+    <!-- SYSTEM STATUS -->
     <section>
         <h2>System Status</h2>
         <div class="grid">
@@ -167,7 +184,7 @@
                 <div class="metric-value" id="val-version">--</div>
             </div>
             <div class="metric-card">
-                <span class="metric-label">Collapse State</span>
+                <span class="metric-label">Collapse Status</span>
                 <div class="metric-value" id="val-collapse">--</div>
             </div>
             <div class="metric-card">
@@ -177,38 +194,59 @@
         </div>
     </section>
 
+    <!-- DAILY PROCESSING VECTORS -->
     <section>
-        <h2>Daily Telemetry Vectors</h2>
+        <h2>Daily Telemetry Vectors (t)</h2>
         <div class="grid">
-            <div class="metric-card">
-                <span class="metric-label">Drift (D)</span>
-                <div class="metric-value" id="metric-d">--</div>
+            <div class="metric-card"><span class="metric-label">Drift (D)</span><div class="metric-value" id="metric-d">--</div></div>
+            <div class="metric-card"><span class="metric-label">Stability (S)</span><div class="metric-value" id="metric-s">--</div></div>
+            <div class="metric-card"><span class="metric-label">Bandwidth (B)</span><div class="metric-value" id="metric-b">--</div></div>
+            <div class="metric-card"><span class="metric-label">Containment (C)</span><div class="metric-value" id="metric-c">--</div></div>
+            <div class="metric-card"><span class="metric-label">Identity (I)</span><div class="metric-value" id="metric-i">--</div></div>
+            <div class="metric-card"><span class="metric-label">Volatility (V)</span><div class="metric-value" id="metric-v">--</div></div>
+        </div>
+    </section>
+
+    <!-- DRIFT SLOPE & COLLAPSE THRESHOLDS -->
+    <section>
+        <h2>Drift Slope & Collapse Thresholds</h2>
+        <div class="sub-grid">
+            <div class="content-block">
+                <span class="label">Drift Slope Parameters</span>
+                <p><strong>Values:</strong> <span id="ds-values">--</span></p>
+                <p><strong>Slope:</strong> <span id="ds-slope">--</span></p>
             </div>
-            <div class="metric-card">
-                <span class="metric-label">Stability (S)</span>
-                <div class="metric-value" id="metric-s">--</div>
-            </div>
-            <div class="metric-card">
-                <span class="metric-label">Bandwidth (B)</span>
-                <div class="metric-value" id="metric-b">--</div>
-            </div>
-            <div class="metric-card">
-                <span class="metric-label">Containment (C)</span>
-                <div class="metric-value" id="metric-c">--</div>
-            </div>
-            <div class="metric-card">
-                <span class="metric-label">Identity (I)</span>
-                <div class="metric-value" id="metric-i">--</div>
-            </div>
-            <div class="metric-card">
-                <span class="metric-label">Volatility (V)</span>
-                <div class="metric-value" id="metric-v">--</div>
+            <div class="content-block">
+                <span class="label">Collapse Thresholds</span>
+                <p><strong>Drift Limit:</strong> <span id="th-drift">--</span></p>
+                <p><strong>Volatility Limit:</strong> <span id="th-vol">--</span></p>
+                <p><strong>Bandwidth Floor:</strong> <span id="th-bw">--</span></p>
             </div>
         </div>
     </section>
 
+    <!-- REGULATORS & LOAD CURVES -->
     <section>
-        <h2>Nightly Entry</h2>
+        <h2>Regulator Dynamics & Load Curves</h2>
+        <div class="sub-grid">
+            <div class="content-block">
+                <span class="label">Regulator Dynamics</span>
+                <p><strong>Identity Array:</strong> <span id="reg-identity">--</span></p>
+                <p><strong>Volatility Array:</strong> <span id="reg-volatility">--</span></p>
+                <p><strong>Load Array:</strong> <span id="reg-load">--</span></p>
+            </div>
+            <div class="content-block">
+                <span class="label">Load Curves & Coherence</span>
+                <p><strong>Bandwidth Curve:</strong> <span id="lc-bandwidth">--</span></p>
+                <p><strong>Containment Curve:</strong> <span id="lc-containment">--</span></p>
+                <p><strong>Temporal Alignment:</strong> <span id="tc-alignment">--</span></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- NIGHTLY ENTRY -->
+    <section>
+        <h2>Latest Nightly Entry</h2>
         <div class="content-block">
             <span class="label">Raw Vent</span>
             <p id="entry-vent">--</p>
@@ -223,19 +261,30 @@
         </div>
     </section>
 
+    <!-- ROLLING HISTORY -->
     <section>
-        <h2>Architecture Map</h2>
+        <h2>Rolling History Buffer</h2>
         <div class="content-block">
-            <span class="label">Core Engines</span>
-            <p id="engines-core">--</p>
+            <span class="label">Logged Nightly Entries Count</span>
+            <p id="history-count">-- entries recorded</p>
         </div>
-        <div class="content-block">
-            <span class="label">Dynamic Regulators</span>
-            <p id="engines-regulators">--</p>
-        </div>
-        <div class="content-block">
-            <span class="label">Processing Engines</span>
-            <p id="engines-processing">--</p>
+    </section>
+
+    <!-- DISCOVERY & ARCHITECTURE MAP -->
+    <section>
+        <h2>Discovery Viewer & Architecture Map</h2>
+        <div class="sub-grid">
+            <div class="content-block">
+                <span class="label">Discovery Reference</span>
+                <p><strong>Target File:</strong> <span id="disc-file">--</span></p>
+                <p><strong>Status:</strong> <span id="disc-content">--</span></p>
+            </div>
+            <div class="content-block">
+                <span class="label">Architecture Map</span>
+                <p><strong>Core Engines:</strong> <span id="engines-core">--</span></p>
+                <p><strong>Dynamic Regulators:</strong> <span id="engines-regulators">--</span></p>
+                <p><strong>Processing Engines:</strong> <span id="engines-processing">--</span></p>
+            </div>
         </div>
     </section>
 
@@ -331,7 +380,7 @@
       }
     };
 
-    // Hydrate UI from embedded JSON
+    // Hydrate UI from complete JSON schema
     document.getElementById('val-user').textContent = data.user;
     document.getElementById('val-version').textContent = data.version;
     document.getElementById('val-collapse').textContent = data.collapse_state.status;
@@ -344,9 +393,29 @@
     document.getElementById('metric-i').textContent = data.daily_processing.I_t;
     document.getElementById('metric-v').textContent = data.daily_processing.V_t;
 
+    document.getElementById('ds-values').textContent = JSON.stringify(data.drift_slope.values);
+    document.getElementById('ds-slope').textContent = data.drift_slope.slope !== null ? data.drift_slope.slope : 'null (uncalculated)';
+
+    document.getElementById('th-drift').textContent = data.collapse_state.thresholds.drift;
+    document.getElementById('th-vol').textContent = data.collapse_state.thresholds.volatility;
+    document.getElementById('th-bw').textContent = data.collapse_state.thresholds.bandwidth;
+
+    document.getElementById('reg-identity').textContent = JSON.stringify(data.regulator_dynamics.identity);
+    document.getElementById('reg-volatility').textContent = JSON.stringify(data.regulator_dynamics.volatility);
+    document.getElementById('reg-load').textContent = data.regulator_dynamics.load.length ? JSON.stringify(data.regulator_dynamics.load) : '[] (empty)';
+
+    document.getElementById('lc-bandwidth').textContent = JSON.stringify(data.load_curve.bandwidth);
+    document.getElementById('lc-containment').textContent = JSON.stringify(data.load_curve.containment);
+    document.getElementById('tc-alignment').textContent = data.temporal_coherence.alignment;
+
     document.getElementById('entry-vent').textContent = data.nightly_entry.raw_vent;
     document.getElementById('entry-work').textContent = data.nightly_entry.work_check;
     document.getElementById('entry-temporal').textContent = data.nightly_entry.temporal_position;
+
+    document.getElementById('history-count').textContent = data.history.nightly_entries.length + ' entry recorded in buffer';
+
+    document.getElementById('disc-file').textContent = data.discovery_viewer.file;
+    document.getElementById('disc-content').textContent = data.discovery_viewer.content ? data.discovery_viewer.content : 'Linked & Ready';
 
     document.getElementById('engines-core').textContent = data.architecture_map.core_engines.join(' // ');
     document.getElementById('engines-regulators').textContent = data.architecture_map.dynamic_regulators.join(' // ');
