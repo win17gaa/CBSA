@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VALVE // TENSILE — CBSA Studio (GitHub Sync Edition)</title>
+    <title>VALVE // TENSILE — CBSA Studio (GitHub Direct Sync Edition)</title>
     <style>
         :root {
             --bg: #0b0b0c;
@@ -410,16 +410,16 @@
         <section id="github-settings">
             <h2>GitHub Connection Settings (Configured Once)</h2>
             <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 1rem;">
-                Enter your private repository details below. This is saved securely in your browser so entries push directly to your repo.
+                Enter your private repository details below. Make sure the Owner field is your exact GitHub account username (not your email address).
             </p>
             <div class="sub-grid">
                 <div class="content-block">
                     <span class="label">GitHub Username / Owner</span>
-                    <input type="text" id="gh-owner" placeholder="e.g. your-username">
+                    <input type="text" id="gh-owner" placeholder="e.g. win17gaa">
                 </div>
                 <div class="content-block">
                     <span class="label">Repository Name</span>
-                    <input type="text" id="gh-repo" placeholder="e.g. cbsa-studio-data">
+                    <input type="text" id="gh-repo" placeholder="e.g. CBSA">
                 </div>
             </div>
             <div class="content-block" style="margin-top: 1rem;">
@@ -434,7 +434,7 @@
         <section id="valve-input">
             <h2>Valve Active Entry Panel</h2>
             <div class="content-block">
-                <span class="label">User Identifier (Matches your folder name)</span>
+                <span class="label">User Identifier</span>
                 <input type="text" id="input-user-id" value="example_user" placeholder="Enter user identifier...">
             </div>
 
@@ -537,7 +537,7 @@
 
         <!-- TELEMETRY READOUTS -->
         <section id="telemetry">
-            <h2>Telemetry Input (Computed Math Readouts)</h2>
+            <h2>Telemetry Input (Live Computed Math Readouts)</h2>
             <div class="grid" id="telemetry-grid"></div>
         </section>
 
@@ -583,6 +583,7 @@
         const len = rawVentInput.value.length;
         charCountEl.textContent = len;
         charCountEl.style.color = len < 40 ? "var(--warning)" : "var(--success)";
+        updateTelemetry();
     });
 
     const toggleBtn = document.getElementById('btn-toggle-deeper');
@@ -603,12 +604,31 @@
         telemetry: { drift: 0.2, stability: 0.8, bandwidth: 0.75, containment: 0.85, identity: 0.9, volatility: 0.15 }
     };
 
-    const telGrid = document.getElementById('telemetry-grid');
-    for (const [key, val] of Object.entries(state.telemetry)) {
-        const card = document.createElement('div');
-        card.className = 'metric-card';
-        card.innerHTML = `<span class="metric-label">${key}</span><div class="metric-value">${val}</div>`;
-        telGrid.appendChild(card);
+    // Live Telemetry Calculation Function
+    function updateTelemetry() {
+        const presentVal = (state.temporal.find(s => s.id === 'present')?.value || 86) / 100;
+        const pastFutureVal = ((state.temporal.find(s => s.id === 'way_past')?.value || 1) + (state.temporal.find(s => s.id === 'far_future')?.value || 1)) / 100;
+        const rawLen = rawVentInput.value.length;
+
+        state.telemetry.stability = Number((0.3 + (presentVal * 0.65)).toFixed(2));
+        state.telemetry.drift = Number((0.05 + (pastFutureVal * 0.8)).toFixed(2));
+        state.telemetry.containment = Number((0.4 + (presentVal * 0.55)).toFixed(2));
+        state.telemetry.bandwidth = Number((0.5 + Math.min(rawLen / 500, 0.45)).toFixed(2));
+        state.telemetry.volatility = Number((0.1 + (pastFutureVal * 0.5)).toFixed(2));
+        state.telemetry.identity = Number((0.7 + (presentVal * 0.25)).toFixed(2));
+
+        renderTelemetry();
+    }
+
+    function renderTelemetry() {
+        const telGrid = document.getElementById('telemetry-grid');
+        telGrid.innerHTML = '';
+        for (const [key, val] of Object.entries(state.telemetry)) {
+            const card = document.createElement('div');
+            card.className = 'metric-card';
+            card.innerHTML = `<span class="metric-label">${key}</span><div class="metric-value">${val}</div>`;
+            telGrid.appendChild(card);
+        }
     }
 
     const temporalContainer = document.getElementById('temporal-sliders-container');
@@ -649,10 +669,12 @@
                 document.getElementById(`val-txt-${s.id}`).textContent = s.value;
                 document.getElementById(`fill-${s.id}`).style.width = s.value + '%';
                 updateSum();
+                updateTelemetry();
             });
         }, 0);
     });
     updateSum();
+    renderTelemetry();
 
     // Session Local History Log
     const localSessionEntries = [];
@@ -672,7 +694,7 @@
         });
     }
 
-    // GitHub Commit Action (Targeting docs/data/[username]/)
+    // GitHub Commit Action (Flat path bypasses directory creation limits)
     document.getElementById('btn-submit-entry').addEventListener('click', async () => {
         const owner = localStorage.getItem('cbsa_gh_owner');
         const repo = localStorage.getItem('cbsa_gh_repo');
@@ -725,7 +747,7 @@
         syncStatusEl.style.color = "var(--warning)";
         syncStatusEl.textContent = "Committing entry directly to GitHub...";
 
-        // Organized directly into your docs/data/[username]/ folder structure
+        // Flat file structure to guarantee zero folder-creation errors
         const fileName = `docs/data/${userId}_${Date.now()}.json`;
         const fileContentBase64 = btoa(unescape(encodeURIComponent(JSON.stringify(entryPayload, null, 2))));
         const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${fileName}`;
@@ -750,7 +772,7 @@
             }
 
             syncStatusEl.style.color = "var(--success)";
-            syncStatusEl.textContent = "Success: Entry committed to docs/data/" + userId + "/!";
+            syncStatusEl.textContent = "Success: Entry committed to docs/data/";
             
             appendLocalHistory(entryPayload);
 
@@ -760,6 +782,7 @@
             document.getElementById('input-work-check').value = "";
             document.getElementById('input-temporal-pos').value = "";
             document.getElementById('input-reactive-log').value = "";
+            updateTelemetry();
         } catch (e) {
             console.error(e);
             syncStatusEl.style.color = "var(--error)";
