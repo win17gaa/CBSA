@@ -1,18 +1,18 @@
 {
   "version": "1.0",
   "user": "example_user",
-  "nightly_entry": {
-    "raw_vent": "",
-    "work_check": "",
-    "temporal_position": ""
+    "nightly_entry": {
+    "raw_vent": "I got slightly irritated driving doordash today, nothing big it didn't accumulate just popped up when stupid driver screws traffic up, but I wasn't driving aggressively at any point. I did get testy with co-pilot as we worked on CBSA and basically told it to fuck off, I apologized, lol, and we moved on",
+    "work_check": "I only had the gym, doordash, and work on the CBSA project, nothing pulled me away from any of those things, smooth day overall",
+    "temporal_position": "my mind spent alot of time thinking about CBSA insights, thought about my finances, mostly tier III structural stuff though"
   },
   "daily_processing": {
-    "D_t": null,
-    "S_t": null,
-    "B_t": null,
-    "C_t": null,
-    "I_t": null,
-    "V_t": null
+    "D_t": 0.2,
+    "S_t": 0.8,
+    "B_t": 0.75,
+    "C_t": 0.85,
+    "I_t": 0.9,
+    "V_t": 0.15
   },
   "weekly_snapshot": {
     "line_1": "",
