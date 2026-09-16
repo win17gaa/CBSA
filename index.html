@@ -171,7 +171,7 @@
             color: var(--text-main);
         }
 
-        /* Sliders Controls */
+        /* Sliders Controls for Interactive Temporal Distribution */
         .slider-group {
             margin-top: 0.75rem;
         }
@@ -232,7 +232,7 @@
             background: var(--text-main);
             height: 100%;
             width: 0%;
-            transition: width 0.3s ease;
+            transition: width 0.1s ease;
         }
 
         .bar-val {
@@ -293,9 +293,9 @@
         <h2>Studio Navigation</h2>
         <ul class="nav-links" id="nav-list">
             <li><a href="#status">System Status</a></li>
-            <li><a href="#telemetry">Telemetry Input</a></li>
+            <li><a href="#telemetry">Telemetry Readouts</a></li>
             <li><a href="#daily">Daily Processing</a></li>
-            <li><a href="#temporal-dist">Temporal Distribution</a></li>
+            <li><a href="#temporal-dist">Temporal Distribution (Interactive)</a></li>
             <li><a href="#temporal-coh">Temporal Coherence</a></li>
             <li><a href="#snapshot">Weekly Snapshot</a></li>
             <li><a href="#drift">Drift Slope & Regression</a></li>
@@ -343,11 +343,11 @@
             </div>
         </section>
 
-        <!-- TELEMETRY INPUT SLIDERS -->
+        <!-- TELEMETRY READOUTS (Math-driven, Non-interactive cards) -->
         <section id="telemetry">
-            <h2>Telemetry Input (Grouped Sliders)</h2>
+            <h2>Telemetry Input (Computed Math Readouts)</h2>
             <div class="grid" id="telemetry-grid">
-                <!-- Populated via JS -->
+                <!-- Populated via JS as clean readouts -->
             </div>
         </section>
 
@@ -368,14 +368,14 @@
             </div>
         </section>
 
-        <!-- TEMPORAL DISTRIBUTION -->
+        <!-- TEMPORAL DISTRIBUTION (Interactive user sliders summing to 100%) -->
         <section id="temporal-dist">
-            <h2>Temporal Distribution (Stacked UI Component)</h2>
+            <h2>Temporal Distribution (User Estimate Input)</h2>
             <div class="content-block">
-                <p><strong>Enforced Total:</strong> <span id="td-total">100</span> | <strong>Bias Index:</strong> <span id="td-bias">null</span> | <strong>Regime:</strong> <span id="td-regime">null</span></p>
+                <p><strong>Enforced Total:</strong> <span id="td-total">100</span> | <strong>Current Sum:</strong> <span id="td-sum">100</span>% | <strong>Regime:</strong> <span id="td-regime">null</span></p>
             </div>
             <div class="chart-container">
-                <div class="bar-chart" id="temporal-bars"></div>
+                <div class="bar-chart" id="temporal-sliders-container"></div>
             </div>
         </section>
 
@@ -554,7 +554,7 @@
         </section>
 
         <footer>
-            CSS-SPEC v1.0 &mdash; Complete Final JSON Schema Hydration Engine
+            CSS-SPEC v1.0 &mdash; Complete Final JSON Schema Hydration Engine (Corrected Flow)
         </footer>
     </main>
 </div>
@@ -572,8 +572,8 @@
         "notes": ""
       },
       "telemetry_input": {
-        "interactive": true,
-        "type": "grouped_sliders",
+        "interactive": false,
+        "type": "computed_metrics",
         "metrics": {
           "drift": 0.2,
           "stability": 0.8,
@@ -601,7 +601,7 @@
       "temporal_distribution": {
         "interactive": true,
         "ui": {
-          "component": "stacked_slider",
+          "component": "stacked_slider_interactive",
           "enforce_total": 100,
           "segments": [
             { "id": "way_past", "label": "Way Past", "value": 1 },
@@ -770,36 +770,17 @@
     document.getElementById('val-risk-band').textContent = data.collapse_state.risk_band;
     document.getElementById('header-status').textContent = data.collapse_state.status.toUpperCase();
 
-    // Telemetry Sliders
+    // 1. Telemetry Readouts (Math-driven, clean metric cards without sliders)
     const telGrid = document.getElementById('telemetry-grid');
-    const metricsObj = data.teleletry_input?.metrics || data.telemetry_input.metrics;
-    const rConfig = data.telemetry_input.range;
+    const metricsObj = data.telemetry_input.metrics;
     for (const [key, val] of Object.entries(metricsObj)) {
         const card = document.createElement('div');
         card.className = 'metric-card';
         card.innerHTML = `
-            <span class="metric-label">${key}</span>
-            <div class="metric-value" id="disp-${key}">${val}</div>
-            <div class="slider-group">
-                <label><span>Adjust</span><span id="lbl-${key}">${val}</span></label>
-                <input type="range" id="slider-${key}" min="${rConfig.min}" max="${rConfig.max}" step="${rConfig.step}" value="${val}">
-            </div>
+            <span class="metric-label">${key} (Math Derived)</span>
+            <div class="metric-value">${val}</div>
         `;
         telGrid.appendChild(card);
-
-        // Bind interactive event
-        setTimeout(() => {
-            const slider = document.getElementById(`slider-${key}`);
-            const disp = document.getElementById(`disp-${key}`);
-            const lbl = document.getElementById(`lbl-${key}`);
-            if(slider) {
-                slider.addEventListener('input', (e) => {
-                    const v = parseFloat(e.target.value).toFixed(2);
-                    disp.textContent = v;
-                    lbl.textContent = v;
-                });
-            }
-        }, 0);
     }
 
     // Daily Processing
@@ -812,27 +793,60 @@
     document.getElementById('dt-flags').textContent = JSON.stringify(data.daily_processing.computed_flags);
     document.getElementById('dt-risk').textContent = data.daily_processing.risk_score;
 
-    // Temporal Distribution UI & Data
+    // 2. Temporal Distribution (Interactive user sliders summing to 100%)
     document.getElementById('td-total').textContent = data.temporal_distribution.ui.enforce_total;
-    document.getElementById('td-bias').textContent = data.temporal_distribution.bias_index;
     document.getElementById('td-regime').textContent = data.temporal_distribution.regime;
 
-    const temporalContainer = document.getElementById('temporal-bars');
+    const temporalSlidersContainer = document.getElementById('temporal-sliders-container');
     const segs = data.temporal_distribution.ui.segments;
-    const totalSeg = segs.reduce((acc, s) => acc + s.value, 0);
+
+    function updateTemporalSum() {
+        let currentSum = 0;
+        segs.forEach(s => {
+            const slider = document.getElementById(`temp-slider-${s.id}`);
+            if(slider) currentSum += parseInt(slider.value);
+        });
+        document.getElementById('td-sum').textContent = currentSum;
+    }
+
     segs.forEach(s => {
-        const pct = Math.round((s.value / totalSeg) * 100);
         const row = document.createElement('div');
         row.className = 'bar-row';
         row.innerHTML = `
             <div class="bar-label">${s.label}</div>
             <div class="bar-track">
-                <div class="bar-fill" style="width: ${pct}%"></div>
+                <div class="bar-fill" id="fill-${s.id}" style="width: ${s.value}%"></div>
             </div>
-            <div class="bar-val">${s.value}%</div>
+            <div class="bar-val"><span id="val-txt-${s.id}">${s.value}</span>%</div>
         `;
-        temporalContainer.appendChild(row);
+        temporalSlidersContainer.appendChild(row);
+
+        // Add a controls grouping right below or integrate slider controls
+        const sliderRow = document.createElement('div');
+        sliderRow.className = 'slider-group';
+        sliderRow.style.margin = "0 0 1rem 136px";
+        sliderRow.innerHTML = `
+            <label><span>User Estimate Adjustment (${s.label})</span></label>
+            <input type="range" id="temp-slider-${s.id}" min="0" max="100" step="1" value="${s.value}">
+        `;
+        temporalSlidersContainer.appendChild(sliderRow);
+
+        setTimeout(() => {
+            const slider = document.getElementById(`temp-slider-${s.id}`);
+            const txt = document.getElementById(`val-txt-${s.id}`);
+            const fill = document.getElementById(`fill-${s.id}`);
+            if(slider) {
+                slider.addEventListener('input', (e) => {
+                    const v = e.target.value;
+                    txt.textContent = v;
+                    fill.style.width = v + '%';
+                    s.value = parseInt(v);
+                    updateTemporalSum();
+                });
+            }
+        }, 0);
     });
+    updateTemporalSum();
 
     // Temporal Coherence
     document.getElementById('tc-tier').textContent = data.temporal_coherence.tier;
