@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VALVE // TENSILE — CBSA Studio (Local-First Edition)</title>
+    <title>VALVE // TENSILE — CBSA Studio (Unified Entry Edition)</title>
     <style>
         :root {
             --bg: #0b0b0c;
@@ -171,9 +171,10 @@
             color: var(--text-main);
         }
 
-        /* Sliders Controls for Interactive Temporal Distribution */
+        /* Sliders Controls */
         .slider-group {
-            margin-top: 0.75rem;
+            margin-top: 0.5rem;
+            margin-bottom: 0.75rem;
         }
 
         input[type="range"] {
@@ -184,7 +185,7 @@
             outline: none;
         }
 
-        /* Forms & Inputs for VALVE Submission */
+        /* Forms & Inputs */
         textarea, input[type="text"] {
             width: 100%;
             background: var(--bg);
@@ -232,13 +233,13 @@
             background: var(--bg);
             border: 1px solid var(--border);
             padding: 1rem;
-            margin-top: 1rem;
+            margin-top: 0.5rem;
         }
 
         .bar-chart {
             display: flex;
             flex-direction: column;
-            gap: 0.75rem;
+            gap: 0.5rem;
         }
 
         .bar-row {
@@ -248,7 +249,7 @@
         }
 
         .bar-label {
-            width: 120px;
+            width: 110px;
             font-size: 11px;
             color: var(--text-muted);
             text-align: right;
@@ -258,7 +259,7 @@
         .bar-track {
             flex-grow: 1;
             background: var(--border);
-            height: 12px;
+            height: 10px;
             overflow: hidden;
             position: relative;
         }
@@ -267,11 +268,10 @@
             background: var(--text-main);
             height: 100%;
             width: 0%;
-            transition: width 0.1s ease;
         }
 
         .bar-val {
-            width: 40px;
+            width: 35px;
             font-size: 11px;
             text-align: right;
         }
@@ -338,7 +338,6 @@
             <li><a href="#valve-input">Valve Entry Panel</a></li>
             <li><a href="#status">System Status</a></li>
             <li><a href="#telemetry">Telemetry Readouts</a></li>
-            <li><a href="#temporal-dist">Temporal Distribution</a></li>
             <li><a href="#collapse">Collapse State</a></li>
             <li><a href="#history">Local History Buffer</a></li>
         </ul>
@@ -349,12 +348,12 @@
         <header>
             <div>
                 <h1>VALVE // TENSILE</h1>
-                <div class="subtitle">Cognitive Boundary & Stability Architecture (Local-First Edition)</div>
+                <div class="subtitle">Cognitive Boundary & Stability Architecture (Unified Layout)</div>
             </div>
             <div class="status-badge" id="header-status">Local Active</div>
         </header>
 
-        <!-- VALVE ACTIVE INPUT PANEL -->
+        <!-- VALVE ACTIVE INPUT PANEL (Unified with Temporal Sliders) -->
         <section id="valve-input">
             <h2>Valve Active Entry Panel</h2>
             <div class="content-block">
@@ -369,11 +368,22 @@
                 <span class="label">Work / Structural Check</span>
                 <textarea id="input-work-check" rows="2" placeholder="Record daily operational check..."></textarea>
             </div>
+            
+            <!-- Unified Temporal Section directly under the question -->
             <div class="content-block">
                 <span class="label">Temporal Position Assessment</span>
-                <input type="text" id="input-temporal-pos" placeholder="Where is your mind anchored today?">
-                <p style="margin-top: 0.5rem; font-size: 11px; color: var(--accent);">👉 Note: Remember to adjust the temporal sliders further down the page so they balance and equal 100%.</p>
+                <input type="text" id="input-temporal-pos" placeholder="Where is your mind anchored today? (e.g., mostly present due to project)">
+                
+                <p style="margin-top: 0.75rem; color: var(--text-main); font-size: 11px;">
+                    <strong>Slider Distribution:</strong> Adjust sliders below so they balance and equal 100%. 
+                    <span id="td-sum-wrap" style="margin-left: 0.5rem;">Current Sum: <span id="td-sum" style="font-weight: bold;">100</span>% <span id="td-warning" style="color: var(--success);">(Balanced)</span></span>
+                </p>
+
+                <div class="chart-container">
+                    <div class="bar-chart" id="temporal-sliders-container"></div>
+                </div>
             </div>
+
             <button class="btn" id="btn-submit-entry">Commit Entry to Local Storage</button>
             <button class="btn btn-secondary" id="btn-export-data">Export JSON Data</button>
             <p id="sync-status" style="margin-top: 0.75rem; font-size: 11px; color: var(--text-muted);"></p>
@@ -408,18 +418,6 @@
             <div class="grid" id="telemetry-grid"></div>
         </section>
 
-        <!-- TEMPORAL DISTRIBUTION -->
-        <section id="temporal-dist">
-            <h2>Temporal Distribution (User Estimate Input)</h2>
-            <div class="content-block">
-                <p style="margin-bottom: 0.5rem; color: var(--text-main);"><strong>Instructions:</strong> Adjust the sliders below to estimate your temporal distribution across zones. <strong>Total must equal 100%.</strong></p>
-                <p><strong>Enforced Total:</strong> 100 | <strong>Current Sum:</strong> <span id="td-sum" style="font-weight: bold;">100</span>% <span id="td-warning" style="color: var(--success); margin-left: 1rem;">(Balanced)</span></p>
-            </div>
-            <div class="chart-container">
-                <div class="bar-chart" id="temporal-sliders-container"></div>
-            </div>
-        </section>
-
         <!-- COLLAPSE STATE -->
         <section id="collapse">
             <h2>Collapse State & Threshold Limits</h2>
@@ -444,7 +442,7 @@
         </section>
 
         <footer>
-            CBSA STUDIO &mdash; Local-First Implementation Layer
+            CBSA STUDIO &mdash; Unified Local-First Implementation Layer
         </footer>
     </main>
 </div>
@@ -455,10 +453,10 @@
         telemetry: { drift: 0.2, stability: 0.8, bandwidth: 0.75, containment: 0.85, identity: 0.9, volatility: 0.15 },
         temporal: [
             { id: "way_past", label: "Way Past", value: 1 },
-            { id: "near_past", label: "Near Past", value: 3 },
-            { id: "present", label: "Present", value: 65 },
-            { id: "near_future", label: "Near Future", value: 20 },
-            { id: "far_future", label: "Far Future", value: 11 }
+            { id: "near_past", label: "Near Past", value: 1 },
+            { id: "present", label: "Present", value: 86 },
+            { id: "near_future", label: "Near Future", value: 11 },
+            { id: "far_future", label: "Far Future", value: 1 }
         ]
     };
 
@@ -471,7 +469,7 @@
         telGrid.appendChild(card);
     }
 
-    // Render Temporal Sliders & Validation Watcher
+    // Render Temporal Sliders inside the Entry Panel uniquely (preventing duplication)
     const temporalContainer = document.getElementById('temporal-sliders-container');
     function updateSum() {
         let total = state.temporal.reduce((acc, curr) => acc + curr.value, 0);
@@ -487,25 +485,23 @@
         } else {
             sumEl.style.color = "#ef4444";
             warningEl.style.color = "#ef4444";
-            warningEl.textContent = `(Must equal 100% — currently off by ${total - 100}%)`;
+            warningEl.textContent = `(Must equal 100% — off by ${total - 100}%)`;
         }
     }
 
     state.temporal.forEach(s => {
         const row = document.createElement('div');
-        row.className = 'bar-row';
         row.innerHTML = `
-            <div class="bar-label">${s.label}</div>
-            <div class="bar-track"><div class="bar-fill" id="fill-${s.id}" style="width: ${s.value}%"></div></div>
-            <div class="bar-val"><span id="val-txt-${s.id}">${s.value}</span>%</div>
+            <div class="bar-row" style="margin-top: 0.5rem;">
+                <div class="bar-label">${s.label}</div>
+                <div class="bar-track"><div class="bar-fill" id="fill-${s.id}" style="width: ${s.value}%"></div></div>
+                <div class="bar-val"><span id="val-txt-${s.id}">${s.value}</span>%</div>
+            </div>
+            <div class="slider-group" style="margin-left: 126px;">
+                <input type="range" id="slider-${s.id}" min="0" max="100" value="${s.value}">
+            </div>
         `;
         temporalContainer.appendChild(row);
-
-        const sliderRow = document.createElement('div');
-        sliderRow.className = 'slider-group';
-        sliderRow.style.margin = "0 0 1rem 136px";
-        sliderRow.innerHTML = `<input type="range" id="slider-${s.id}" min="0" max="100" value="${s.value}">`;
-        temporalContainer.appendChild(sliderRow);
 
         setTimeout(() => {
             const slider = document.getElementById(`slider-${s.id}`);
@@ -556,7 +552,6 @@
         }
     }
 
-    // Load existing history on startup
     loadHistory();
 
     document.getElementById('btn-submit-entry').addEventListener('click', () => {
@@ -568,7 +563,7 @@
 
         if (!rawVent.trim()) {
             syncStatusEl.style.color = "#ef4444";
-            syncStatusEl.textContent = "Error: Raw vent cannot be empty.";
+            syncStatusEl.textContent = "Error: Raw vent cannot be empty before committing.";
             return;
         }
 
@@ -584,7 +579,6 @@
             temporal_distribution: state.temporal.reduce((obj, item) => ({ ...obj, [item.id]: item.value }), {})
         };
 
-        // Fetch existing entries or initialize empty array
         let existingEntries = [];
         try {
             const stored = localStorage.getItem(STORAGE_KEY);
@@ -599,14 +593,13 @@
         syncStatusEl.style.color = "var(--success)";
         syncStatusEl.textContent = "Success: Entry saved locally to browser storage!";
 
-        // Clear entry fields and refresh view
+        // Reset text inputs only (keep sliders where user set them)
         document.getElementById('input-raw-vent').value = "";
         document.getElementById('input-work-check').value = "";
         document.getElementById('input-temporal-pos').value = "";
         loadHistory();
     });
 
-    // Export JSON feature for gathering files from other computers
     document.getElementById('btn-export-data').addEventListener('click', () => {
         const rawData = localStorage.getItem(STORAGE_KEY);
         if (!rawData) {
