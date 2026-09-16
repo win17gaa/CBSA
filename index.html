@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VALVE // TENSILE — CBSA Studio (Interactive Edition)</title>
+    <title>VALVE // TENSILE — CBSA Studio (Release-Ready Spec v1.0)</title>
     <style>
         :root {
             --bg: #0b0b0c;
@@ -13,7 +13,6 @@
             --text-main: #f4f4f5;
             --text-muted: #a1a1aa;
             --accent: #3b82f6;
-            --accent-glow: rgba(59, 130, 246, 0.15);
             --success: #22c55e;
             --font-mono: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
         }
@@ -34,7 +33,7 @@
         }
 
         .studio-layout {
-            max-width: 1200px;
+            max-width: 1280px;
             margin: 0 auto;
             display: grid;
             grid-template-columns: 240px 1fr;
@@ -71,14 +70,14 @@
             list-style: none;
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 0.4rem;
         }
 
         .nav-links a {
             color: var(--text-muted);
             text-decoration: none;
-            font-size: 12px;
-            padding: 0.5rem;
+            font-size: 11px;
+            padding: 0.4rem 0.5rem;
             display: block;
             border: 1px solid transparent;
             transition: all 0.2s ease;
@@ -214,7 +213,7 @@
         }
 
         .bar-label {
-            width: 110px;
+            width: 120px;
             font-size: 11px;
             color: var(--text-muted);
             text-align: right;
@@ -294,13 +293,14 @@
         <h2>Studio Navigation</h2>
         <ul class="nav-links">
             <li><a href="#status">System Status</a></li>
-            <li><a href="#vectors">Telemetry Vectors & Sliders</a></li>
+            <li><a href="#vectors">Telemetry Input Sliders</a></li>
             <li><a href="#temporal">Temporal Distribution</a></li>
             <li><a href="#dynamics">Regulators & Thresholds</a></li>
             <li><a href="#snapshot">Weekly Snapshot</a></li>
+            <li><a href="#prediction">Prediction Model Spec</a></li>
             <li><a href="#nightly">Latest Nightly Entry</a></li>
             <li><a href="#history">Rolling History</a></li>
-            <li><a href="#architecture">Architecture Map</a></li>
+            <li><a href="#architecture">Architecture & Extensions</a></li>
         </ul>
     </aside>
 
@@ -309,7 +309,7 @@
         <header>
             <div>
                 <h1>VALVE // TENSILE</h1>
-                <div class="subtitle">Cognitive Boundary & Stability Architecture (CSS-SPEC v0.2.1)</div>
+                <div class="subtitle">Cognitive Boundary & Stability Architecture (v1.0 Release Spec)</div>
             </div>
             <div class="status-badge" id="header-status">Stable</div>
         </header>
@@ -331,74 +331,72 @@
                     <div class="metric-value" id="val-collapse">--</div>
                 </div>
                 <div class="metric-card">
-                    <span class="metric-label">Temporal Tier</span>
-                    <div class="metric-value" id="val-tier">--</div>
+                    <span class="metric-label">Risk Band</span>
+                    <div class="metric-value" id="val-risk-band">--</div>
                 </div>
             </div>
         </section>
 
-        <!-- TELEMETRY VECTORS & INTERACTIVE SLIDERS -->
+        <!-- TELEMETRY INPUT SLIDERS -->
         <section id="vectors">
-            <h2>Daily Telemetry Vectors (t) & Control Sliders</h2>
+            <h2>Telemetry Input Sliders (Grouped)</h2>
             <div class="grid">
                 <div class="metric-card">
                     <span class="metric-label">Drift (D)</span>
-                    <div class="metric-value" id="disp-d">0.2</div>
+                    <div class="metric-value" id="disp-drift">0.2</div>
                     <div class="slider-group">
-                        <label><span>Adjust</span><span id="lbl-d">0.2</span></label>
-                        <input type="range" id="slider-d" min="0" max="1" step="0.05" value="0.2">
+                        <label><span>Adjust</span><span id="lbl-drift">0.2</span></label>
+                        <input type="range" id="slider-drift" min="0" max="1" step="0.05" value="0.2">
                     </div>
                 </div>
                 <div class="metric-card">
                     <span class="metric-label">Stability (S)</span>
-                    <div class="metric-value" id="disp-s">0.8</div>
+                    <div class="metric-value" id="disp-stability">0.8</div>
                     <div class="slider-group">
-                        <label><span>Adjust</span><span id="lbl-s">0.8</span></label>
-                        <input type="range" id="slider-s" min="0" max="1" step="0.05" value="0.8">
+                        <label><span>Adjust</span><span id="lbl-stability">0.8</span></label>
+                        <input type="range" id="slider-stability" min="0" max="1" step="0.05" value="0.8">
                     </div>
                 </div>
                 <div class="metric-card">
                     <span class="metric-label">Bandwidth (B)</span>
-                    <div class="metric-value" id="disp-b">0.75</div>
+                    <div class="metric-value" id="disp-bandwidth">0.75</div>
                     <div class="slider-group">
-                        <label><span>Adjust</span><span id="lbl-b">0.75</span></label>
-                        <input type="range" id="slider-b" min="0" max="1" step="0.05" value="0.75">
+                        <label><span>Adjust</span><span id="lbl-bandwidth">0.75</span></label>
+                        <input type="range" id="slider-bandwidth" min="0" max="1" step="0.05" value="0.75">
                     </div>
                 </div>
                 <div class="metric-card">
                     <span class="metric-label">Containment (C)</span>
-                    <div class="metric-value" id="disp-c">0.85</div>
+                    <div class="metric-value" id="disp-containment">0.85</div>
                     <div class="slider-group">
-                        <label><span>Adjust</span><span id="lbl-c">0.85</span></label>
-                        <input type="range" id="slider-c" min="0" max="1" step="0.05" value="0.85">
+                        <label><span>Adjust</span><span id="lbl-containment">0.85</span></label>
+                        <input type="range" id="slider-containment" min="0" max="1" step="0.05" value="0.85">
                     </div>
                 </div>
                 <div class="metric-card">
                     <span class="metric-label">Identity (I)</span>
-                    <div class="metric-value" id="disp-i">0.9</div>
+                    <div class="metric-value" id="disp-identity">0.9</div>
                     <div class="slider-group">
-                        <label><span>Adjust</span><span id="lbl-i">0.9</span></label>
-                        <input type="range" id="slider-i" min="0" max="1" step="0.05" value="0.9">
+                        <label><span>Adjust</span><span id="lbl-identity">0.9</span></label>
+                        <input type="range" id="slider-identity" min="0" max="1" step="0.05" value="0.9">
                     </div>
                 </div>
                 <div class="metric-card">
                     <span class="metric-label">Volatility (V)</span>
-                    <div class="metric-value" id="disp-v">0.15</div>
+                    <div class="metric-value" id="disp-volatility">0.15</div>
                     <div class="slider-group">
-                        <label><span>Adjust</span><span id="lbl-v">0.15</span></label>
-                        <input type="range" id="slider-v" min="0" max="1" step="0.05" value="0.15">
+                        <label><span>Adjust</span><span id="lbl-volatility">0.15</span></label>
+                        <input type="range" id="slider-volatility" min="0" max="1" step="0.05" value="0.15">
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- TEMPORAL DISTRIBUTION GRAPH -->
+        <!-- TEMPORAL DISTRIBUTION -->
         <section id="temporal">
-            <h2>Temporal Distribution Graph</h2>
+            <h2>Temporal Distribution (Stacked Slider Spec)</h2>
             <div class="chart-container">
-                <div class="bar-chart" id="temporal-bars">
-                    <!-- Populated via JS -->
-                </div>
+                <div class="bar-chart" id="temporal-bars"></div>
             </div>
         </section>
 
@@ -407,10 +405,11 @@
             <h2>Regulator Dynamics & Collapse Thresholds</h2>
             <div class="sub-grid">
                 <div class="content-block">
-                    <span class="label">Regulator Arrays</span>
-                    <p><strong>Identity:</strong> <span id="reg-identity">--</span></p>
-                    <p><strong>Volatility:</strong> <span id="reg-volatility">--</span></p>
-                    <p><strong>Load:</strong> <span id="reg-load">--</span></p>
+                    <span class="label">Regulator Arrays & Slopes</span>
+                    <p><strong>Identity Array:</strong> <span id="reg-identity">--</span></p>
+                    <p><strong>Volatility Array:</strong> <span id="reg-volatility">--</span></p>
+                    <p><strong>Load Array:</strong> <span id="reg-load">--</span></p>
+                    <p><strong>Identity Slope:</strong> <span id="trend-is">--</span></p>
                 </div>
                 <div class="content-block">
                     <span class="label">Collapse Threshold Limits</span>
@@ -423,12 +422,24 @@
 
         <!-- WEEKLY SNAPSHOT -->
         <section id="snapshot">
-            <h2>Weekly Snapshot Buffer</h2>
+            <h2>Weekly Snapshot & Aggregation Rules</h2>
             <div class="content-block">
-                <span class="label">Logged Lines</span>
+                <span class="label">Snapshot Lines</span>
                 <p><strong>Line 1:</strong> <span id="ws-l1">(empty)</span></p>
                 <p><strong>Line 2:</strong> <span id="ws-l2">(empty)</span></p>
                 <p><strong>Line 3:</strong> <span id="ws-l3">(empty)</span></p>
+                <p><strong>Aggregation Rules:</strong> Window size 7 days | Drift Avg: <span id="agg-drift">null</span> | Collapse Events: <span id="agg-events">0</span></p>
+            </div>
+        </section>
+
+        <!-- PREDICTION MODEL SPEC -->
+        <section id="prediction">
+            <h2>Prediction Model Specification</h2>
+            <div class="content-block">
+                <span class="label">Model Status</span>
+                <p><strong>Enabled:</strong> <span id="pred-enabled">false</span></p>
+                <p><strong>Model Inputs:</strong> <span id="pred-inputs">--</span></p>
+                <p><strong>Outputs (Next 7 Days):</strong> Risk: <span id="pred-risk">null</span> | Drift Trend: <span id="pred-drift-trend">null</span></p>
             </div>
         </section>
 
@@ -453,31 +464,30 @@
         <section id="history">
             <h2>Rolling History Buffer</h2>
             <div class="content-block">
-                <span class="label">Archive State</span>
+                <span class="label">Archive Specs</span>
                 <p id="history-summary">--</p>
             </div>
         </section>
 
-        <!-- ARCHITECTURE MAP -->
+        <!-- ARCHITECTURE & EXTENSIONS -->
         <section id="architecture">
-            <h2>Discovery & Architecture Map</h2>
+            <h2>Architecture Map & Future Extensions</h2>
             <div class="sub-grid">
-                <div class="content-block">
-                    <span class="label">Discovery Viewer</span>
-                    <p><strong>Target:</strong> <span id="disc-file">--</span></p>
-                    <p><strong>State:</strong> <span id="disc-content">--</span></p>
-                </div>
                 <div class="content-block">
                     <span class="label">System Engines</span>
                     <p><strong>Core:</strong> <span id="engines-core">--</span></p>
                     <p><strong>Regulators:</strong> <span id="engines-regulators">--</span></p>
                     <p><strong>Processing:</strong> <span id="engines-processing">--</span></p>
                 </div>
+                <div class="content-block">
+                    <span class="label">Future Extensions</span>
+                    <p id="engines-extensions">--</p>
+                </div>
             </div>
         </section>
 
         <footer>
-            CSS-SPEC v0.2.1 &mdash; Local-First Deterministic Telemetry
+            CSS-SPEC v1.0 &mdash; Release-Ready Intent Architecture
         </footer>
     </main>
 </div>
@@ -489,103 +499,92 @@
       "nightly_entry": {
         "raw_vent": "I got slightly irritated driving doordash today, nothing big it didn't accumulate just popped up when stupid driver screws traffic up, but I wasn't driving aggressively at any point. I did get testy with co-pilot as we worked on CBSA and basically told it to fuck off, I apologized, lol, and we moved on",
         "work_check": "I only had the gym, doordash, and work on the CBSA project, nothing pulled me away from any of those things, smooth day overall",
-        "temporal_position": "my mind spent alot of time thinking about CBSA insights, thought about my finances, mostly tier III structural stuff though"
+        "temporal_position": "my mind spent alot of time thinking about CBSA insights, thought about my finances, mostly tier III structural stuff though",
+        "tags": [],
+        "collapse_flags": [],
+        "notes": ""
+      },
+      "telemetry_input": {
+        "interactive": true,
+        "type": "grouped_sliders",
+        "metrics": {
+          "drift": 0.2,
+          "stability": 0.8,
+          "bandwidth": 0.75,
+          "containment": 0.85,
+          "identity": 0.9,
+          "volatility": 0.15
+        },
+        "range": { "min": 0.0, "max": 1.0, "step": 0.05 }
       },
       "daily_processing": {
-        "D_t": 0.2,
-        "S_t": 0.8,
-        "B_t": 0.75,
-        "C_t": 0.85,
-        "I_t": 0.9,
-        "V_t": 0.15
+        "D_t": 0.2, "S_t": 0.8, "B_t": 0.75, "C_t": 0.85, "I_t": 0.9, "V_t": 0.15,
+        "computed_flags": [], "risk_score": null
       },
+      "temporal_distribution": {
+        "interactive": true,
+        "type": "stacked_slider",
+        "enforce_total": 100,
+        "segments": { "way_past": 1, "near_past": 3, "present": 65, "near_future": 20, "far_future": 11 },
+        "bias_index": null, "regime": null
+      },
+      "temporal_coherence": { "tier": "III", "alignment": 0.0, "drift_bias": null, "future_bias": null, "present_anchor": null },
       "weekly_snapshot": {
-        "line_1": "",
-        "line_2": "",
-        "line_3": "",
-        "history": []
+        "line_1": "", "line_2": "", "line_3": "", "history": [],
+        "aggregation_rules": { "drift_avg": null, "stability_avg": null, "collapse_events": 0 }
       },
       "drift_slope": {
-        "values": [0.2],
-        "slope": null
+        "values": [0.2], "slope": null, "window_days": 7,
+        "regression": { "enabled": false, "coefficients": null, "r2": null }
       },
       "collapse_state": {
         "status": "stable",
-        "thresholds": {
-          "drift": 0.65,
-          "volatility": 0.45,
-          "bandwidth": 0.30
-        }
+        "thresholds": { "drift": 0.65, "volatility": 0.45, "bandwidth": 0.30 },
+        "events": [], "last_event": null, "risk_band": "low"
       },
       "regulator_dynamics": {
-        "identity": [0.9],
-        "volatility": [0.15],
-        "load": []
+        "identity": [0.9], "volatility": [0.15], "load": [],
+        "trend": { "identity_slope": null, "volatility_slope": null, "load_slope": null }
       },
-      "temporal_coherence": {
-        "tier": "III",
-        "alignment": 0.0
-      },
-      "temporal_distribution": {
-        "way_past": 1,
-        "near_past": 3,
-        "present": 65,
-        "near_future": 20,
-        "far_future": 11
-      },
-      "load_curve": {
-        "bandwidth": [0.75],
-        "containment": [0.85]
-      },
+      "load_curve": { "bandwidth": [0.75], "containment": [0.85], "smoothed": { "bandwidth": [], "containment": [] } },
       "history": {
-        "nightly_entries": [
-          {
-            "raw_vent": "I got slightly irritated driving doordash today...",
-            "work_check": "I only had the gym, doordash...",
-            "temporal_position": "my mind spent a lot of time thinking about CBSA...",
-            "D_t": 0.2,
-            "S_t": 0.8,
-            "B_t": 0.75,
-            "C_t": 0.85,
-            "I_t": 0.9,
-            "V_t": 0.15
-          }
-        ]
+        "nightly_entries": [{
+          "raw_vent": "I got slightly irritated driving doordash today...",
+          "work_check": "I only had the gym, doordash...",
+          "temporal_position": "my mind spent a lot of time thinking about CBSA...",
+          "D_t": 0.2, "S_t": 0.8, "B_t": 0.75, "C_t": 0.85, "I_t": 0.9, "V_t": 0.15,
+          "temporal_distribution": { "way_past": 1, "near_past": 3, "present": 65, "near_future": 20, "far_future": 11 },
+          "collapse_state": "stable", "tags": [], "date": null
+        }],
+        "max_entries": 365
       },
-      "discovery_viewer": {
-        "file": "docs/DISCOVERY.md",
-        "content": ""
+      "prediction_model": {
+        "enabled": false,
+        "inputs": ["D_t", "S_t", "B_t", "C_t", "I_t", "V_t", "temporal_distribution", "regulator_dynamics", "collapse_state"],
+        "outputs": { "collapse_risk_next_7_days": null, "drift_trend_next_7_days": null },
+        "notes": ""
       },
+      "ui_settings": { "theme": "dark", "navigation": "sidebar", "show_graphs": true, "show_raw_vent": true, "compact_mode": false, "inline_mode": false },
+      "discovery_viewer": { "file": "docs/DISCOVERY.md", "content": "", "cache_enabled": false },
       "architecture_map": {
-        "core_engines": [
-          "Drift_Engine",
-          "Stability_Engine",
-          "Bandwidth_Engine",
-          "Containment_Engine"
-        ],
-        "dynamic_regulators": [
-          "Identity_Coherence_Regulator",
-          "Volatility_Regulator",
-          "Load_Regulator"
-        ],
-        "processing_engines": [
-          "Daily_Processing_Engine",
-          "Weekly_Processing_Engine",
-          "Collapse_Processing_Engine"
-        ]
+        "core_engines": ["Drift_Engine", "Stability_Engine", "Bandwidth_Engine", "Containment_Engine"],
+        "dynamic_regulators": ["Identity_Coherence_Regulator", "Volatility_Regulator", "Load_Regulator"],
+        "processing_engines": ["Daily_Processing_Engine", "Weekly_Processing_Engine", "Collapse_Processing_Engine", "Prediction_Engine"],
+        "future_extensions": ["Clinical_Validation_Module", "Multi_Day_Regression_Module", "Collapse_Event_Classifier", "Temporal_Regime_Detector"]
       }
     };
 
-    // Hydration
+    // Hydrate UI
     document.getElementById('val-user').textContent = data.user;
     document.getElementById('val-version').textContent = data.version;
     document.getElementById('val-collapse').textContent = data.collapse_state.status;
     document.getElementById('header-status').textContent = data.collapse_state.status.toUpperCase();
-    document.getElementById('val-tier').textContent = data.temporal_coherence.tier;
+    document.getElementById('val-risk-band').textContent = data.collapse_state.risk_band;
 
     document.getElementById('reg-identity').textContent = JSON.stringify(data.regulator_dynamics.identity);
     document.getElementById('reg-volatility').textContent = JSON.stringify(data.regulator_dynamics.volatility);
     document.getElementById('reg-load').textContent = data.regulator_dynamics.load.length ? JSON.stringify(data.regulator_dynamics.load) : '[] (empty)';
+    document.getElementById('trend-is').textContent = data.regulator_dynamics.trend.identity_slope !== null ? data.regulator_dynamics.trend.identity_slope : 'null';
 
     document.getElementById('th-drift').textContent = data.collapse_state.thresholds.drift;
     document.getElementById('th-vol').textContent = data.collapse_state.thresholds.volatility;
@@ -594,27 +593,32 @@
     document.getElementById('ws-l1').textContent = data.weekly_snapshot.line_1 || '(empty)';
     document.getElementById('ws-l2').textContent = data.weekly_snapshot.line_2 || '(empty)';
     document.getElementById('ws-l3').textContent = data.weekly_snapshot.line_3 || '(empty)';
+    document.getElementById('agg-drift').textContent = data.weekly_snapshot.aggregation_rules.drift_avg !== null ? data.weekly_snapshot.aggregation_rules.drift_avg : 'null';
+    document.getElementById('agg-events').textContent = data.weekly_snapshot.aggregation_rules.collapse_events;
+
+    document.getElementById('pred-enabled').textContent = data.prediction_model.enabled;
+    document.getElementById('pred-inputs').textContent = data.prediction_model.inputs.join(', ');
+    document.getElementById('pred-risk').textContent = data.prediction_model.outputs.collapse_risk_next_7_days !== null ? data.prediction_model.outputs.collapse_risk_next_7_days : 'null';
+    document.getElementById('pred-drift-trend').textContent = data.prediction_model.outputs.drift_trend_next_7_days !== null ? data.prediction_model.outputs.drift_trend_next_7_days : 'null';
 
     document.getElementById('entry-vent').textContent = data.nightly_entry.raw_vent;
     document.getElementById('entry-work').textContent = data.nightly_entry.work_check;
     document.getElementById('entry-temporal').textContent = data.nightly_entry.temporal_position;
 
-    document.getElementById('history-summary').textContent = data.history.nightly_entries.length + ' entry loaded in rolling archive buffer.';
-
-    document.getElementById('disc-file').textContent = data.discovery_viewer.file;
-    document.getElementById('disc-content').textContent = data.discovery_viewer.content ? data.discovery_viewer.content : 'Ready (Empty Content String)';
+    document.getElementById('history-summary').textContent = `Max buffer capacity: ${data.history.max_entries} entries. Current loaded archive: ${data.history.nightly_entries.length} entry.`;
 
     document.getElementById('engines-core').textContent = data.architecture_map.core_engines.join(' // ');
     document.getElementById('engines-regulators').textContent = data.architecture_map.dynamic_regulators.join(' // ');
     document.getElementById('engines-processing').textContent = data.architecture_map.processing_engines.join(' // ');
+    document.getElementById('engines-extensions').textContent = data.architecture_map.future_extensions.join(' // ');
 
-    // Render Temporal Distribution Graph
+    // Render Temporal Distribution Stacked Segments
     const temporalContainer = document.getElementById('temporal-bars');
-    const td = data.temporal_distribution;
-    const total = Object.values(td).reduce((a, b) => a + b, 0);
+    const segs = data.temporal_distribution.segments;
+    const totalSeg = Object.values(segs).reduce((a, b) => a + b, 0);
 
-    for (const [key, val] of Object.entries(td)) {
-        const pct = Math.round((val / total) * 100);
+    for (const [key, val] of Object.entries(segs)) {
+        const pct = Math.round((val / totalSeg) * 100);
         const row = document.createElement('div');
         row.className = 'bar-row';
         row.innerHTML = `
@@ -627,9 +631,9 @@
         temporalContainer.appendChild(row);
     }
 
-    // Interactive Sliders Binding
-    const metrics = ['d', 's', 'b', 'c', 'i', 'v'];
-    metrics.forEach(m => {
+    // Telemetry Sliders Interaction Bindings
+    const metricsKeys = ['drift', 'stability', 'bandwidth', 'containment', 'identity', 'volatility'];
+    metricsKeys.forEach(m => {
         const slider = document.getElementById(`slider-${m}`);
         const disp = document.getElementById(`disp-${m}`);
         const lbl = document.getElementById(`lbl-${m}`);
