@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VALVE // TENSILE — CBSA Studio (Reactive Reflection Edition)</title>
+    <title>VALVE // TENSILE — CBSA Studio (GitHub Sync Edition)</title>
     <style>
         :root {
             --bg: #0b0b0c;
@@ -34,59 +34,6 @@
             padding: 1.5rem;
         }
 
-        /* Firebase Auth Overlay Styles */
-        #auth-overlay {
-            max-width: 450px;
-            margin: 6rem auto;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            padding: 2.5rem;
-            text-align: center;
-        }
-
-        #auth-overlay h2 {
-            font-size: 14px;
-            color: var(--accent);
-            margin-bottom: 1.5rem;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 0.5rem;
-        }
-
-        .auth-group {
-            margin-bottom: 1.25rem;
-            text-align: left;
-        }
-
-        .auth-group label {
-            display: block;
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-bottom: 0.35rem;
-            text-transform: uppercase;
-        }
-
-        .auth-group input {
-            width: 100%;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            padding: 0.75rem;
-            font-family: var(--font-mono);
-            font-size: 12px;
-            outline: none;
-        }
-
-        .auth-group input:focus {
-            border-color: var(--accent);
-        }
-
-        /* Main Workspace Layout (Hidden until authenticated) */
-        #studio-wrapper {
-            display: none;
-        }
-
         .studio-layout {
             max-width: 1320px;
             margin: 0 auto;
@@ -101,7 +48,6 @@
             }
         }
 
-        /* Navigation Sidebar */
         aside {
             background: var(--surface);
             border: 1px solid var(--border);
@@ -144,7 +90,6 @@
             border-color: var(--border);
         }
 
-        /* Main Workspace */
         main {
             display: flex;
             flex-direction: column;
@@ -187,23 +132,6 @@
             background: var(--bg);
             color: var(--success);
             font-weight: 600;
-        }
-
-        .logout-btn {
-            background: var(--bg);
-            color: var(--error);
-            border: 1px solid var(--border);
-            padding: 0.35rem 0.75rem;
-            font-family: var(--font-mono);
-            font-size: 11px;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .logout-btn:hover {
-            background: var(--surface-hover);
-            border-color: var(--error);
         }
 
         section {
@@ -249,7 +177,6 @@
             color: var(--text-main);
         }
 
-        /* Sliders Controls */
         .slider-group {
             margin-top: 0.5rem;
             margin-bottom: 0.75rem;
@@ -263,8 +190,7 @@
             outline: none;
         }
 
-        /* Forms & Inputs */
-        textarea, input[type="text"], input[type="password"], input[type="email"] {
+        textarea, input[type="text"], input[type="password"] {
             width: 100%;
             background: var(--bg);
             border: 1px solid var(--border);
@@ -277,7 +203,7 @@
             margin-top: 0.35rem;
         }
 
-        textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus {
+        textarea:focus, input[type="text"]:focus, input[type="password"]:focus {
             border-color: var(--accent);
         }
 
@@ -342,7 +268,7 @@
             color: var(--text-main);
         }
 
-        #go-deeper-panel {
+        #go-deeper-panel, #github-config-panel {
             display: none;
             border: 1px dashed var(--accent);
             padding: 1rem;
@@ -350,7 +276,7 @@
             background: var(--bg);
         }
 
-        #go-deeper-panel.active {
+        #go-deeper-panel.active, #github-config-panel.active {
             display: block;
         }
 
@@ -455,292 +381,228 @@
 </head>
 <body>
 
-<!-- FIREBASE AUTHENTICATION GATE -->
-<div id="auth-overlay">
-    <h2>CBSA Studio Authentication</h2>
-    <form id="firebase-login-form" onsubmit="event.preventDefault(); executeLogin();">
-        <div class="auth-group">
-            <label for="auth-email">Email</label>
-            <input type="email" id="auth-email" required placeholder="architect@cbsa.studio">
-        </div>
-        <div class="auth-group">
-            <label for="auth-password">Password</label>
-            <input type="password" id="auth-password" required placeholder="••••••••">
-        </div>
-        <button type="submit" class="btn" style="width: 100%; margin-top: 0.5rem;">Authenticate Session</button>
-        <p id="auth-error-msg" style="color: var(--error); font-size: 11px; margin-top: 0.75rem; display: none;"></p>
-    </form>
-</div>
+<div class="studio-layout">
+    <!-- Navigation Sidebar -->
+    <aside>
+        <h2>Studio Navigation</h2>
+        <ul class="nav-links">
+            <li><a href="#valve-input">Valve Entry Panel</a></li>
+            <li><a href="#github-settings">GitHub Sync Settings</a></li>
+            <li><a href="#status">System Status</a></li>
+            <li><a href="#telemetry">Telemetry Readouts</a></li>
+            <li><a href="#history">Local Buffer Log</a></li>
+        </ul>
+    </aside>
 
-<!-- MAIN STUDIO INTERFACE (Gated) -->
-<div id="studio-wrapper">
-    <div class="studio-layout">
-        <!-- Navigation Sidebar -->
-        <aside>
-            <h2>Studio Navigation</h2>
-            <ul class="nav-links">
-                <li><a href="#valve-input">Valve Entry Panel</a></li>
-                <li><a href="#status">System Status</a></li>
-                <li><a href="#telemetry">Telemetry Readouts</a></li>
-                <li><a href="#collapse">Collapse State</a></li>
-                <li><a href="#history">Local History Buffer</a></li>
-            </ul>
-        </aside>
+    <!-- Main Workspace -->
+    <main>
+        <header>
+            <div>
+                <h1>VALVE // TENSILE</h1>
+                <div class="subtitle">Cognitive Boundary & Stability Architecture (GitHub Direct Sync Edition)</div>
+            </div>
+            <div class="header-controls">
+                <div class="status-badge" style="color: var(--success);">GitHub Direct Ready</div>
+            </div>
+        </header>
 
-        <!-- Main Workspace -->
-        <main>
-            <header>
-                <div>
-                    <h1>VALVE // TENSILE</h1>
-                    <div class="subtitle">Cognitive Boundary & Stability Architecture (Reactive Reflection Edition)</div>
-                </div>
-                <div class="header-controls">
-                    <div class="status-badge" id="header-status">Local Active</div>
-                    <button class="logout-btn" onclick="executeLogout()">Disconnect</button>
-                </div>
-            </header>
-
-            <!-- VALVE ACTIVE INPUT PANEL -->
-            <section id="valve-input">
-                <h2>Valve Active Entry Panel</h2>
+        <!-- GITHUB SETTINGS CONFIG PANEL -->
+        <section id="github-settings">
+            <h2>GitHub Connection Settings (Configured Once)</h2>
+            <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 1rem;">
+                Enter your private repository details below. This is saved securely in your browser so entries push directly to your repo.
+            </p>
+            <div class="sub-grid">
                 <div class="content-block">
-                    <span class="label">User Identifier</span>
-                    <input type="text" id="input-user-id" value="example_user" placeholder="Enter user identifier...">
+                    <span class="label">GitHub Username / Owner</span>
+                    <input type="text" id="gh-owner" placeholder="e.g. your-username">
                 </div>
-
                 <div class="content-block">
-                    <span class="label">1. Raw Vent (Zero-Friction Somatic Log)</span>
-                    <textarea id="input-raw-vent" rows="3" maxlength="500" placeholder="Type general somatic noise or background state here..."></textarea>
-                    <div class="char-counter"><span id="char-count">0</span> / 500 chars (Min 40 required)</div>
-                    <div class="example-hint">
-                        <strong>Format Example:</strong> <code>"Small interruptions felt heavier than usual today. Low physical pacing in the morning."</code>
-                    </div>
+                    <span class="label">Repository Name</span>
+                    <input type="text" id="gh-repo" placeholder="e.g. cbsa-studio-data">
                 </div>
+            </div>
+            <div class="content-block" style="margin-top: 1rem;">
+                <span class="label">Personal Access Token (PAT with repo scope)</span>
+                <input type="password" id="gh-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+            </div>
+            <button class="btn btn-secondary" id="btn-save-gh-config" style="margin-top: 0.75rem;">Save Config to Browser</button>
+            <span id="gh-config-status" style="font-size: 11px; margin-left: 1rem; color: var(--success);"></span>
+        </section>
 
-                <div class="content-block">
-                    <span class="label">2. Work / Structural Check</span>
-                    <textarea id="input-work-check" rows="2" maxlength="300" placeholder="Record daily operational check..."></textarea>
-                    <div class="example-hint">
-                        <strong>Format Example:</strong> <code>"Core task finished, but administrative drag ate up buffer time."</code>
-                    </div>
+        <!-- VALVE ACTIVE INPUT PANEL -->
+        <section id="valve-input">
+            <h2>Valve Active Entry Panel</h2>
+            <div class="content-block">
+                <span class="label">User Identifier</span>
+                <input type="text" id="input-user-id" value="example_user" placeholder="Enter user identifier...">
+            </div>
+
+            <div class="content-block">
+                <span class="label">1. Raw Vent (Zero-Friction Somatic Log)</span>
+                <textarea id="input-raw-vent" rows="3" maxlength="500" placeholder="Type general somatic noise or background state here..."></textarea>
+                <div class="char-counter"><span id="char-count">0</span> / 500 chars (Min 40 required)</div>
+                <div class="example-hint">
+                    <strong>Format Example:</strong> <code>"Small interruptions felt heavier than usual today. Low physical pacing in the morning."</code>
+                </div>
+            </div>
+
+            <div class="content-block">
+                <span class="label">2. Work / Structural Check</span>
+                <textarea id="input-work-check" rows="2" maxlength="300" placeholder="Record daily operational check..."></textarea>
+                <div class="example-hint">
+                    <strong>Format Example:</strong> <code>"Core task finished, but administrative drag ate up buffer time."</code>
+                </div>
+            </div>
+            
+            <div class="content-block">
+                <span class="label">3. Temporal Position Assessment</span>
+                <input type="text" id="input-temporal-pos" maxlength="150" placeholder="Where is your mind anchored today?">
+                <div class="example-hint">
+                    <strong>Format Example:</strong> <code>"Mostly present due to active project deadlines, minor pull toward past friction."</code>
                 </div>
                 
-                <div class="content-block">
-                    <span class="label">3. Temporal Position Assessment</span>
-                    <input type="text" id="input-temporal-pos" maxlength="150" placeholder="Where is your mind anchored today?">
-                    <div class="example-hint">
-                        <strong>Format Example:</strong> <code>"Mostly present due to active project deadlines, minor pull toward past friction."</code>
-                    </div>
-                    
-                    <p style="margin-top: 0.75rem; color: var(--text-main); font-size: 11px;">
-                        <strong>Slider Distribution:</strong> Adjust sliders below so they balance and equal 100%. 
-                        <span id="td-sum-wrap" style="margin-left: 0.5rem;">Current Sum: <span id="td-sum" style="font-weight: bold;">100</span>% <span id="td-warning" style="color: var(--success);">(Balanced)</span></span>
-                    </p>
+                <p style="margin-top: 0.75rem; color: var(--text-main); font-size: 11px;">
+                    <strong>Slider Distribution:</strong> Adjust sliders below so they balance and equal 100%. 
+                    <span id="td-sum-wrap" style="margin-left: 0.5rem;">Current Sum: <span id="td-sum" style="font-weight: bold;">100</span>% <span id="td-warning" style="color: var(--success);">(Balanced)</span></span>
+                </p>
 
-                    <div class="chart-container">
-                        <div class="bar-chart" id="temporal-sliders-container"></div>
-                    </div>
+                <div class="chart-container">
+                    <div class="bar-chart" id="temporal-sliders-container"></div>
                 </div>
+            </div>
 
-                <!-- 4. REACTIVE SITUATIONS & HANDLING LOG -->
-                <div class="content-block" style="border-color: var(--accent);">
-                    <span class="label" style="color: var(--accent);">4. Reactive Situations & Friction Handling</span>
-                    <textarea id="input-reactive-log" rows="3" maxlength="400" placeholder="Describe any reactive triggers from today and evaluate how you handled them..."></textarea>
-                    <div class="example-hint">
-                        <strong>Format Example:</strong> <code>"Trigger: Sudden shift in project requirements mid-day. Handling: Initial defensive spike, but caught it within 10 minutes and recalibrated scope cleanly."</code>
-                    </div>
+            <!-- 4. REACTIVE SITUATIONS & HANDLING LOG -->
+            <div class="content-block" style="border-color: var(--accent);">
+                <span class="label" style="color: var(--accent);">4. Reactive Situations & Friction Handling</span>
+                <textarea id="input-reactive-log" rows="3" maxlength="400" placeholder="Describe any reactive triggers from today and evaluate how you handled them..."></textarea>
+                <div class="example-hint">
+                    <strong>Format Example:</strong> <code>"Trigger: Sudden shift in project requirements mid-day. Handling: Initial defensive spike, but caught it within 10 minutes and recalibrated scope cleanly."</code>
                 </div>
+            </div>
 
-                <!-- GO DEEPER TOGGLE BUTTON & EXTENDED PANEL -->
-                <button class="btn-toggle" id="btn-toggle-deeper">+ Go Deeper: Map 6 Load Types</button>
+            <!-- GO DEEPER TOGGLE BUTTON & EXTENDED PANEL -->
+            <button class="btn-toggle" id="btn-toggle-deeper">+ Go Deeper: Map 6 Load Types</button>
+            
+            <div id="go-deeper-panel">
+                <span class="label" style="color: var(--accent); margin-bottom: 0.75rem;">Deep Diagnostic: Load Type Mapping</span>
+                <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 1rem;">Detail how each of the 6 core structural loads impacted your bandwidth today.</p>
                 
-                <div id="go-deeper-panel">
-                    <span class="label" style="color: var(--accent); margin-bottom: 0.75rem;">Deep Diagnostic: Load Type Mapping</span>
-                    <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 1rem;">Detail how each of the 6 core structural loads impacted your bandwidth today.</p>
-                    
-                    <div class="content-block"><span class="label">1. Somatic Load (Physical tension, sleep, fatigue)</span>
-                    <textarea id="load-somatic" rows="2" maxlength="200" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
+                <div class="content-block"><span class="label">1. Somatic Load (Physical tension, sleep, fatigue)</span>
+                <textarea id="load-somatic" rows="2" maxlength="200" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
 
-                    <div class="content-block"><span class="label">2. Cognitive Load (Context switching, mental clutter)</span>
-                    <textarea id="load-cognitive" rows="2" maxlength="200" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
+                <div class="content-block"><span class="label">2. Cognitive Load (Context switching, mental clutter)</span>
+                <textarea id="load-cognitive" rows="2" maxlength="200" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
 
-                    <div class="content-block"><span class="label">3. Temporal Load (Rushing, backlog pressure, future anxiety)</span>
-                    <textarea id="load-temporal" rows="2" maxlength="200" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
+                <div class="content-block"><span class="label">3. Temporal Load (Rushing, backlog pressure, future anxiety)</span>
+                <textarea id="load-temporal" rows="2" maxlength="200" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
 
-                    <div class="content-block"><span class="label">4. Relational Load (Interpersonal friction, communication drag)</span>
-                    <textarea id="load-relational" rows="2" maxlength="200" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
+                <div class="content-block"><span class="label">4. Relational Load (Interpersonal friction, communication drag)</span>
+                <textarea id="load-relational" rows="2" maxlength="200" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
 
-                    <div class="content-block"><span class="label">5. Environmental Load (Noise, sensory friction, workspace state)</span>
-                    <textarea id="load-environmental" rows="2" maxlength="200" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
+                <div class="content-block"><span class="label">5. Environmental Load (Noise, sensory friction, workspace state)</span>
+                <textarea id="load-environmental" rows="2" maxlength="200" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
 
-                    <div class="content-block"><span class="label">6. Operational Load (Process friction, tools, maintenance overhead)</span>
-                    <textarea id="load-operational" rows="2" maxlength="200" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
+                <div class="content-block"><span class="label">6. Operational Load (Process friction, tools, maintenance overhead)</span>
+                <textarea id="load-operational" rows="2" maxlength="200" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
+            </div>
+
+            <button class="btn" id="btn-submit-entry">Commit Entry to GitHub Repo</button>
+            <button class="btn btn-secondary" id="btn-export-data">Export JSON Local Backup</button>
+            <p id="sync-status" style="margin-top: 0.75rem; font-size: 11px; color: var(--text-muted);"></p>
+        </section>
+
+        <!-- SYSTEM STATUS -->
+        <section id="status">
+            <h2>System Status & Core Config</h2>
+            <div class="grid">
+                <div class="metric-card">
+                    <span class="metric-label">User Active</span>
+                    <div class="metric-value" id="val-user">--</div>
                 </div>
-
-                <button class="btn" id="btn-submit-entry">Commit Entry to Local Storage</button>
-                <button class="btn btn-secondary" id="btn-export-data">Export JSON Data</button>
-                <p id="sync-status" style="margin-top: 0.75rem; font-size: 11px; color: var(--text-muted);"></p>
-            </section>
-
-            <!-- SYSTEM STATUS -->
-            <section id="status">
-                <h2>System Status & Core Config</h2>
-                <div class="grid">
-                    <div class="metric-card">
-                        <span class="metric-label">User Active</span>
-                        <div class="metric-value" id="val-user">--</div>
-                    </div>
-                    <div class="metric-card">
-                        <span class="metric-label">Version</span>
-                        <div class="metric-value">1.0</div>
-                    </div>
-                    <div class="metric-card">
-                        <span class="metric-label">Storage Mode</span>
-                        <div class="metric-value" id="val-sync-status" style="font-size: 14px; color: var(--success);">Local Browser</div>
-                    </div>
-                    <div class="metric-card">
-                        <span class="metric-label">Risk Band</span>
-                        <div class="metric-value">Low</div>
-                    </div>
+                <div class="metric-card">
+                    <span class="metric-label">Version</span>
+                    <div class="metric-value">1.0</div>
                 </div>
-            </section>
-
-            <!-- TELEMETRY READOUTS -->
-            <section id="telemetry">
-                <h2>Telemetry Input (Computed Math Readouts)</h2>
-                <div class="grid" id="telemetry-grid"></div>
-            </section>
-
-            <!-- COLLAPSE STATE -->
-            <section id="collapse">
-                <h2>Collapse State & Threshold Limits</h2>
-                <div class="sub-grid">
-                    <div class="content-block">
-                        <span class="label">Status</span>
-                        <p><strong>Status:</strong> <span id="col-status">stable</span></p>
-                    </div>
-                    <div class="content-block">
-                        <span class="label">Threshold Limits</span>
-                        <p><strong>Drift Threshold:</strong> 0.65 | <strong>Volatility Threshold:</strong> 0.45</p>
-                    </div>
+                <div class="metric-card">
+                    <span class="metric-label">Storage Mode</span>
+                    <div class="metric-value" style="font-size: 14px; color: var(--success);">GitHub Direct</div>
                 </div>
-            </section>
-
-            <!-- LOCAL HISTORY BUFFER -->
-            <section id="history">
-                <h2>Local History Buffer (Stored Entries)</h2>
-                <div class="content-block" id="history-log-container">
-                    <p style="color: var(--text-muted);">No entries stored in this browser yet.</p>
+                <div class="metric-card">
+                    <span class="metric-label">Risk Band</span>
+                    <div class="metric-value">Low</div>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <footer>
-                CBSA STUDIO &mdash; Reactive Reflection Implementation Layer
-            </footer>
-        </main>
-    </div>
+        <!-- TELEMETRY READOUTS -->
+        <section id="telemetry">
+            <h2>Telemetry Input (Computed Math Readouts)</h2>
+            <div class="grid" id="telemetry-grid"></div>
+        </section>
+
+        <!-- LOCAL HISTORY BUFFER -->
+        <section id="history">
+            <h2>Local History Buffer (Recent Submissions)</h2>
+            <div class="content-block" id="history-log-container">
+                <p style="color: var(--text-muted);">No entries committed in this session yet.</p>
+            </div>
+        </section>
+
+        <footer>
+            CBSA STUDIO &mdash; Reactive Reflection Implementation Layer
+        </footer>
+    </main>
 </div>
-
-<!-- Firebase SDK & Controller Script -->
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-analytics.js";
-    import { 
-        getAuth, 
-        signInWithEmailAndPassword, 
-        onAuthStateChanged, 
-        signOut 
-    } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyCqI3LS1mwvdFOcBjCgAahSI1aj_ZwZqgA",
-        authDomain: "cbsa-7ca94.firebaseapp.com",
-        projectId: "cbsa-7ca94",
-        storageBucket: "cbsa-7ca94.firebasestorage.app",
-        messagingSenderId: "1041870358890",
-        appId: "1:1041870358890:web:30a6c9970e58ae26507d13",
-        measurementId: "G-WFRSN5C1S9"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-    const auth = getAuth(app);
-
-    // Gate UI visibility based on Authentication state
-    onAuthStateChanged(auth, (user) => {
-        const authOverlay = document.getElementById('auth-overlay');
-        const studioWrapper = document.getElementById('studio-wrapper');
-        const errorMsg = document.getElementById('auth-error-msg');
-        
-        if (user) {
-            authOverlay.style.display = 'none';
-            studioWrapper.style.display = 'block';
-            if(errorMsg) errorMsg.style.display = 'none';
-        } else {
-            authOverlay.style.display = 'block';
-            studioWrapper.style.display = 'none';
-        }
-    });
-
-    window.executeLogin = function() {
-        const email = document.getElementById('auth-email').value;
-        const password = document.getElementById('auth-password').value;
-        const errorMsg = document.getElementById('auth-error-msg');
-
-        signInWithEmailAndPassword(auth, email, password)
-            .catch((error) => {
-                errorMsg.style.display = 'block';
-                errorMsg.textContent = "Auth Error: " + error.message;
-            });
-    };
-
-    window.executeLogout = function() {
-        signOut(auth).catch((error) => {
-            console.error("Sign out error", error);
-        });
-    };
-</script>
 
 <script>
-    // Live Character Counter for Raw Vent
+    // Load saved GitHub credentials if available
+    document.getElementById('gh-owner').value = localStorage.getItem('cbsa_gh_owner') || '';
+    document.getElementById('gh-repo').value = localStorage.getItem('cbsa_gh_repo') || '';
+    document.getElementById('gh-token').value = localStorage.getItem('cbsa_gh_token') || '';
+
+    document.getElementById('btn-save-gh-config').addEventListener('click', () => {
+        const owner = document.getElementById('gh-owner').value.trim();
+        const repo = document.getElementById('gh-repo').value.trim();
+        const token = document.getElementById('gh-token').value.trim();
+
+        localStorage.setItem('cbsa_gh_owner', owner);
+        localStorage.setItem('cbsa_gh_repo', repo);
+        localStorage.setItem('cbsa_gh_token', token);
+
+        const statusEl = document.getElementById('gh-config-status');
+        statusEl.textContent = "Saved successfully!";
+        setTimeout(() => statusEl.textContent = "", 3000);
+    });
+
+    // Character Counter & Toggles
     const rawVentInput = document.getElementById('input-raw-vent');
     const charCountEl = document.getElementById('char-count');
     
     rawVentInput.addEventListener('input', () => {
         const len = rawVentInput.value.length;
         charCountEl.textContent = len;
-        if (len < 40) {
-            charCountEl.style.color = "var(--warning)";
-        } else {
-            charCountEl.style.color = "var(--success)";
-        }
+        charCountEl.style.color = len < 40 ? "var(--warning)" : "var(--success)";
     });
 
-    // Toggle Go Deeper Panel
     const toggleBtn = document.getElementById('btn-toggle-deeper');
     const deeperPanel = document.getElementById('go-deeper-panel');
     toggleBtn.addEventListener('click', () => {
         deeperPanel.classList.toggle('active');
-        if (deeperPanel.classList.contains('active')) {
-            toggleBtn.textContent = "- Hide Go Deeper Loads";
-        } else {
-            toggleBtn.textContent = "+ Go Deeper: Map 6 Load Types";
-        }
+        toggleBtn.textContent = deeperPanel.classList.contains('active') ? "- Hide Go Deeper Loads" : "+ Go Deeper: Map 6 Load Types";
     });
 
-    // Baseline state model
     const state = {
-        telemetry: { drift: 0.2, stability: 0.8, bandwidth: 0.75, containment: 0.85, identity: 0.9, volatility: 0.15 },
         temporal: [
             { id: "way_past", label: "Way Past", value: 1 },
             { id: "near_past", label: "Near Past", value: 1 },
             { id: "present", label: "Present", value: 86 },
             { id: "near_future", label: "Near Future", value: 11 },
             { id: "far_future", label: "Far Future", value: 1 }
-        ]
+        ],
+        telemetry: { drift: 0.2, stability: 0.8, bandwidth: 0.75, containment: 0.85, identity: 0.9, volatility: 0.15 }
     };
 
-    // Render Telemetry Cards
     const telGrid = document.getElementById('telemetry-grid');
     for (const [key, val] of Object.entries(state.telemetry)) {
         const card = document.createElement('div');
@@ -749,15 +611,12 @@
         telGrid.appendChild(card);
     }
 
-    // Render Temporal Sliders
     const temporalContainer = document.getElementById('temporal-sliders-container');
     function updateSum() {
         let total = state.temporal.reduce((acc, curr) => acc + curr.value, 0);
         const sumEl = document.getElementById('td-sum');
         const warningEl = document.getElementById('td-warning');
-        
         sumEl.textContent = total;
-        
         if (total === 100) {
             sumEl.style.color = "var(--text-main)";
             warningEl.style.color = "var(--success)";
@@ -793,59 +652,48 @@
             });
         }, 0);
     });
-
     updateSum();
 
-    // ==========================================
-    // LOCAL STORAGE HISTORY MANAGEMENT
-    // ==========================================
-    const STORAGE_KEY = "cbsa_studio_entries";
-
-    function loadHistory() {
+    // Session Local History Log
+    const localSessionEntries = [];
+    function appendLocalHistory(entry) {
         const container = document.getElementById('history-log-container');
-        const rawData = localStorage.getItem(STORAGE_KEY);
-        if (!rawData) {
-            container.innerHTML = '<p style="color: var(--text-muted);">No entries stored in this browser yet.</p>';
+        localSessionEntries.unshift(entry);
+        container.innerHTML = "";
+        localSessionEntries.forEach((itemData, idx) => {
+            const item = document.createElement('div');
+            item.className = 'history-item';
+            item.innerHTML = `
+                <strong>[Session #${localSessionEntries.length - idx}] User: ${itemData.user}</strong> (${itemData.local_date_string})<br>
+                <span style="color: var(--text-muted);">Vent:</span> ${itemData.raw_vent}<br>
+                <span style="color: var(--accent);">Reactive Log:</span> ${itemData.reactive_log || 'None recorded'}<br>
+            `;
+            container.appendChild(item);
+        });
+    }
+
+    // GitHub Commit Action
+    document.getElementById('btn-submit-entry').addEventListener('click', async () => {
+        const owner = localStorage.getItem('cbsa_gh_owner');
+        const repo = localStorage.getItem('cbsa_gh_repo');
+        const token = localStorage.getItem('cbsa_gh_token');
+        const syncStatusEl = document.getElementById('sync-status');
+
+        if (!owner || !repo || !token) {
+            syncStatusEl.style.color = "var(--error)";
+            syncStatusEl.textContent = "Error: Please fill out and save your GitHub settings above first.";
             return;
         }
 
-        try {
-            const entries = JSON.parse(rawData);
-            if (entries.length === 0) {
-                container.innerHTML = '<p style="color: var(--text-muted);">No entries stored in this browser yet.</p>';
-                return;
-            }
-
-            container.innerHTML = "";
-            entries.reverse().forEach((entry, idx) => {
-                const item = document.createElement('div');
-                item.className = 'history-item';
-                item.innerHTML = `
-                    <strong>[#${entries.length - idx}] User: ${entry.user}</strong> (${entry.local_date_string})<br>
-                    <span style="color: var(--text-muted);">Vent:</span> ${entry.raw_vent}<br>
-                    <span style="color: var(--accent);">Reactive Log:</span> ${entry.reactive_log || 'None recorded'}<br>
-                    ${entry.loads ? '<span style="color: var(--success);">[Includes 6-Load Deep Diagnostic Data]</span>' : ''}
-                `;
-                container.appendChild(item);
-            });
-        } catch (e) {
-            container.innerHTML = '<p style="color: #ef4444;">Error reading local history storage.</p>';
-        }
-    }
-
-    loadHistory();
-
-    document.getElementById('btn-submit-entry').addEventListener('click', () => {
         const userId = document.getElementById('input-user-id').value || "anonymous";
         const rawVent = rawVentInput.value.trim();
         const workCheck = document.getElementById('input-work-check').value;
         const temporalPos = document.getElementById('input-temporal-pos').value;
         const reactiveLog = document.getElementById('input-reactive-log').value;
-        const syncStatusEl = document.getElementById('sync-status');
 
         if (rawVent.length < 40) {
             syncStatusEl.style.color = "var(--error)";
-            syncStatusEl.textContent = "Error: Raw vent is too short (minimum 40 characters required for telemetry analysis).";
+            syncStatusEl.textContent = "Error: Raw vent is too short (minimum 40 characters required).";
             return;
         }
 
@@ -862,7 +710,6 @@
         }
 
         const entryPayload = {
-            id: Date.now(),
             user: userId,
             timestamp: new Date().toISOString(),
             local_date_string: new Date().toLocaleString(),
@@ -875,42 +722,60 @@
             temporal_distribution: state.temporal.reduce((obj, item) => ({ ...obj, [item.id]: item.value }), {})
         };
 
-        let existingEntries = [];
+        syncStatusEl.style.color = "var(--warning)";
+        syncStatusEl.textContent = "Committing entry directly to GitHub...";
+
+        const fileName = `data/entry_${Date.now()}.json`;
+        const fileContentBase64 = btoa(unescape(encodeURIComponent(JSON.stringify(entryPayload, null, 2))));
+        const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${fileName}`;
+
         try {
-            const stored = localStorage.getItem(STORAGE_KEY);
-            if (stored) existingEntries = JSON.parse(stored);
+            const response = await fetch(apiUrl, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/vnd.github+json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: `CBSA Studio entry: ${userId} at ${new Date().toLocaleString()}`,
+                    content: fileContentBase64
+                })
+            });
+
+            if (!response.ok) {
+                const errData = await response.json();
+                throw new Error(errData.message || 'GitHub API rejected commit');
+            }
+
+            syncStatusEl.style.color = "var(--success)";
+            syncStatusEl.textContent = "Success: Entry committed directly to your private GitHub repository!";
+            
+            appendLocalHistory(entryPayload);
+
+            // Clear form
+            rawVentInput.value = "";
+            charCountEl.textContent = "0";
+            document.getElementById('input-work-check').value = "";
+            document.getElementById('input-temporal-pos').value = "";
+            document.getElementById('input-reactive-log').value = "";
         } catch (e) {
-            existingEntries = [];
+            console.error(e);
+            syncStatusEl.style.color = "var(--error)";
+            syncStatusEl.textContent = "GitHub Error: " + e.message;
         }
-
-        existingEntries.push(entryPayload);
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(existingEntries));
-
-        syncStatusEl.style.color = "var(--success)";
-        syncStatusEl.textContent = "Success: Entry saved locally to browser storage!";
-
-        rawVentInput.value = "";
-        charCountEl.textContent = "0";
-        document.getElementById('input-work-check').value = "";
-        document.getElementById('input-temporal-pos').value = "";
-        document.getElementById('input-reactive-log').value = "";
-        ['somatic', 'cognitive', 'temporal', 'relational', 'environmental', 'operational'].forEach(l => {
-            document.getElementById(`load-${l}`).value = "";
-        });
-        loadHistory();
     });
 
     document.getElementById('btn-export-data').addEventListener('click', () => {
-        const rawData = localStorage.getItem(STORAGE_KEY);
-        if (!rawData) {
-            alert("No local data to export.");
+        if (localSessionEntries.length === 0) {
+            alert("No session entries to export.");
             return;
         }
-        const blob = new Blob([rawData], { type: "application/json" });
+        const blob = new Blob([JSON.stringify(localSessionEntries, null, 2)], { type: "application/json" });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `cbsa_entries_${document.getElementById('input-user-id').value || 'export'}.json`;
+        a.download = `cbsa_session_export.json`;
         a.click();
         URL.revokeObjectURL(url);
     });
