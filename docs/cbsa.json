@@ -15,30 +15,43 @@
     "V_t": 0.15
   },
   "weekly_snapshot": {
-    "line_1": "",
-    "line_2": "",
-    "line_3": ""
-  },
-  "discovery": {
-    "status": "ready",
-    "file": "docs/DISCOVERY.md"
-  },
-  "architecture_map": {
-    "core_engines": [
-      "Drift_Engine",
-      "Stability_Engine",
-      "Bandwidth_Engine",
-      "Containment_Engine"
-    ],
-    "dynamic_regulators": [
-      "Identity_Coherence_Regulator",
-      "Volatility_Regulator",
-      "Load_Regulator"
-    ],
-    "processing_engines": [
-      "Daily_Processing_Engine",
-      "Weekly_Processing_Engine",
-      "Collapse_Processing_Engine"
-    ]
+  "line_1": "",
+  "line_2": "",
+  "line_3": "",
+  "history": []
+},
+"drift_slope": {
+  "values": [],
+  "slope": null
+},
+"collapse_state": {
+  "status": "stable",
+  "thresholds": {
+    "drift": 0.65,
+    "volatility": 0.45,
+    "bandwidth": 0.30
+  }
+},
+"regulator_dynamics": {
+  "identity": [],
+  "volatility": [],
+  "load": []
+},
+"temporal_coherence": {
+  "tier": "III",
+  "alignment": 0.0
+},
+"load_curve": {
+  "bandwidth": [],
+  "containment": []
+},
+"history": {
+  "nightly_entries": []
+},
+"discovery_viewer": {
+  "file": "docs/DISCOVERY.md",
+  "content": ""
+]
   }
 }
+
