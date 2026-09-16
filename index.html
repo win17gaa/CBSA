@@ -34,7 +34,59 @@
             padding: 1.5rem;
         }
 
-        /* Main Workspace Layout */
+        /* Firebase Auth Overlay Styles */
+        #auth-overlay {
+            max-width: 450px;
+            margin: 6rem auto;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 2.5rem;
+            text-align: center;
+        }
+
+        #auth-overlay h2 {
+            font-size: 14px;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        .auth-group {
+            margin-bottom: 1.25rem;
+            text-align: left;
+        }
+
+        .auth-group label {
+            display: block;
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 0.35rem;
+            text-transform: uppercase;
+        }
+
+        .auth-group input {
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 0.75rem;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            outline: none;
+        }
+
+        .auth-group input:focus {
+            border-color: var(--accent);
+        }
+
+        /* Main Workspace Layout (Hidden until authenticated) */
+        #studio-wrapper {
+            display: none;
+        }
+
         .studio-layout {
             max-width: 1320px;
             margin: 0 auto;
@@ -137,6 +189,23 @@
             font-weight: 600;
         }
 
+        .logout-btn {
+            background: var(--bg);
+            color: var(--error);
+            border: 1px solid var(--border);
+            padding: 0.35rem 0.75rem;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: var(--surface-hover);
+            border-color: var(--error);
+        }
+
         section {
             background: var(--surface);
             border: 1px solid var(--border);
@@ -195,7 +264,7 @@
         }
 
         /* Forms & Inputs */
-        textarea, input[type="text"] {
+        textarea, input[type="text"], input[type="password"], input[type="email"] {
             width: 100%;
             background: var(--bg);
             border: 1px solid var(--border);
@@ -208,7 +277,7 @@
             margin-top: 0.35rem;
         }
 
-        textarea:focus, input[type="text"]:focus {
+        textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus {
             border-color: var(--accent);
         }
 
@@ -386,7 +455,24 @@
 </head>
 <body>
 
-<!-- MAIN STUDIO INTERFACE (Direct Access) -->
+<!-- FIREBASE AUTHENTICATION GATE -->
+<div id="auth-overlay">
+    <h2>CBSA Studio Authentication</h2>
+    <form id="firebase-login-form" onsubmit="event.preventDefault(); executeLogin();">
+        <div class="auth-group">
+            <label for="auth-email">Email</label>
+            <input type="email" id="auth-email" required placeholder="architect@cbsa.studio">
+        </div>
+        <div class="auth-group">
+            <label for="auth-password">Password</label>
+            <input type="password" id="auth-password" required placeholder="••••••••">
+        </div>
+        <button type="submit" class="btn" style="width: 100%; margin-top: 0.5rem;">Authenticate Session</button>
+        <p id="auth-error-msg" style="color: var(--error); font-size: 11px; margin-top: 0.75rem; display: none;"></p>
+    </form>
+</div>
+
+<!-- MAIN STUDIO INTERFACE (Gated) -->
 <div id="studio-wrapper">
     <div class="studio-layout">
         <!-- Navigation Sidebar -->
@@ -409,7 +495,8 @@
                     <div class="subtitle">Cognitive Boundary & Stability Architecture (Reactive Reflection Edition)</div>
                 </div>
                 <div class="header-controls">
-                    <div class="status-badge" id="header-status">Direct Local Mode</div>
+                    <div class="status-badge" id="header-status">Local Active</div>
+                    <button class="logout-btn" onclick="executeLogout()">Disconnect</button>
                 </div>
             </header>
 
@@ -553,6 +640,66 @@
         </main>
     </div>
 </div>
+
+<!-- Firebase SDK & Controller Script -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-analytics.js";
+    import { 
+        getAuth, 
+        signInWithEmailAndPassword, 
+        onAuthStateChanged, 
+        signOut 
+    } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCqI3LS1mwvdFOcBjCgAahSI1aj_ZwZqgA",
+        authDomain: "cbsa-7ca94.firebaseapp.com",
+        projectId: "cbsa-7ca94",
+        storageBucket: "cbsa-7ca94.firebasestorage.app",
+        messagingSenderId: "1041870358890",
+        appId: "1:1041870358890:web:30a6c9970e58ae26507d13",
+        measurementId: "G-WFRSN5C1S9"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const auth = getAuth(app);
+
+    // Gate UI visibility based on Authentication state
+    onAuthStateChanged(auth, (user) => {
+        const authOverlay = document.getElementById('auth-overlay');
+        const studioWrapper = document.getElementById('studio-wrapper');
+        const errorMsg = document.getElementById('auth-error-msg');
+        
+        if (user) {
+            authOverlay.style.display = 'none';
+            studioWrapper.style.display = 'block';
+            if(errorMsg) errorMsg.style.display = 'none';
+        } else {
+            authOverlay.style.display = 'block';
+            studioWrapper.style.display = 'none';
+        }
+    });
+
+    window.executeLogin = function() {
+        const email = document.getElementById('auth-email').value;
+        const password = document.getElementById('auth-password').value;
+        const errorMsg = document.getElementById('auth-error-msg');
+
+        signInWithEmailAndPassword(auth, email, password)
+            .catch((error) => {
+                errorMsg.style.display = 'block';
+                errorMsg.textContent = "Auth Error: " + error.message;
+            });
+    };
+
+    window.executeLogout = function() {
+        signOut(auth).catch((error) => {
+            console.error("Sign out error", error);
+        });
+    };
+</script>
 
 <script>
     // Live Character Counter for Raw Vent
