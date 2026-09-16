@@ -176,14 +176,6 @@
             margin-top: 0.75rem;
         }
 
-        .slider-group label {
-            font-size: 10px;
-            color: var(--text-muted);
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.25rem;
-        }
-
         input[type="range"] {
             width: 100%;
             accent-color: var(--text-main);
@@ -365,6 +357,7 @@
             <div class="content-block">
                 <span class="label">Temporal Position Assessment</span>
                 <input type="text" id="input-temporal-pos" placeholder="Where is your mind anchored today?">
+                <p style="margin-top: 0.5rem; font-size: 11px; color: var(--accent);">👉 Note: Remember to adjust the temporal sliders further down the page so they balance and equal 100%.</p>
             </div>
             <button class="btn" id="btn-submit-entry">Commit Entry & Sync to Cloud</button>
             <p id="sync-status" style="margin-top: 0.75rem; font-size: 11px; color: var(--text-muted);"></p>
@@ -399,7 +392,7 @@
             <div class="grid" id="telemetry-grid"></div>
         </section>
 
-        <!-- TEMPORAL DISTRIBUTION (With instructions & real-time validator) -->
+        <!-- TEMPORAL DISTRIBUTION -->
         <section id="temporal-dist">
             <h2>Temporal Distribution (User Estimate Input)</h2>
             <div class="content-block">
@@ -447,7 +440,6 @@
 
     // ==========================================
     // FIREBASE CONFIGURATION PLACEHOLDERS
-    // Drop your project keys here when ready
     // ==========================================
     const firebaseConfig = {
         apiKey: "YOUR_API_KEY_HERE",
@@ -539,7 +531,6 @@
         }, 0);
     });
 
-    // Initial sum check execution
     updateSum();
 
     // ==========================================
@@ -558,7 +549,6 @@
             return;
         }
 
-        // Automatic timestamp injection
         const entryPayload = {
             user: userId,
             timestamp: new Date().toISOString(),
@@ -575,18 +565,15 @@
 
         try {
             if (isFirebaseInitialized && db) {
-                // Write directly to user-isolated Firestore collection
                 await addDoc(collection(db, "users", userId, "nightly_entries"), entryPayload);
                 syncStatusEl.style.color = "var(--success)";
                 syncStatusEl.textContent = "Success: Entry securely synced to cloud off-site storage.";
             } else {
-                // Local fallback simulation if keys are still placeholders
                 console.log("Simulated Cloud Push:", entryPayload);
                 syncStatusEl.style.color = "var(--success)";
                 syncStatusEl.textContent = "Success: Entry logged locally (Configure Firebase keys to push live).";
             }
             
-            // Clear entry fields after commit
             document.getElementById('input-raw-vent').value = "";
             document.getElementById('input-work-check').value = "";
             document.getElementById('input-temporal-pos').value = "";
