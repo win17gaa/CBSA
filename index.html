@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VALVE // TENSILE — CBSA Studio (Go Deeper Edition)</title>
+    <title>VALVE // TENSILE — CBSA Studio (Character-Bounded Edition)</title>
     <style>
         :root {
             --bg: #0b0b0c;
@@ -14,6 +14,8 @@
             --text-muted: #a1a1aa;
             --accent: #3b82f6;
             --success: #22c55e;
+            --warning: #f59e0b;
+            --error: #ef4444;
             --font-mono: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
         }
 
@@ -203,6 +205,13 @@
             border-color: var(--accent);
         }
 
+        .char-counter {
+            font-size: 10px;
+            text-align: right;
+            margin-top: 0.25rem;
+            color: var(--text-muted);
+        }
+
         .btn {
             background: var(--text-main);
             color: var(--bg);
@@ -244,7 +253,6 @@
             background: var(--surface-hover);
         }
 
-        /* Example Guidance Box */
         .example-hint {
             font-size: 11px;
             color: var(--text-muted);
@@ -258,7 +266,6 @@
             color: var(--text-main);
         }
 
-        /* Go Deeper Expanded Drawer */
         #go-deeper-panel {
             display: none;
             border: 1px dashed var(--accent);
@@ -271,7 +278,6 @@
             display: block;
         }
 
-        /* Graphs & Visualizations */
         .chart-container {
             background: var(--bg);
             border: 1px solid var(--border);
@@ -391,7 +397,7 @@
         <header>
             <div>
                 <h1>VALVE // TENSILE</h1>
-                <div class="subtitle">Cognitive Boundary & Stability Architecture (Go Deeper Edition)</div>
+                <div class="subtitle">Cognitive Boundary & Stability Architecture (Bounded Edition)</div>
             </div>
             <div class="status-badge" id="header-status">Local Active</div>
         </header>
@@ -405,8 +411,9 @@
             </div>
 
             <div class="content-block">
-                <span class="label">Raw Vent (Zero-Friction Somatic Log)</span>
-                <textarea id="input-raw-vent" rows="3" placeholder="Type raw vent input here..."></textarea>
+                <span class="label">Raw Vent (Zero-Friction Somatic Log) — Target: 50 to 400 characters</span>
+                <textarea id="input-raw-vent" rows="3" maxlength="500" placeholder="Type raw vent input here..."></textarea>
+                <div class="char-counter"><span id="char-count">0</span> / 500 chars (Min 40 required)</div>
                 <div class="example-hint">
                     <strong>Format Example:</strong> <code>"Small interruptions felt heavier than usual today. Low physical pacing in the morning, high mental friction around midday."</code>
                 </div>
@@ -414,7 +421,7 @@
 
             <div class="content-block">
                 <span class="label">Work / Structural Check</span>
-                <textarea id="input-work-check" rows="2" placeholder="Record daily operational check..."></textarea>
+                <textarea id="input-work-check" rows="2" maxlength="300" placeholder="Record daily operational check..."></textarea>
                 <div class="example-hint">
                     <strong>Format Example:</strong> <code>"Core task finished, but administrative drag ate up buffer time."</code>
                 </div>
@@ -422,7 +429,7 @@
             
             <div class="content-block">
                 <span class="label">Temporal Position Assessment</span>
-                <input type="text" id="input-temporal-pos" placeholder="Where is your mind anchored today?">
+                <input type="text" id="input-temporal-pos" maxlength="150" placeholder="Where is your mind anchored today?">
                 <div class="example-hint">
                     <strong>Format Example:</strong> <code>"Mostly present due to active project deadlines, minor pull toward past friction."</code>
                 </div>
@@ -445,22 +452,22 @@
                 <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 1rem;">Detail how each of the 6 core structural loads impacted your bandwidth today.</p>
                 
                 <div class="content-block"><span class="label">1. Somatic Load (Physical tension, sleep, fatigue)</span>
-                <textarea id="load-somatic" rows="2" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
+                <textarea id="load-somatic" rows="2" maxlength="200" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
 
                 <div class="content-block"><span class="label">2. Cognitive Load (Context switching, mental clutter)</span>
-                <textarea id="load-cognitive" rows="2" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
+                <textarea id="load-cognitive" rows="2" maxlength="200" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
 
                 <div class="content-block"><span class="label">3. Temporal Load (Rushing, backlog pressure, future anxiety)</span>
-                <textarea id="load-temporal" rows="2" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
+                <textarea id="load-temporal" rows="2" maxlength="200" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
 
                 <div class="content-block"><span class="label">4. Relational Load (Interpersonal friction, communication drag)</span>
-                <textarea id="load-relational" rows="2" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
+                <textarea id="load-relational" rows="2" maxlength="200" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
 
                 <div class="content-block"><span class="label">5. Environmental Load (Noise, sensory friction, workspace state)</span>
-                <textarea id="load-environmental" rows="2" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
+                <textarea id="load-environmental" rows="2" maxlength="200" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
 
                 <div class="content-block"><span class="label">6. Operational Load (Process friction, tools, maintenance overhead)</span>
-                <textarea id="load-operational" rows="2" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
+                <textarea id="load-operational" rows="2" maxlength="200" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
             </div>
 
             <button class="btn" id="btn-submit-entry">Commit Entry to Local Storage</button>
@@ -521,12 +528,26 @@
         </section>
 
         <footer>
-            CBSA STUDIO &mdash; Unified Local-First Implementation Layer
+            CBSA STUDIO &mdash; Bounded Local-First Implementation Layer
         </footer>
     </main>
 </div>
 
 <script>
+    // Live Character Counter for Raw Vent
+    const rawVentInput = document.getElementById('input-raw-vent');
+    const charCountEl = document.getElementById('char-count');
+    
+    rawVentInput.addEventListener('input', () => {
+        const len = rawVentInput.value.length;
+        charCountEl.textContent = len;
+        if (len < 40) {
+            charCountEl.style.color = "var(--warning)";
+        } else {
+            charCountEl.style.color = "var(--success)";
+        }
+    });
+
     // Toggle Go Deeper Panel
     const toggleBtn = document.getElementById('btn-toggle-deeper');
     const deeperPanel = document.getElementById('go-deeper-panel');
@@ -633,7 +654,7 @@
                 item.className = 'history-item';
                 item.innerHTML = `
                     <strong>[#${entries.length - idx}] User: ${entry.user}</strong> (${entry.local_date_string})<br>
-                    <span style="color: var(--text-muted);">Vent:</span> ${entry.raw_vent}<br>
+                    <span style="color: var(--text-muted);">Vent (${entry.raw_vent.length} chars):</span> ${entry.raw_vent}<br>
                     <span style="color: var(--text-muted);">Temporal Anchor:</span> ${entry.temporal_position || 'None'}
                     ${entry.loads ? '<br><span style="color: var(--accent);">[Includes 6-Load Deep Diagnostic Data]</span>' : ''}
                 `;
@@ -648,14 +669,14 @@
 
     document.getElementById('btn-submit-entry').addEventListener('click', () => {
         const userId = document.getElementById('input-user-id').value || "anonymous";
-        const rawVent = document.getElementById('input-raw-vent').value;
+        const rawVent = rawVentInput.value.trim();
         const workCheck = document.getElementById('input-work-check').value;
         const temporalPos = document.getElementById('input-temporal-pos').value;
         const syncStatusEl = document.getElementById('sync-status');
 
-        if (!rawVent.trim()) {
-            syncStatusEl.style.color = "#ef4444";
-            syncStatusEl.textContent = "Error: Raw vent cannot be empty before committing.";
+        if (rawVent.length < 40) {
+            syncStatusEl.style.color = "var(--error)";
+            syncStatusEl.textContent = "Error: Raw vent is too short (minimum 40 characters required for telemetry analysis).";
             return;
         }
 
@@ -699,8 +720,9 @@
         syncStatusEl.style.color = "var(--success)";
         syncStatusEl.textContent = "Success: Entry saved locally to browser storage!";
 
-        // Reset text inputs
-        document.getElementById('input-raw-vent').value = "";
+        // Reset text inputs and counter
+        rawVentInput.value = "";
+        charCountEl.textContent = "0";
         document.getElementById('input-work-check').value = "";
         document.getElementById('input-temporal-pos').value = "";
         ['somatic', 'cognitive', 'temporal', 'relational', 'environmental', 'operational'].forEach(l => {
