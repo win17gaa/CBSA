@@ -34,6 +34,59 @@
             padding: 1.5rem;
         }
 
+        /* Firebase Auth Overlay Styles */
+        #auth-overlay {
+            max-width: 450px;
+            margin: 6rem auto;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 2.5rem;
+            text-align: center;
+        }
+
+        #auth-overlay h2 {
+            font-size: 14px;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        .auth-group {
+            margin-bottom: 1.25rem;
+            text-align: left;
+        }
+
+        .auth-group label {
+            display: block;
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 0.35rem;
+            text-transform: uppercase;
+        }
+
+        .auth-group input {
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 0.75rem;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            outline: none;
+        }
+
+        .auth-group input:focus {
+            border-color: var(--accent);
+        }
+
+        /* Main Workspace Layout (Hidden until authenticated) */
+        #studio-wrapper {
+            display: none;
+        }
+
         .studio-layout {
             max-width: 1320px;
             margin: 0 auto;
@@ -107,6 +160,12 @@
             align-items: center;
         }
 
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
         h1 {
             font-size: 15px;
             font-weight: 600;
@@ -128,6 +187,23 @@
             background: var(--bg);
             color: var(--success);
             font-weight: 600;
+        }
+
+        .logout-btn {
+            background: var(--bg);
+            color: var(--error);
+            border: 1px solid var(--border);
+            padding: 0.35rem 0.75rem;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: var(--surface-hover);
+            border-color: var(--error);
         }
 
         section {
@@ -188,7 +264,7 @@
         }
 
         /* Forms & Inputs */
-        textarea, input[type="text"] {
+        textarea, input[type="text"], input[type="password"], input[type="email"] {
             width: 100%;
             background: var(--bg);
             border: 1px solid var(--border);
@@ -201,7 +277,7 @@
             margin-top: 0.35rem;
         }
 
-        textarea:focus, input[type="text"]:focus {
+        textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus {
             border-color: var(--accent);
         }
 
@@ -379,168 +455,251 @@
 </head>
 <body>
 
-<div class="studio-layout">
-    <!-- Navigation Sidebar -->
-    <aside>
-        <h2>Studio Navigation</h2>
-        <ul class="nav-links">
-            <li><a href="#valve-input">Valve Entry Panel</a></li>
-            <li><a href="#status">System Status</a></li>
-            <li><a href="#telemetry">Telemetry Readouts</a></li>
-            <li><a href="#collapse">Collapse State</a></li>
-            <li><a href="#history">Local History Buffer</a></li>
-        </ul>
-    </aside>
-
-    <!-- Main Workspace -->
-    <main>
-        <header>
-            <div>
-                <h1>VALVE // TENSILE</h1>
-                <div class="subtitle">Cognitive Boundary & Stability Architecture (Reactive Reflection Edition)</div>
-            </div>
-            <div class="status-badge" id="header-status">Local Active</div>
-        </header>
-
-        <!-- VALVE ACTIVE INPUT PANEL -->
-        <section id="valve-input">
-            <h2>Valve Active Entry Panel</h2>
-            <div class="content-block">
-                <span class="label">User Identifier</span>
-                <input type="text" id="input-user-id" value="example_user" placeholder="Enter user identifier...">
-            </div>
-
-            <div class="content-block">
-                <span class="label">1. Raw Vent (Zero-Friction Somatic Log)</span>
-                <textarea id="input-raw-vent" rows="3" maxlength="500" placeholder="Type general somatic noise or background state here..."></textarea>
-                <div class="char-counter"><span id="char-count">0</span> / 500 chars (Min 40 required)</div>
-                <div class="example-hint">
-                    <strong>Format Example:</strong> <code>"Small interruptions felt heavier than usual today. Low physical pacing in the morning."</code>
-                </div>
-            </div>
-
-            <div class="content-block">
-                <span class="label">2. Work / Structural Check</span>
-                <textarea id="input-work-check" rows="2" maxlength="300" placeholder="Record daily operational check..."></textarea>
-                <div class="example-hint">
-                    <strong>Format Example:</strong> <code>"Core task finished, but administrative drag ate up buffer time."</code>
-                </div>
-            </div>
-            
-            <div class="content-block">
-                <span class="label">3. Temporal Position Assessment</span>
-                <input type="text" id="input-temporal-pos" maxlength="150" placeholder="Where is your mind anchored today?">
-                <div class="example-hint">
-                    <strong>Format Example:</strong> <code>"Mostly present due to active project deadlines, minor pull toward past friction."</code>
-                </div>
-                
-                <p style="margin-top: 0.75rem; color: var(--text-main); font-size: 11px;">
-                    <strong>Slider Distribution:</strong> Adjust sliders below so they balance and equal 100%. 
-                    <span id="td-sum-wrap" style="margin-left: 0.5rem;">Current Sum: <span id="td-sum" style="font-weight: bold;">100</span>% <span id="td-warning" style="color: var(--success);">(Balanced)</span></span>
-                </p>
-
-                <div class="chart-container">
-                    <div class="bar-chart" id="temporal-sliders-container"></div>
-                </div>
-            </div>
-
-            <!-- 4. REACTIVE SITUATIONS & HANDLING LOG -->
-            <div class="content-block" style="border-color: var(--accent);">
-                <span class="label" style="color: var(--accent);">4. Reactive Situations & Friction Handling</span>
-                <textarea id="input-reactive-log" rows="3" maxlength="400" placeholder="Describe any reactive triggers from today and evaluate how you handled them..."></textarea>
-                <div class="example-hint">
-                    <strong>Format Example:</strong> <code>"Trigger: Sudden shift in project requirements mid-day. Handling: Initial defensive spike, but caught it within 10 minutes and recalibrated scope cleanly."</code>
-                </div>
-            </div>
-
-            <!-- GO DEEPER TOGGLE BUTTON & EXTENDED PANEL -->
-            <button class="btn-toggle" id="btn-toggle-deeper">+ Go Deeper: Map 6 Load Types</button>
-            
-            <div id="go-deeper-panel">
-                <span class="label" style="color: var(--accent); margin-bottom: 0.75rem;">Deep Diagnostic: Load Type Mapping</span>
-                <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 1rem;">Detail how each of the 6 core structural loads impacted your bandwidth today.</p>
-                
-                <div class="content-block"><span class="label">1. Somatic Load (Physical tension, sleep, fatigue)</span>
-                <textarea id="load-somatic" rows="2" maxlength="200" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
-
-                <div class="content-block"><span class="label">2. Cognitive Load (Context switching, mental clutter)</span>
-                <textarea id="load-cognitive" rows="2" maxlength="200" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
-
-                <div class="content-block"><span class="label">3. Temporal Load (Rushing, backlog pressure, future anxiety)</span>
-                <textarea id="load-temporal" rows="2" maxlength="200" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
-
-                <div class="content-block"><span class="label">4. Relational Load (Interpersonal friction, communication drag)</span>
-                <textarea id="load-relational" rows="2" maxlength="200" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
-
-                <div class="content-block"><span class="label">5. Environmental Load (Noise, sensory friction, workspace state)</span>
-                <textarea id="load-environmental" rows="2" maxlength="200" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
-
-                <div class="content-block"><span class="label">6. Operational Load (Process friction, tools, maintenance overhead)</span>
-                <textarea id="load-operational" rows="2" maxlength="200" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
-            </div>
-
-            <button class="btn" id="btn-submit-entry">Commit Entry to Local Storage</button>
-            <button class="btn btn-secondary" id="btn-export-data">Export JSON Data</button>
-            <p id="sync-status" style="margin-top: 0.75rem; font-size: 11px; color: var(--text-muted);"></p>
-        </section>
-
-        <!-- SYSTEM STATUS -->
-        <section id="status">
-            <h2>System Status & Core Config</h2>
-            <div class="grid">
-                <div class="metric-card">
-                    <span class="metric-label">User Active</span>
-                    <div class="metric-value" id="val-user">--</div>
-                </div>
-                <div class="metric-card">
-                    <span class="metric-label">Version</span>
-                    <div class="metric-value">1.0</div>
-                </div>
-                <div class="metric-card">
-                    <span class="metric-label">Storage Mode</span>
-                    <div class="metric-value" id="val-sync-status" style="font-size: 14px; color: var(--success);">Local Browser</div>
-                </div>
-                <div class="metric-card">
-                    <span class="metric-label">Risk Band</span>
-                    <div class="metric-value">Low</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- TELEMETRY READOUTS -->
-        <section id="telemetry">
-            <h2>Telemetry Input (Computed Math Readouts)</h2>
-            <div class="grid" id="telemetry-grid"></div>
-        </section>
-
-        <!-- COLLAPSE STATE -->
-        <section id="collapse">
-            <h2>Collapse State & Threshold Limits</h2>
-            <div class="sub-grid">
-                <div class="content-block">
-                    <span class="label">Status</span>
-                    <p><strong>Status:</strong> <span id="col-status">stable</span></p>
-                </div>
-                <div class="content-block">
-                    <span class="label">Threshold Limits</span>
-                    <p><strong>Drift Threshold:</strong> 0.65 | <strong>Volatility Threshold:</strong> 0.45</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- LOCAL HISTORY BUFFER -->
-        <section id="history">
-            <h2>Local History Buffer (Stored Entries)</h2>
-            <div class="content-block" id="history-log-container">
-                <p style="color: var(--text-muted);">No entries stored in this browser yet.</p>
-            </div>
-        </section>
-
-        <footer>
-            CBSA STUDIO &mdash; Reactive Reflection Implementation Layer
-        </footer>
-    </main>
+<!-- FIREBASE AUTHENTICATION GATE -->
+<div id="auth-overlay">
+    <h2>CBSA Studio Authentication</h2>
+    <form id="firebase-login-form" onsubmit="event.preventDefault(); executeLogin();">
+        <div class="auth-group">
+            <label for="auth-email">Email</label>
+            <input type="email" id="auth-email" required placeholder="architect@cbsa.studio">
+        </div>
+        <div class="auth-group">
+            <label for="auth-password">Password</label>
+            <input type="password" id="auth-password" required placeholder="••••••••">
+        </div>
+        <button type="submit" class="btn" style="width: 100%; margin-top: 0.5rem;">Authenticate Session</button>
+        <p id="auth-error-msg" style="color: var(--error); font-size: 11px; margin-top: 0.75rem; display: none;"></p>
+    </form>
 </div>
+
+<!-- MAIN STUDIO INTERFACE (Gated) -->
+<div id="studio-wrapper">
+    <div class="studio-layout">
+        <!-- Navigation Sidebar -->
+        <aside>
+            <h2>Studio Navigation</h2>
+            <ul class="nav-links">
+                <li><a href="#valve-input">Valve Entry Panel</a></li>
+                <li><a href="#status">System Status</a></li>
+                <li><a href="#telemetry">Telemetry Readouts</a></li>
+                <li><a href="#collapse">Collapse State</a></li>
+                <li><a href="#history">Local History Buffer</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Workspace -->
+        <main>
+            <header>
+                <div>
+                    <h1>VALVE // TENSILE</h1>
+                    <div class="subtitle">Cognitive Boundary & Stability Architecture (Reactive Reflection Edition)</div>
+                </div>
+                <div class="header-controls">
+                    <div class="status-badge" id="header-status">Local Active</div>
+                    <button class="logout-btn" onclick="executeLogout()">Disconnect</button>
+                </div>
+            </header>
+
+            <!-- VALVE ACTIVE INPUT PANEL -->
+            <section id="valve-input">
+                <h2>Valve Active Entry Panel</h2>
+                <div class="content-block">
+                    <span class="label">User Identifier</span>
+                    <input type="text" id="input-user-id" value="example_user" placeholder="Enter user identifier...">
+                </div>
+
+                <div class="content-block">
+                    <span class="label">1. Raw Vent (Zero-Friction Somatic Log)</span>
+                    <textarea id="input-raw-vent" rows="3" maxlength="500" placeholder="Type general somatic noise or background state here..."></textarea>
+                    <div class="char-counter"><span id="char-count">0</span> / 500 chars (Min 40 required)</div>
+                    <div class="example-hint">
+                        <strong>Format Example:</strong> <code>"Small interruptions felt heavier than usual today. Low physical pacing in the morning."</code>
+                    </div>
+                </div>
+
+                <div class="content-block">
+                    <span class="label">2. Work / Structural Check</span>
+                    <textarea id="input-work-check" rows="2" maxlength="300" placeholder="Record daily operational check..."></textarea>
+                    <div class="example-hint">
+                        <strong>Format Example:</strong> <code>"Core task finished, but administrative drag ate up buffer time."</code>
+                    </div>
+                </div>
+                
+                <div class="content-block">
+                    <span class="label">3. Temporal Position Assessment</span>
+                    <input type="text" id="input-temporal-pos" maxlength="150" placeholder="Where is your mind anchored today?">
+                    <div class="example-hint">
+                        <strong>Format Example:</strong> <code>"Mostly present due to active project deadlines, minor pull toward past friction."</code>
+                    </div>
+                    
+                    <p style="margin-top: 0.75rem; color: var(--text-main); font-size: 11px;">
+                        <strong>Slider Distribution:</strong> Adjust sliders below so they balance and equal 100%. 
+                        <span id="td-sum-wrap" style="margin-left: 0.5rem;">Current Sum: <span id="td-sum" style="font-weight: bold;">100</span>% <span id="td-warning" style="color: var(--success);">(Balanced)</span></span>
+                    </p>
+
+                    <div class="chart-container">
+                        <div class="bar-chart" id="temporal-sliders-container"></div>
+                    </div>
+                </div>
+
+                <!-- 4. REACTIVE SITUATIONS & HANDLING LOG -->
+                <div class="content-block" style="border-color: var(--accent);">
+                    <span class="label" style="color: var(--accent);">4. Reactive Situations & Friction Handling</span>
+                    <textarea id="input-reactive-log" rows="3" maxlength="400" placeholder="Describe any reactive triggers from today and evaluate how you handled them..."></textarea>
+                    <div class="example-hint">
+                        <strong>Format Example:</strong> <code>"Trigger: Sudden shift in project requirements mid-day. Handling: Initial defensive spike, but caught it within 10 minutes and recalibrated scope cleanly."</code>
+                    </div>
+                </div>
+
+                <!-- GO DEEPER TOGGLE BUTTON & EXTENDED PANEL -->
+                <button class="btn-toggle" id="btn-toggle-deeper">+ Go Deeper: Map 6 Load Types</button>
+                
+                <div id="go-deeper-panel">
+                    <span class="label" style="color: var(--accent); margin-bottom: 0.75rem;">Deep Diagnostic: Load Type Mapping</span>
+                    <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 1rem;">Detail how each of the 6 core structural loads impacted your bandwidth today.</p>
+                    
+                    <div class="content-block"><span class="label">1. Somatic Load (Physical tension, sleep, fatigue)</span>
+                    <textarea id="load-somatic" rows="2" maxlength="200" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
+
+                    <div class="content-block"><span class="label">2. Cognitive Load (Context switching, mental clutter)</span>
+                    <textarea id="load-cognitive" rows="2" maxlength="200" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
+
+                    <div class="content-block"><span class="label">3. Temporal Load (Rushing, backlog pressure, future anxiety)</span>
+                    <textarea id="load-temporal" rows="2" maxlength="200" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
+
+                    <div class="content-block"><span class="label">4. Relational Load (Interpersonal friction, communication drag)</span>
+                    <textarea id="load-relational" rows="2" maxlength="200" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
+
+                    <div class="content-block"><span class="label">5. Environmental Load (Noise, sensory friction, workspace state)</span>
+                    <textarea id="load-environmental" rows="2" maxlength="200" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
+
+                    <div class="content-block"><span class="label">6. Operational Load (Process friction, tools, maintenance overhead)</span>
+                    <textarea id="load-operational" rows="2" maxlength="200" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
+                </div>
+
+                <button class="btn" id="btn-submit-entry">Commit Entry to Local Storage</button>
+                <button class="btn btn-secondary" id="btn-export-data">Export JSON Data</button>
+                <p id="sync-status" style="margin-top: 0.75rem; font-size: 11px; color: var(--text-muted);"></p>
+            </section>
+
+            <!-- SYSTEM STATUS -->
+            <section id="status">
+                <h2>System Status & Core Config</h2>
+                <div class="grid">
+                    <div class="metric-card">
+                        <span class="metric-label">User Active</span>
+                        <div class="metric-value" id="val-user">--</div>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-label">Version</span>
+                        <div class="metric-value">1.0</div>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-label">Storage Mode</span>
+                        <div class="metric-value" id="val-sync-status" style="font-size: 14px; color: var(--success);">Local Browser</div>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-label">Risk Band</span>
+                        <div class="metric-value">Low</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TELEMETRY READOUTS -->
+            <section id="telemetry">
+                <h2>Telemetry Input (Computed Math Readouts)</h2>
+                <div class="grid" id="telemetry-grid"></div>
+            </section>
+
+            <!-- COLLAPSE STATE -->
+            <section id="collapse">
+                <h2>Collapse State & Threshold Limits</h2>
+                <div class="sub-grid">
+                    <div class="content-block">
+                        <span class="label">Status</span>
+                        <p><strong>Status:</strong> <span id="col-status">stable</span></p>
+                    </div>
+                    <div class="content-block">
+                        <span class="label">Threshold Limits</span>
+                        <p><strong>Drift Threshold:</strong> 0.65 | <strong>Volatility Threshold:</strong> 0.45</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- LOCAL HISTORY BUFFER -->
+            <section id="history">
+                <h2>Local History Buffer (Stored Entries)</h2>
+                <div class="content-block" id="history-log-container">
+                    <p style="color: var(--text-muted);">No entries stored in this browser yet.</p>
+                </div>
+            </section>
+
+            <footer>
+                CBSA STUDIO &mdash; Reactive Reflection Implementation Layer
+            </footer>
+        </main>
+    </div>
+</div>
+
+<!-- Firebase SDK & Controller Script -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-analytics.js";
+    import { 
+        getAuth, 
+        signInWithEmailAndPassword, 
+        onAuthStateChanged, 
+        signOut 
+    } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCqI3LS1mwvdFOcBjCgAahSI1aj_ZwZqgA",
+        authDomain: "cbsa-7ca94.firebaseapp.com",
+        projectId: "cbsa-7ca94",
+        storageBucket: "cbsa-7ca94.firebasestorage.app",
+        messagingSenderId: "1041870358890",
+        appId: "1:1041870358890:web:30a6c9970e58ae26507d13",
+        measurementId: "G-WFRSN5C1S9"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const auth = getAuth(app);
+
+    // Gate UI visibility based on Authentication state
+    onAuthStateChanged(auth, (user) => {
+        const authOverlay = document.getElementById('auth-overlay');
+        const studioWrapper = document.getElementById('studio-wrapper');
+        const errorMsg = document.getElementById('auth-error-msg');
+        
+        if (user) {
+            authOverlay.style.display = 'none';
+            studioWrapper.style.display = 'block';
+            if(errorMsg) errorMsg.style.display = 'none';
+        } else {
+            authOverlay.style.display = 'block';
+            studioWrapper.style.display = 'none';
+        }
+    });
+
+    window.executeLogin = function() {
+        const email = document.getElementById('auth-email').value;
+        const password = document.getElementById('auth-password').value;
+        const errorMsg = document.getElementById('auth-error-msg');
+
+        signInWithEmailAndPassword(auth, email, password)
+            .catch((error) => {
+                errorMsg.style.display = 'block';
+                errorMsg.textContent = "Auth Error: " + error.message;
+            });
+    };
+
+    window.executeLogout = function() {
+        signOut(auth).catch((error) => {
+            console.error("Sign out error", error);
+        });
+    };
+</script>
 
 <script>
     // Live Character Counter for Raw Vent
@@ -663,7 +822,7 @@
                 item.className = 'history-item';
                 item.innerHTML = `
                     <strong>[#${entries.length - idx}] User: ${entry.user}</strong> (${entry.local_date_string})<br>
-                    <span style="color: var::text-muted);">Vent:</span> ${entry.raw_vent}<br>
+                    <span style="color: var(--text-muted);">Vent:</span> ${entry.raw_vent}<br>
                     <span style="color: var(--accent);">Reactive Log:</span> ${entry.reactive_log || 'None recorded'}<br>
                     ${entry.loads ? '<span style="color: var(--success);">[Includes 6-Load Deep Diagnostic Data]</span>' : ''}
                 `;
@@ -690,7 +849,6 @@
             return;
         }
 
-        // Gather 6 Load data if expanded
         let loadsData = null;
         if (deeperPanel.classList.contains('active')) {
             loadsData = {
@@ -731,7 +889,6 @@
         syncStatusEl.style.color = "var(--success)";
         syncStatusEl.textContent = "Success: Entry saved locally to browser storage!";
 
-        // Reset text inputs and counter
         rawVentInput.value = "";
         charCountEl.textContent = "0";
         document.getElementById('input-work-check').value = "";
