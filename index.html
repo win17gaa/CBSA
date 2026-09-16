@@ -347,7 +347,7 @@
             <div class="status-badge" id="header-status">Stable</div>
         </header>
 
-        <!-- VALVE ACTIVE INPUT PANEL (Step 1 & 2) -->
+        <!-- VALVE ACTIVE INPUT PANEL -->
         <section id="valve-input">
             <h2>Valve Active Entry Panel</h2>
             <div class="content-block">
@@ -399,11 +399,12 @@
             <div class="grid" id="telemetry-grid"></div>
         </section>
 
-        <!-- TEMPORAL DISTRIBUTION -->
+        <!-- TEMPORAL DISTRIBUTION (With instructions & real-time validator) -->
         <section id="temporal-dist">
             <h2>Temporal Distribution (User Estimate Input)</h2>
             <div class="content-block">
-                <p><strong>Enforced Total:</strong> 100 | <strong>Current Sum:</strong> <span id="td-sum">100</span>%</p>
+                <p style="margin-bottom: 0.5rem; color: var(--text-main);"><strong>Instructions:</strong> Adjust the sliders below to estimate your temporal distribution across zones. <strong>Total must equal 100%.</strong></p>
+                <p><strong>Enforced Total:</strong> 100 | <strong>Current Sum:</strong> <span id="td-sum" style="font-weight: bold;">100</span>% <span id="td-warning" style="color: var(--success); margin-left: 1rem;">(Balanced)</span></p>
             </div>
             <div class="chart-container">
                 <div class="bar-chart" id="temporal-sliders-container"></div>
@@ -445,7 +446,7 @@
     import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     // ==========================================
-    // STEP 3: FIREBASE CONFIGURATION PLACEHOLDERS
+    // FIREBASE CONFIGURATION PLACEHOLDERS
     // Drop your project keys here when ready
     // ==========================================
     const firebaseConfig = {
@@ -491,11 +492,24 @@
         telGrid.appendChild(card);
     }
 
-    // Render Temporal Sliders
+    // Render Temporal Sliders & Validation Watcher
     const temporalContainer = document.getElementById('temporal-sliders-container');
     function updateSum() {
         let total = state.temporal.reduce((acc, curr) => acc + curr.value, 0);
-        document.getElementById('td-sum').textContent = total;
+        const sumEl = document.getElementById('td-sum');
+        const warningEl = document.getElementById('td-warning');
+        
+        sumEl.textContent = total;
+        
+        if (total === 100) {
+            sumEl.style.color = "var(--text-main)";
+            warningEl.style.color = "var(--success)";
+            warningEl.textContent = "(Balanced)";
+        } else {
+            sumEl.style.color = "#ef4444";
+            warningEl.style.color = "#ef4444";
+            warningEl.textContent = `(Must equal 100% — currently off by ${total - 100}%)`;
+        }
     }
 
     state.temporal.forEach(s => {
@@ -525,8 +539,11 @@
         }, 0);
     });
 
+    // Initial sum check execution
+    updateSum();
+
     // ==========================================
-    // STEP 1 & 2 & 4: SUBMIT WIRING & TIMESTAMPS
+    // SUBMIT WIRING & TIMESTAMPS
     // ==========================================
     document.getElementById('btn-submit-entry').addEventListener('click', async () => {
         const userId = document.getElementById('input-user-id').value || "anonymous";
