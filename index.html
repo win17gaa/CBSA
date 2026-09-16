@@ -726,7 +726,7 @@
         syncStatusEl.textContent = "Committing entry directly to GitHub...";
 
         // Organized directly into your docs/data/[username]/ folder structure
-        const fileName = `docs/data/${userId}/entry_${Date.now()}.json`;
+        const fileName = `docs/data/${userId}_${Date.now()}.json`;
         const fileContentBase64 = btoa(unescape(encodeURIComponent(JSON.stringify(entryPayload, null, 2))));
         const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${fileName}`;
 
