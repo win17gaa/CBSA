@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VALVE // TENSILE — CBSA Studio (Unified Entry Edition)</title>
+    <title>VALVE // TENSILE — CBSA Studio (Go Deeper Edition)</title>
     <style>
         :root {
             --bg: #0b0b0c;
@@ -228,6 +228,49 @@
             margin-left: 0.5rem;
         }
 
+        .btn-toggle {
+            background: var(--border);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            font-size: 11px;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .btn-toggle:hover {
+            background: var(--surface-hover);
+        }
+
+        /* Example Guidance Box */
+        .example-hint {
+            font-size: 11px;
+            color: var(--text-muted);
+            background: var(--bg);
+            border-left: 2px solid var(--accent);
+            padding: 0.5rem 0.75rem;
+            margin-top: 0.35rem;
+        }
+
+        .example-hint code {
+            color: var(--text-main);
+        }
+
+        /* Go Deeper Expanded Drawer */
+        #go-deeper-panel {
+            display: none;
+            border: 1px dashed var(--accent);
+            padding: 1rem;
+            margin-top: 1rem;
+            background: var(--bg);
+        }
+
+        #go-deeper-panel.active {
+            display: block;
+        }
+
         /* Graphs & Visualizations */
         .chart-container {
             background: var(--bg);
@@ -348,31 +391,41 @@
         <header>
             <div>
                 <h1>VALVE // TENSILE</h1>
-                <div class="subtitle">Cognitive Boundary & Stability Architecture (Unified Layout)</div>
+                <div class="subtitle">Cognitive Boundary & Stability Architecture (Go Deeper Edition)</div>
             </div>
             <div class="status-badge" id="header-status">Local Active</div>
         </header>
 
-        <!-- VALVE ACTIVE INPUT PANEL (Unified with Temporal Sliders) -->
+        <!-- VALVE ACTIVE INPUT PANEL -->
         <section id="valve-input">
             <h2>Valve Active Entry Panel</h2>
             <div class="content-block">
                 <span class="label">User Identifier</span>
                 <input type="text" id="input-user-id" value="example_user" placeholder="Enter user identifier...">
             </div>
+
             <div class="content-block">
                 <span class="label">Raw Vent (Zero-Friction Somatic Log)</span>
-                <textarea id="input-raw-vent" rows="3" placeholder="Type raw vent input here (e.g., small things hit way too hard)..."></textarea>
+                <textarea id="input-raw-vent" rows="3" placeholder="Type raw vent input here..."></textarea>
+                <div class="example-hint">
+                    <strong>Format Example:</strong> <code>"Small interruptions felt heavier than usual today. Low physical pacing in the morning, high mental friction around midday."</code>
+                </div>
             </div>
+
             <div class="content-block">
                 <span class="label">Work / Structural Check</span>
                 <textarea id="input-work-check" rows="2" placeholder="Record daily operational check..."></textarea>
+                <div class="example-hint">
+                    <strong>Format Example:</strong> <code>"Core task finished, but administrative drag ate up buffer time."</code>
+                </div>
             </div>
             
-            <!-- Unified Temporal Section directly under the question -->
             <div class="content-block">
                 <span class="label">Temporal Position Assessment</span>
-                <input type="text" id="input-temporal-pos" placeholder="Where is your mind anchored today? (e.g., mostly present due to project)">
+                <input type="text" id="input-temporal-pos" placeholder="Where is your mind anchored today?">
+                <div class="example-hint">
+                    <strong>Format Example:</strong> <code>"Mostly present due to active project deadlines, minor pull toward past friction."</code>
+                </div>
                 
                 <p style="margin-top: 0.75rem; color: var(--text-main); font-size: 11px;">
                     <strong>Slider Distribution:</strong> Adjust sliders below so they balance and equal 100%. 
@@ -382,6 +435,32 @@
                 <div class="chart-container">
                     <div class="bar-chart" id="temporal-sliders-container"></div>
                 </div>
+            </div>
+
+            <!-- GO DEEPER TOGGLE BUTTON & EXTENDED PANEL -->
+            <button class="btn-toggle" id="btn-toggle-deeper">+ Go Deeper: Map 6 Load Types</button>
+            
+            <div id="go-deeper-panel">
+                <span class="label" style="color: var(--accent); margin-bottom: 0.75rem;">Deep Diagnostic: Load Type Mapping</span>
+                <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 1rem;">Detail how each of the 6 core structural loads impacted your bandwidth today.</p>
+                
+                <div class="content-block"><span class="label">1. Somatic Load (Physical tension, sleep, fatigue)</span>
+                <textarea id="load-somatic" rows="2" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
+
+                <div class="content-block"><span class="label">2. Cognitive Load (Context switching, mental clutter)</span>
+                <textarea id="load-cognitive" rows="2" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
+
+                <div class="content-block"><span class="label">3. Temporal Load (Rushing, backlog pressure, future anxiety)</span>
+                <textarea id="load-temporal" rows="2" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
+
+                <div class="content-block"><span class="label">4. Relational Load (Interpersonal friction, communication drag)</span>
+                <textarea id="load-relational" rows="2" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
+
+                <div class="content-block"><span class="label">5. Environmental Load (Noise, sensory friction, workspace state)</span>
+                <textarea id="load-environmental" rows="2" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
+
+                <div class="content-block"><span class="label">6. Operational Load (Process friction, tools, maintenance overhead)</span>
+                <textarea id="load-operational" rows="2" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
             </div>
 
             <button class="btn" id="btn-submit-entry">Commit Entry to Local Storage</button>
@@ -448,6 +527,18 @@
 </div>
 
 <script>
+    // Toggle Go Deeper Panel
+    const toggleBtn = document.getElementById('btn-toggle-deeper');
+    const deeperPanel = document.getElementById('go-deeper-panel');
+    toggleBtn.addEventListener('click', () => {
+        deeperPanel.classList.toggle('active');
+        if (deeperPanel.classList.contains('active')) {
+            toggleBtn.textContent = "- Hide Go Deeper Loads";
+        } else {
+            toggleBtn.textContent = "+ Go Deeper: Map 6 Load Types";
+        }
+    });
+
     // Baseline state model
     const state = {
         telemetry: { drift: 0.2, stability: 0.8, bandwidth: 0.75, containment: 0.85, identity: 0.9, volatility: 0.15 },
@@ -469,7 +560,7 @@
         telGrid.appendChild(card);
     }
 
-    // Render Temporal Sliders inside the Entry Panel uniquely (preventing duplication)
+    // Render Temporal Sliders
     const temporalContainer = document.getElementById('temporal-sliders-container');
     function updateSum() {
         let total = state.temporal.reduce((acc, curr) => acc + curr.value, 0);
@@ -544,6 +635,7 @@
                     <strong>[#${entries.length - idx}] User: ${entry.user}</strong> (${entry.local_date_string})<br>
                     <span style="color: var(--text-muted);">Vent:</span> ${entry.raw_vent}<br>
                     <span style="color: var(--text-muted);">Temporal Anchor:</span> ${entry.temporal_position || 'None'}
+                    ${entry.loads ? '<br><span style="color: var(--accent);">[Includes 6-Load Deep Diagnostic Data]</span>' : ''}
                 `;
                 container.appendChild(item);
             });
@@ -567,6 +659,19 @@
             return;
         }
 
+        // Gather 6 Load data if expanded
+        let loadsData = null;
+        if (deeperPanel.classList.contains('active')) {
+            loadsData = {
+                somatic: document.getElementById('load-somatic').value,
+                cognitive: document.getElementById('load-cognitive').value,
+                temporal: document.getElementById('load-temporal').value,
+                relational: document.getElementById('load-relational').value,
+                environmental: document.getElementById('load-environmental').value,
+                operational: document.getElementById('load-operational').value
+            };
+        }
+
         const entryPayload = {
             id: Date.now(),
             user: userId,
@@ -575,6 +680,7 @@
             raw_vent: rawVent,
             work_check: workCheck,
             temporal_position: temporalPos,
+            loads: loadsData,
             telemetry: state.telemetry,
             temporal_distribution: state.temporal.reduce((obj, item) => ({ ...obj, [item.id]: item.value }), {})
         };
@@ -593,10 +699,13 @@
         syncStatusEl.style.color = "var(--success)";
         syncStatusEl.textContent = "Success: Entry saved locally to browser storage!";
 
-        // Reset text inputs only (keep sliders where user set them)
+        // Reset text inputs
         document.getElementById('input-raw-vent').value = "";
         document.getElementById('input-work-check').value = "";
         document.getElementById('input-temporal-pos').value = "";
+        ['somatic', 'cognitive', 'temporal', 'relational', 'environmental', 'operational'].forEach(l => {
+            document.getElementById(`load-${l}`).value = "";
+        });
         loadHistory();
     });
 
