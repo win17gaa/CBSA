@@ -1,0 +1,25 @@
+{
+  "user": "johnny",
+  "timestamp": "2026-09-16T23:22:07.842Z",
+  "local_date_string": "9/16/2026, 7:22:07 PM",
+  "raw_vent": "Long day trying to get this CBSA project to a point for testing , meant to hit the gym at some point today but haven't, routine dropped off a bit because i wanted to get this out today",
+  "work_check": "CBSA dedicated day outside the gym, no Doordash hrs",
+  "temporal_position": "Mostly in the present",
+  "reactive_log": "Just irritation accumulation through the day fighting coding issues and webpage development",
+  "loads": null,
+  "telemetry": {
+    "drift": 0.2,
+    "stability": 0.8,
+    "bandwidth": 0.75,
+    "containment": 0.85,
+    "identity": 0.9,
+    "volatility": 0.15
+  },
+  "temporal_distribution": {
+    "way_past": 1,
+    "near_past": 1,
+    "present": 87,
+    "near_future": 10,
+    "far_future": 1
+  }
+}
