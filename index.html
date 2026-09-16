@@ -1,271 +1,296 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CBSA — Cognitive Behavioral Stability Architecture (Version 1.0)</title>
-<meta name="description" content="CBSA — Cognitive Behavioral Stability Architecture Version 1.0. Complete Public Manuscript & Interactive Studio.">
-<style>
-    body {
-        margin: 0;
-        padding: 0;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        line-height: 1.6;
-        background: #f4f6f8;
-        color: #222;
-    }
-    #navbar {
-        position: fixed;
-        top: 0; left: 0; width: 100%;
-        background: #1e293b; color: #fff;
-        padding: 12px 24px; z-index: 1000;
-        display: flex; justify-content: space-between; align-items: center;
-        box-sizing: border-box;
-    }
-    #navbar a { color: #94a3b8; margin-left: 14px; text-decoration: none; font-size: 13px; font-weight: 600; }
-    #navbar a:hover { color: #fff; }
-    .container {
-        max-width: 960px;
-        margin: 90px auto 60px auto;
-        padding: 40px; background: #fff;
-        border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        box-sizing: border-box;
-    }
-    h1, h2, h3, h4 { color: #0f172a; margin-top: 36px; }
-    h1 { font-size: 2.2rem; margin-top: 0; }
-    h2 { border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; font-size: 1.4rem; margin-top: 48px; }
-    h3 { font-size: 1.15rem; color: #334155; margin-top: 28px; }
-    p, li, blockquote { font-size: 15px; color: #334155; }
-    ul, ol { padding-left: 20px; }
-    hr { border: none; border-top: 1px solid #e2e8f0; margin: 40px 0; }
-    blockquote { border-left: 3px solid #cbd5e1; padding-left: 16px; margin-left: 0; color: #475569; }
-    .case-box { background: #f8fafc; border: 1px solid #e2e8f0; padding: 16px 20px; border-radius: 6px; margin: 16px 0; }
-    
-    /* Studio Styling */
-    .studio-panel { background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; padding: 24px; margin: 24px 0; }
-    .studio-group { margin-bottom: 16px; }
-    .studio-group label { margin-right: 20px; font-weight: 500; cursor: pointer; color: #0369a1; }
-    .choice-option {
-        display: block; background: #fff; border: 1px solid #bae6fd;
-        padding: 10px 14px; border-radius: 6px; margin-bottom: 8px;
-        cursor: pointer; font-size: 14px; color: #0f172a;
-    }
-    .choice-option:hover { background: #e0f2fe; }
-    .choice-option input { margin-right: 10px; }
-    button.btn-primary, button.btn-secondary {
-        border: none; padding: 10px 20px; border-radius: 6px; font-weight: 600; cursor: pointer;
-    }
-    button.btn-primary { background: #0284c7; color: white; margin-top: 12px; }
-    button.btn-primary:hover { background: #0369a1; }
-    button.btn-secondary { background: #e2e8f0; color: #0f172a; margin-top: 12px; }
-    button.btn-secondary:hover { background: #cbd5e1; }
-    #studio-report-container { display: none; margin-top: 20px; }
-    #studio-report {
-        background: #0f172a; color: #f8fafc; padding: 20px;
-        border-radius: 6px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        font-size: 14px; line-height: 1.7; white-space: pre-wrap;
-    }
-    .toc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
-    .toc-grid a { display: block; padding: 6px 10px; background: #f1f5f9; color: #0f172a; text-decoration: none; border-radius: 4px; font-weight: 500; font-size: 13px; }
-    .toc-grid a:hover { background: #e2e8f0; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VALVE // TENSILE — CBSA Studio</title>
+    <style>
+        :root {
+            --bg: #0d0d0d;
+            --surface: #141414;
+            --border: #262626;
+            --text-main: #e5e5e5;
+            --text-muted: #737373;
+            --accent: #525252;
+            --font-mono: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: var(--font-mono);
+            font-size: 13px;
+            line-height: 1.6;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        header {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 0.25rem;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        h2 {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+        }
+
+        .metric-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            padding: 0.75rem;
+        }
+
+        .metric-label {
+            color: var(--text-muted);
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+
+        .metric-value {
+            font-size: 18px;
+            font-weight: 500;
+            margin-top: 0.25rem;
+        }
+
+        p {
+            margin-bottom: 0.75rem;
+        }
+
+        p:last-child {
+            margin-bottom: 0;
+        }
+
+        .label {
+            color: var(--text-muted);
+            font-size: 11px;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .content-block {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-block:last-child {
+            margin-bottom: 0;
+        }
+
+        footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 11px;
+            margin-top: 3rem;
+            border-top: 1px solid var(--border);
+            padding-top: 1.5rem;
+        }
+    </style>
 </head>
 <body>
 
-<div id="navbar">
-    <div><strong>CBSA v1.0 — Full Manuscript & Human-First Studio</strong></div>
-    <div>
-        <a href="#studio">Studio</a>
-        <a href="#toc">TOC</a>
-        <a href="#chapters">Chapters</a>
-        <a href="#casestudies">Case Studies</a>
-        <a href="#appendices">Appendices</a>
-    </div>
-</div>
-
 <div class="container">
-<h1>CBSA — Cognitive Behavioral Stability Architecture</h1>
-<p><em>Version 1.0 Public Release | Full Manuscript Archive & Interactive Studio</em></p>
-<hr>
+    <header>
+        <h1>VALVE // TENSILE</h1>
+        <div class="subtitle">Cognitive Boundary & Stability Architecture (CBSA-SPEC v0.2.1)</div>
+    </header>
 
-<!-- INTERACTIVE STUDIO -->
-<section id="studio">
-    <h2>CBSA Studio v1.0 (5-Tier Human-First Runner)</h2>
-    <div class="studio-panel">
-        <p><strong>Select scale per checkpoint (5-point resolution):</strong></p>
-        <div id="setup-form">
-            <div class="studio-group">
-                <p><strong>Select Mode:</strong><br>
-                <label><input type="radio" name="testMode" value="Text Mode" checked> Text Mode (Default)</label>
-                <label><input type="radio" name="testMode" value="Voice Mode"> Voice Mode (Optional)</label></p>
+    <section>
+        <h2>System Status</h2>
+        <div class="grid">
+            <div class="metric-card">
+                <span class="metric-label">User</span>
+                <div class="metric-value" id="val-user">--</div>
             </div>
-            <button class="btn-primary" onclick="cbsaApp.start()">Start Check</button>
+            <div class="metric-card">
+                <span class="metric-label">Version</span>
+                <div class="metric-value" id="val-version">--</div>
+            </div>
+            <div class="metric-card">
+                <span class="metric-label">Discovery</span>
+                <div class="metric-value" id="val-discovery">--</div>
+            </div>
         </div>
+    </section>
 
-        <div id="runner-panel" style="display:none;">
-            <h4 id="q-header"></h4>
-            <div id="choice-container"></div>
-            <button class="btn-primary" onclick="cbsaApp.next()">Next →</button>
+    <section>
+        <h2>Daily Telemetry Vectors</h2>
+        <div class="grid">
+            <div class="metric-card">
+                <span class="metric-label">Drift (D)</span>
+                <div class="metric-value" id="metric-d">--</div>
+            </div>
+            <div class="metric-card">
+                <span class="metric-label">Stability (S)</span>
+                <div class="metric-value" id="metric-s">--</div>
+            </div>
+            <div class="metric-card">
+                <span class="metric-label">Bandwidth (B)</span>
+                <div class="metric-value" id="metric-b">--</div>
+            </div>
+            <div class="metric-card">
+                <span class="metric-label">Containment (C)</span>
+                <div class="metric-value" id="metric-c">--</div>
+            </div>
+            <div class="metric-card">
+                <span class="metric-label">Identity (I)</span>
+                <div class="metric-value" id="metric-i">--</div>
+            </div>
+            <div class="metric-card">
+                <span class="metric-label">Volatility (V)</span>
+                <div class="metric-value" id="metric-v">--</div>
+            </div>
         </div>
+    </section>
 
-        <div id="studio-report-container">
-            <div id="studio-report"></div>
-            <button class="btn-secondary" onclick="cbsaApp.download()">Save / Copy Output (.txt)</button>
+    <section>
+        <h2>Nightly Entry</h2>
+        <div class="content-block">
+            <span class="label">Raw Vent</span>
+            <p id="entry-vent">--</p>
         </div>
-    </div>
-</section>
+        <div class="content-block">
+            <span class="label">Work Check</span>
+            <p id="entry-work">--</p>
+        </div>
+        <div class="content-block">
+            <span class="label">Temporal Position</span>
+            <p id="entry-temporal">--</p>
+        </div>
+    </section>
 
-<hr>
+    <section>
+        <h2>Architecture Map</h2>
+        <div class="content-block">
+            <span class="label">Core Engines</span>
+            <p id="engines-core">--</p>
+        </div>
+        <div class="content-block">
+            <span class="label">Dynamic Regulators</span>
+            <p id="engines-regulators">--</p>
+        </div>
+        <div class="content-block">
+            <span class="label">Processing Engines</span>
+            <p id="engines-processing">--</p>
+        </div>
+    </section>
 
-<!-- TABLE OF CONTENTS -->
-<h2 id="toc">Table of Contents</h2>
-<div class="toc-grid">
-    <div><a href="#ch1">Ch 1 — Load</a><a href="#ch2">Ch 2 — Collapse</a><a href="#ch3">Ch 3 — Containment</a><a href="#ch4">Ch 4 — Relevance</a><a href="#ch5">Ch 5 — Telemetry</a><a href="#ch6">Ch 6 — Application</a></div>
-    <div><a href="#casestudies">Case Studies (1–7)</a><a href="#app-intro">Operational Appendices Preamble</a><a href="#app-intent">Appendix: Intent Layer</a></div>
-</div>
-
-<hr>
-
-<!-- CORE CHAPTERS 1-6 -->
-<section id="chapters">
-    <h2>Core Chapters</h2>
-    <div id="ch1"><h3>Chapter 1 — Load</h3><p>Total cognitive weight carried at any moment (working, residual, environmental). Additive and mechanical.</p></div>
-    <div id="ch2"><h3>Chapter 2 — Collapse</h3><p>Bandwidth failure triggered when load exceeds available stability.</p></div>
-    <div id="ch3"><h3>Chapter 3 — Containment</h3><p>Barrier preventing collapse from spreading, isolating errors, capping loops.</p></div>
-    <div id="ch4"><h3>Chapter 4 — Relevance</h3><p>Priority engine filtering noise and directing focus.</p></div>
-    <div id="ch5"><h3>Chapter 5 — Telemetry</h3><p>Real-time measurement of friction, hesitation, and output stability.</p></div>
-    <div id="ch6"><h3>Chapter 6 — Application</h3><p>Conversion of stability into consistent output behavior.</p></div>
-</section>
-
-<hr>
-
-<!-- CASE STUDIES -->
-<section id="casestudies">
-    <h2>Case Studies</h2>
-    <div class="case-box"><h4>CASE STUDY 1-7 SUMMARY</h4><p>Managed via mechanical containment, loop capping, and immediate simplification.</p></div>
-</section>
-
-<hr>
-
-<!-- OPERATIONAL APPENDICES -->
-<section id="appendices">
-    <h2>Operational Appendices</h2>
-    <div id="app-intro"><h3>Operational Appendices Overview</h3><p>Modular scripts and 14-step framework reference.</p></div>
-</section>
+    <footer>
+        CSS-SPEC v0.2.1 &mdash; Local-First Deterministic Telemetry
+    </footer>
 </div>
 
 <script>
-const cbsaApp = (() => {
-    let state = { mode: 'Text Mode', qQueue: [], idx: 0, log: [], timestamp: '' };
-
-    const opts5 = [
-        "A: Nominal / Smooth zero friction",
-        "AB: Borderline / Minor startup drift",
-        "B: Moderate / Noticeable drag or pause",
-        "BC: High friction / Replaying or near saturation",
-        "C: Severe / Hard stall or shutdown"
-    ];
-
-    const questions = [
-        { id: 'Q1', q: "Starting first task of the morning:" },
-        { id: 'Q2', q: "Jumping between unrelated tasks or messages:" },
-        { id: 'Q3', q: "Mental re-play of open loops or unfinished arguments:" },
-        { id: 'Q4', q: "Artificial emergency inflation (treating minor things like fires):" },
-        { id: 'Q5', q: "Overall operational rhythm right now:" }
-    ];
-
-    function getTierWeight(val) {
-        if (val.startsWith('AB:')) return 0.5;
-        if (val.startsWith('B:')) return 1.0;
-        if (val.startsWith('BC:')) return 1.5;
-        if (val.startsWith('C:')) return 2.0;
-        return 0;
-    }
-
-    function start() {
-        state.mode = document.querySelector('input[name="testMode"]:checked').value;
-        state.idx = 0; state.log = [];
-        state.timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        state.qQueue = [...questions];
-        document.getElementById('setup-form').style.display = 'none';
-        document.getElementById('runner-panel').style.display = 'block';
-        document.getElementById('studio-report-container').style.display = 'none';
-        next();
-    }
-
-    function renderOptions(opts) {
-        const container = document.getElementById('choice-container');
-        container.innerHTML = '';
-        opts.forEach((opt, idx) => {
-            const label = document.createElement('label');
-            label.className = 'choice-option';
-            label.innerHTML = `<input type="radio" name="choiceGroup" value="${opt}" ${idx === 0 ? 'checked' : ''}> ${opt}`;
-            container.appendChild(label);
-        });
-    }
-
-    window.cbsaAppNext = function() {
-        if (state.idx > 0 && state.idx <= state.qQueue.length) {
-            const selected = document.querySelector('input[name="choiceGroup"]:checked');
-            const val = selected ? selected.value : opts5[0];
-            const prevItem = state.qQueue[state.idx - 1];
-            state.log.push({ q: prevItem.q, a: val });
-        }
-        if (state.idx < state.qQueue.length) {
-            const currentItem = state.qQueue[state.idx];
-            document.getElementById('q-header').innerText = `Step ${state.idx + 1} of ${state.qQueue.length}: ${currentItem.q}`;
-            renderOptions(opts5);
-            state.idx++;
-        } else { finish(); }
+    const data = {
+      "version": "1.0",
+      "user": "example_user",
+      "nightly_entry": {
+        "raw_vent": "I got slightly irritated driving doordash today, nothing big it didn't accumulate just popped up when stupid driver screws traffic up, but I wasn't driving aggressively at any point. I did get testy with co-pilot as we worked on CBSA and basically told it to fuck off, I apologized, lol, and we moved on",
+        "work_check": "I only had the gym, doordash, and work on the CBSA project, nothing pulled me away from any of those things, smooth day overall",
+        "temporal_position": "my mind spent alot of time thinking about CBSA insights, thought about my finances, mostly tier III structural stuff though"
+      },
+      "daily_processing": {
+        "D_t": 0.2,
+        "S_t": 0.8,
+        "B_t": 0.75,
+        "C_t": 0.85,
+        "I_t": 0.9,
+        "V_t": 0.15
+      },
+      "weekly_snapshot": {
+        "line_1": "",
+        "line_2": "",
+        "line_3": ""
+      },
+      "discovery": {
+        "status": "ready",
+        "file": "docs/DISCOVERY.md"
+      },
+      "architecture_map": {
+        "core_engines": [
+          "Drift_Engine",
+          "Stability_Engine",
+          "Bandwidth_Engine",
+          "Containment_Engine"
+        ],
+        "dynamic_regulators": [
+          "Identity_Coherence_Regulator",
+          "Volatility_Regulator",
+          "Load_Regulator"
+        ],
+        "processing_engines": [
+          "Daily_Processing_Engine",
+          "Weekly_Processing_Engine",
+          "Collapse_Processing_Engine"
+        ]
+      }
     };
 
-    function generateReportText() {
-        let totalW = 0, highCount = 0;
-        state.log.forEach(item => {
-            const w = getTierWeight(item.a);
-            totalW += w;
-            if (w >= 1.5) highCount++;
-        });
+    // Hydrate UI from JSON payload
+    document.getElementById('val-user').textContent = data.user;
+    document.getElementById('val-version').textContent = data.version;
+    document.getElementById('val-discovery').textContent = data.discovery.status;
 
-        let habit = "System running smooth; parallel task switching is clean with minimal drag.";
-        let tax = "Near-zero baseline energy loss.";
-        let fix = "Keep current execution stream straight through.";
+    document.getElementById('metric-d').textContent = data.daily_processing.D_t;
+    document.getElementById('metric-s').textContent = data.daily_processing.S_t;
+    document.getElementById('metric-b').textContent = data.daily_processing.B_t;
+    document.getElementById('metric-c').textContent = data.daily_processing.C_t;
+    document.getElementById('metric-i').textContent = data.daily_processing.I_t;
+    document.getElementById('metric-v').textContent = data.daily_processing.V_t;
 
-        if (totalW >= 8.0 || highCount >= 3) {
-            habit = "Brain is spinning duplicate background simulations and treating minor inputs as urgent fires.";
-            tax = "Bleeding working memory before noon on phantom priority inflation.";
-            fix = "Close the laptop lid for 3 minutes, physical stretch, clear browser tabs down to 1 window, write down maximum 2 deliverables for the next 2 hours on paper.";
-        } else if (totalW >= 3.0 || highCount >= 1) {
-            habit = "Initiation friction is catching on minor context switches or unfinished open loops.";
-            tax = "Slow drag on task startup; losing minutes per switch re-orienting.";
-            fix = "Put phone face down out of arm's reach, open raw text doc, write the next single physical sentence or sub-task, execute.";
-        }
+    document.getElementById('entry-vent').textContent = data.nightly_entry.raw_vent;
+    document.getElementById('entry-work').textContent = data.nightly_entry.work_check;
+    document.getElementById('entry-temporal').textContent = data.nightly_entry.temporal_position;
 
-        let txt = `CBSA READ (${state.timestamp} | Mode: ${state.mode})\n\n`;
-        txt += `1. THE HABIT: ${habit}\n`;
-        txt += `2. THE TAX: ${tax}\n`;
-        txt += `3. THE FIX: ${fix}\n`;
-        return txt;
-    }
-
-    function finish() {
-        document.getElementById('runner-panel').style.display = 'none';
-        document.getElementById('setup-form').style.display = 'block';
-        document.getElementById('studio-report-container').style.display = 'block';
-        document.getElementById('studio-report').innerText = generateReportText();
-    }
-
-    function download() {
-        const text = generateReportText();
-        const filename = `cbsa-read-${new Date().toISOString().split('T')[0]}.txt`;
-        const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a'); a.href = url; a.download = filename;
-        document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
-    }
-
-    return { start, next: function() { window.cbsaAppNext(); }, download };
-})();
+    document.getElementById('engines-core').textContent = data.architecture_map.core_engines.join(' // ');
+    document.getElementById('engines-regulators').textContent = data.architecture_map.dynamic_regulators.join(' // ');
+    document.getElementById('engines-processing').textContent = data.architecture_map.processing_engines.join(' // ');
 </script>
+
 </body>
 </html>
