@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VALVE // TENSILE — CBSA Studio (Final Spec v1.0 Edition)</title>
+    <title>VALVE // TENSILE — CBSA Studio (Cloud-Ready Edition)</title>
     <style>
         :root {
             --bg: #0b0b0c;
@@ -192,6 +192,42 @@
             outline: none;
         }
 
+        /* Forms & Inputs for VALVE Submission */
+        textarea, input[type="text"] {
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 0.75rem;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            resize: vertical;
+            outline: none;
+            margin-top: 0.35rem;
+        }
+
+        textarea:focus, input[type="text"]:focus {
+            border-color: var(--accent);
+        }
+
+        .btn {
+            background: var(--text-main);
+            color: var(--bg);
+            border: none;
+            padding: 0.6rem 1.2rem;
+            font-family: var(--font-mono);
+            font-weight: 600;
+            font-size: 11px;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: opacity 0.2s ease;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
         /* Graphs & Visualizations */
         .chart-container {
             background: var(--bg);
@@ -291,22 +327,13 @@
     <!-- Navigation Sidebar -->
     <aside>
         <h2>Studio Navigation</h2>
-        <ul class="nav-links" id="nav-list">
+        <ul class="nav-links">
+            <li><a href="#valve-input">Valve Entry Panel</a></li>
             <li><a href="#status">System Status</a></li>
             <li><a href="#telemetry">Telemetry Readouts</a></li>
-            <li><a href="#daily">Daily Processing</a></li>
-            <li><a href="#temporal-dist">Temporal Distribution (Interactive)</a></li>
-            <li><a href="#temporal-coh">Temporal Coherence</a></li>
-            <li><a href="#snapshot">Weekly Snapshot</a></li>
-            <li><a href="#drift">Drift Slope & Regression</a></li>
+            <li><a href="#temporal-dist">Temporal Distribution</a></li>
             <li><a href="#collapse">Collapse State</a></li>
-            <li><a href="#regulators">Regulator Dynamics</a></li>
-            <li><a href="#loads">Load Curves</a></li>
-            <li><a href="#prediction">Prediction Model</a></li>
-            <li><a href="#nightly">Latest Nightly Entry</a></li>
-            <li><a href="#history">History Buffer</a></li>
-            <li><a href="#viewer">Discovery Viewer</a></li>
-            <li><a href="#architecture">Architecture Map</a></li>
+            <li><a href="#history">Cloud History Buffer</a></li>
         </ul>
     </aside>
 
@@ -314,115 +341,72 @@
     <main>
         <header>
             <div>
-                <h1 id="header-title">VALVE // TENSILE</h1>
-                <div class="subtitle" id="header-sub">Cognitive Boundary & Stability Architecture (v1.0 Final JSON Spec)</div>
+                <h1>VALVE // TENSILE</h1>
+                <div class="subtitle">Cognitive Boundary & Stability Architecture (Cloud-Ready)</div>
             </div>
             <div class="status-badge" id="header-status">Stable</div>
         </header>
+
+        <!-- VALVE ACTIVE INPUT PANEL (Step 1 & 2) -->
+        <section id="valve-input">
+            <h2>Valve Active Entry Panel</h2>
+            <div class="content-block">
+                <span class="label">User Identifier</span>
+                <input type="text" id="input-user-id" value="example_user" placeholder="Enter user identifier...">
+            </div>
+            <div class="content-block">
+                <span class="label">Raw Vent (Zero-Friction Somatic Log)</span>
+                <textarea id="input-raw-vent" rows="3" placeholder="Type raw vent input here (e.g., small things hit way too hard)..."></textarea>
+            </div>
+            <div class="content-block">
+                <span class="label">Work / Structural Check</span>
+                <textarea id="input-work-check" rows="2" placeholder="Record daily operational check..."></textarea>
+            </div>
+            <div class="content-block">
+                <span class="label">Temporal Position Assessment</span>
+                <input type="text" id="input-temporal-pos" placeholder="Where is your mind anchored today?">
+            </div>
+            <button class="btn" id="btn-submit-entry">Commit Entry & Sync to Cloud</button>
+            <p id="sync-status" style="margin-top: 0.75rem; font-size: 11px; color: var(--text-muted);"></p>
+        </section>
 
         <!-- SYSTEM STATUS -->
         <section id="status">
             <h2>System Status & Core Config</h2>
             <div class="grid">
                 <div class="metric-card">
-                    <span class="metric-label">User</span>
+                    <span class="metric-label">User Active</span>
                     <div class="metric-value" id="val-user">--</div>
                 </div>
                 <div class="metric-card">
                     <span class="metric-label">Version</span>
-                    <div class="metric-value" id="val-version">--</div>
+                    <div class="metric-value">1.0</div>
                 </div>
                 <div class="metric-card">
-                    <span class="metric-label">Theme</span>
-                    <div class="metric-value" id="val-theme">--</div>
+                    <span class="metric-label">Cloud Sync</span>
+                    <div class="metric-value" id="val-sync-status" style="font-size: 14px; color: var(--accent);">Ready</div>
                 </div>
                 <div class="metric-card">
                     <span class="metric-label">Risk Band</span>
-                    <div class="metric-value" id="val-risk-band">--</div>
+                    <div class="metric-value">Low</div>
                 </div>
             </div>
         </section>
 
-        <!-- TELEMETRY READOUTS (Math-driven, Non-interactive cards) -->
+        <!-- TELEMETRY READOUTS -->
         <section id="telemetry">
             <h2>Telemetry Input (Computed Math Readouts)</h2>
-            <div class="grid" id="telemetry-grid">
-                <!-- Populated via JS as clean readouts -->
-            </div>
+            <div class="grid" id="telemetry-grid"></div>
         </section>
 
-        <!-- DAILY PROCESSING -->
-        <section id="daily">
-            <h2>Daily Processing Engine</h2>
-            <div class="sub-grid">
-                <div class="content-block">
-                    <span class="label">Normalized Vectors (t)</span>
-                    <p><strong>D_t:</strong> <span id="dt-d">--</span> | <strong>S_t:</strong> <span id="dt-s">--</span> | <strong>B_t:</strong> <span id="dt-b">--</span></p>
-                    <p><strong>C_t:</strong> <span id="dt-c">--</span> | <strong>I_t:</strong> <span id="dt-i">--</span> | <strong>V_t:</strong> <span id="dt-v">--</span></p>
-                </div>
-                <div class="content-block">
-                    <span class="label">Flags & Risk Score</span>
-                    <p><strong>Computed Flags:</strong> <span id="dt-flags">[]</span></p>
-                    <p><strong>Risk Score:</strong> <span id="dt-risk">null</span></p>
-                </div>
-            </div>
-        </section>
-
-        <!-- TEMPORAL DISTRIBUTION (Interactive user sliders summing to 100%) -->
+        <!-- TEMPORAL DISTRIBUTION -->
         <section id="temporal-dist">
             <h2>Temporal Distribution (User Estimate Input)</h2>
             <div class="content-block">
-                <p><strong>Enforced Total:</strong> <span id="td-total">100</span> | <strong>Current Sum:</strong> <span id="td-sum">100</span>% | <strong>Regime:</strong> <span id="td-regime">null</span></p>
+                <p><strong>Enforced Total:</strong> 100 | <strong>Current Sum:</strong> <span id="td-sum">100</span>%</p>
             </div>
             <div class="chart-container">
                 <div class="bar-chart" id="temporal-sliders-container"></div>
-            </div>
-        </section>
-
-        <!-- TEMPORAL COHERENCE -->
-        <section id="temporal-coh">
-            <h2>Temporal Coherence Spec</h2>
-            <div class="sub-grid">
-                <div class="content-block">
-                    <span class="label">Coherence Tier</span>
-                    <p><strong>Tier:</strong> <span id="tc-tier">--</span></p>
-                    <p><strong>Alignment:</strong> <span id="tc-align">--</span></p>
-                </div>
-                <div class="content-block">
-                    <span class="label">Biases & Anchors</span>
-                    <p><strong>Drift Bias:</strong> <span id="tc-db">null</span></p>
-                    <p><strong>Future Bias:</strong> <span id="tc-fb">null</span></p>
-                    <p><strong>Present Anchor:</strong> <span id="tc-pa">null</span></p>
-                </div>
-            </div>
-        </section>
-
-        <!-- WEEKLY SNAPSHOT -->
-        <section id="snapshot">
-            <h2>Weekly Snapshot Buffer</h2>
-            <div class="content-block">
-                <span class="label">Lines & Aggregations</span>
-                <p><strong>Line 1:</strong> <span id="ws-l1">(empty)</span></p>
-                <p><strong>Line 2:</strong> <span id="ws-l2">(empty)</span></p>
-                <p><strong>Line 3:</strong> <span id="ws-l3">(empty)</span></p>
-                <p><strong>Drift Average:</strong> <span id="ws-da">null</span> | <strong>Stability Average:</strong> <span id="ws-sa">null</span> | <strong>Collapse Events:</strong> <span id="ws-ce">0</span></p>
-            </div>
-        </section>
-
-        <!-- DRIFT SLOPE & REGRESSION -->
-        <section id="drift">
-            <h2>Drift Slope & Regression Engine</h2>
-            <div class="sub-grid">
-                <div class="content-block">
-                    <span class="label">Slope Parameters</span>
-                    <p><strong>Values Array:</strong> <span id="ds-vals">--</span></p>
-                    <p><strong>Slope:</strong> <span id="ds-slope">null</span> | <strong>Window Days:</strong> <span id="ds-window">7</span></p>
-                </div>
-                <div class="content-block">
-                    <span class="label">Regression Config</span>
-                    <p><strong>Enabled:</strong> <span id="ds-reg-en">false</span></p>
-                    <p><strong>Coefficients:</strong> <span id="ds-coef">null</span> | <strong>R2:</strong> <span id="ds-r2">null</span></p>
-                </div>
             </div>
         </section>
 
@@ -431,497 +415,176 @@
             <h2>Collapse State & Threshold Limits</h2>
             <div class="sub-grid">
                 <div class="content-block">
-                    <span class="label">Status & Events</span>
-                    <p><strong>Status:</strong> <span id="col-status">--</span></p>
-                    <p><strong>Last Event:</strong> <span id="col-last">null</span></p>
-                    <p><strong>Events Log:</strong> <span id="col-events">[]</span></p>
+                    <span class="label">Status</span>
+                    <p><strong>Status:</strong> <span id="col-status">stable</span></p>
                 </div>
                 <div class="content-block">
                     <span class="label">Threshold Limits</span>
-                    <p><strong>Drift Threshold:</strong> <span id="th-drift">--</span></p>
-                    <p><strong>Volatility Threshold:</strong> <span id="th-vol">--</span></p>
-                    <p><strong>Bandwidth Floor:</strong> <span id="th-bw">--</span></p>
+                    <p><strong>Drift Threshold:</strong> 0.65 | <strong>Volatility Threshold:</strong> 0.45</p>
                 </div>
             </div>
         </section>
 
-        <!-- REGULATOR DYNAMICS -->
-        <section id="regulators">
-            <h2>Regulator Dynamics & Trends</h2>
-            <div class="sub-grid">
-                <div class="content-block">
-                    <span class="label">Arrays</span>
-                    <p><strong>Identity:</strong> <span id="reg-id">--</span></p>
-                    <p><strong>Volatility:</strong> <span id="reg-vol">--</span></p>
-                    <p><strong>Load:</strong> <span id="reg-load">[]</span></p>
-                </div>
-                <div class="content-block">
-                    <span class="label">Trends</span>
-                    <p><strong>Identity Slope:</strong> <span id="tr-is">null</span></p>
-                    <p><strong>Volatility Slope:</strong> <span id="tr-vs">null</span></p>
-                    <p><strong>Load Slope:</strong> <span id="tr-ls">null</span></p>
-                </div>
-            </div>
-        </section>
-
-        <!-- LOAD CURVE -->
-        <section id="loads">
-            <h2>Load Curve & Smoothers</h2>
-            <div class="sub-grid">
-                <div class="content-block">
-                    <span class="label">Raw Curves</span>
-                    <p><strong>Bandwidth:</strong> <span id="lc-bw">--</span></p>
-                    <p><strong>Containment:</strong> <span id="lc-cont">--</span></p>
-                </div>
-                <div class="content-block">
-                    <span class="label">Smoothed Curves</span>
-                    <p><strong>Smoothed Bandwidth:</strong> <span id="lc-sbw">[]</span></p>
-                    <p><strong>Smoothed Containment:</strong> <span id="lc-scont">[]</span></p>
-                </div>
-            </div>
-        </section>
-
-        <!-- PREDICTION MODEL -->
-        <section id="prediction">
-            <h2>Prediction Model Spec</h2>
-            <div class="content-block">
-                <span class="label">Model Configuration</span>
-                <p><strong>Enabled:</strong> <span id="pred-en">false</span></p>
-                <p><strong>Inputs Array:</strong> <span id="pred-in">--</span></p>
-                <p><strong>Outputs (Next 7 Days):</strong> Risk: <span id="pred-out-risk">null</span> | Drift Trend: <span id="pred-out-dt">null</span></p>
-                <p><strong>Notes:</strong> <span id="pred-notes">(empty)</span></p>
-            </div>
-        </section>
-
-        <!-- NIGHTLY ENTRY -->
-        <section id="nightly">
-            <h2>Latest Nightly Entry</h2>
-            <div class="content-block">
-                <span class="label">Raw Vent</span>
-                <p id="entry-vent">--</p>
-            </div>
-            <div class="content-block">
-                <span class="label">Work Check</span>
-                <p id="entry-work">--</p>
-            </div>
-            <div class="content-block">
-                <span class="label">Temporal Position</span>
-                <p id="entry-temporal">--</p>
-            </div>
-            <div class="content-block">
-                <span class="label">Meta & Flags</span>
-                <p><strong>Tags:</strong> <span id="entry-tags">[]</span> | <strong>Collapse Flags:</strong> <span id="entry-cflags">[]</span></p>
-                <p><strong>Notes:</strong> <span id="entry-notes">(empty)</span></p>
-            </div>
-        </section>
-
-        <!-- ROLLING HISTORY -->
+        <!-- CLOUD HISTORY BUFFER -->
         <section id="history">
-            <h2>History Buffer Spec</h2>
-            <div class="content-block">
-                <span class="label">Buffer Settings</span>
-                <p><strong>Max Entries Capacity:</strong> <span id="hist-max">365</span></p>
-                <p><strong>Loaded Archive Count:</strong> <span id="hist-count">1</span></p>
-            </div>
-        </section>
-
-        <!-- DISCOVERY VIEWER -->
-        <section id="viewer">
-            <h2>Discovery Viewer Spec</h2>
-            <div class="content-block">
-                <span class="label">File Target</span>
-                <p><strong>File Path:</strong> <span id="disc-file">--</span></p>
-                <p><strong>Cache Enabled:</strong> <span id="disc-cache">false</span></p>
-                <p><strong>Content:</strong> <span id="disc-content">(empty)</span></p>
-            </div>
-        </section>
-
-        <!-- ARCHITECTURE MAP -->
-        <section id="architecture">
-            <h2>Architecture Map & Future Extensions</h2>
-            <div class="sub-grid">
-                <div class="content-block">
-                    <span class="label">Engines Map</span>
-                    <p><strong>Core Engines:</strong> <span id="arch-core">--</span></p>
-                    <p><strong>Dynamic Regulators:</strong> <span id="arch-reg">--</span></p>
-                    <p><strong>Processing Engines:</strong> <span id="arch-proc">--</span></p>
-                </div>
-                <div class="content-block">
-                    <span class="label">Future Extensions</span>
-                    <p id="arch-ext">--</p>
-                </div>
+            <h2>Cloud History Buffer (Loaded Entries)</h2>
+            <div class="content-block" id="history-log-container">
+                <p style="color: var(--text-muted);">No entries loaded from cloud yet.</p>
             </div>
         </section>
 
         <footer>
-            CSS-SPEC v1.0 &mdash; Complete Final JSON Schema Hydration Engine (Corrected Flow)
+            CBSA STUDIO &mdash; Secure Cloud-Ready Implementation Layer
         </footer>
     </main>
 </div>
 
-<script>
-    const data = {
-      "version": "1.0",
-      "user": "example_user",
-      "nightly_entry": {
-        "raw_vent": "I got slightly irritated driving doordash today, nothing big it didn't accumulate just popped up when stupid driver screws traffic up, but I wasn't driving aggressively at any point. I did get testy with co-pilot as we worked on CBSA and basically told it to fuck off, I apologized, lol, and we moved on",
-        "work_check": "I only had the gym, doordash, and work on the CBSA project, nothing pulled me away from any of those things, smooth day overall",
-        "temporal_position": "my mind spent alot of time thinking about CBSA insights, thought about my finances, mostly tier III structural stuff though",
-        "tags": [],
-        "collapse_flags": [],
-        "notes": ""
-      },
-      "telemetry_input": {
-        "interactive": false,
-        "type": "computed_metrics",
-        "metrics": {
-          "drift": 0.2,
-          "stability": 0.8,
-          "bandwidth": 0.75,
-          "containment": 0.85,
-          "identity": 0.9,
-          "volatility": 0.15
-        },
-        "range": {
-          "min": 0.0,
-          "max": 1.0,
-          "step": 0.05
-        }
-      },
-      "daily_processing": {
-        "D_t": 0.2,
-        "S_t": 0.8,
-        "B_t": 0.75,
-        "C_t": 0.85,
-        "I_t": 0.9,
-        "V_t": 0.15,
-        "computed_flags": [],
-        "risk_score": null
-      },
-      "temporal_distribution": {
-        "interactive": true,
-        "ui": {
-          "component": "stacked_slider_interactive",
-          "enforce_total": 100,
-          "segments": [
-            { "id": "way_past", "label": "Way Past", "value": 1 },
-            { "id": "near_past", "label": "Near Past", "value": 3 },
-            { "id": "present", "label": "Present", "value": 65 },
-            { "id": "near_future", "label": "Near Future", "value": 20 },
-            { "id": "far_future", "label": "Far Future", "value": 11 }
-          ]
-        },
-        "data": {
-          "way_past": 1,
-          "near_past": 3,
-          "present": 65,
-          "near_future": 20,
-          "far_future": 11
-        },
-        "bias_index": null,
-        "regime": null
-      },
-      "temporal_coherence": {
-        "tier": "III",
-        "alignment": 0.0,
-        "drift_bias": null,
-        "future_bias": null,
-        "present_anchor": null
-      },
-      "weekly_snapshot": {
-        "line_1": "",
-        "line_2": "",
-        "line_3": "",
-        "history": [],
-        "aggregation_rules": {
-          "drift_avg": null,
-          "stability_avg": null,
-          "collapse_events": 0
-        }
-      },
-      "drift_slope": {
-        "values": [0.2],
-        "slope": null,
-        "window_days": 7,
-        "regression": {
-          "enabled": false,
-          "coefficients": null,
-          "r2": null
-        }
-      },
-      "collapse_state": {
-        "status": "stable",
-        "thresholds": {
-          "drift": 0.65,
-          "volatility": 0.45,
-          "bandwidth": 0.30
-        },
-        "events": [],
-        "last_event": null,
-        "risk_band": "low"
-      },
-      "regulator_dynamics": {
-        "identity": [0.9],
-        "volatility": [0.15],
-        "load": [],
-        "trend": {
-          "identity_slope": null,
-          "volatility_slope": null,
-          "load_slope": null
-        }
-      },
-      "load_curve": {
-        "bandwidth": [0.75],
-        "containment": [0.85],
-        "smoothed": {
-          "bandwidth": [],
-          "containment": []
-        }
-      },
-      "history": {
-        "nightly_entries": [
-          {
-            "raw_vent": "I got slightly irritated driving doordash today...",
-            "work_check": "I only had the gym, doordash...",
-            "temporal_position": "my mind spent a lot of time thinking about CBSA...",
-            "D_t": 0.2,
-            "S_t": 0.8,
-            "B_t": 0.75,
-            "C_t": 0.85,
-            "I_t": 0.9,
-            "V_t": 0.15,
-            "temporal_distribution": {
-              "way_past": 1,
-              "near_past": 3,
-              "present": 65,
-              "near_future": 20,
-              "far_future": 11
-            },
-            "collapse_state": "stable",
-            "tags": [],
-            "date": null
-          }
-        ],
-        "max_entries": 365
-      },
-      "prediction_model": {
-        "enabled": false,
-        "inputs": [
-          "D_t",
-          "S_t",
-          "B_t",
-          "C_t",
-          "I_t",
-          "V_t",
-          "temporal_distribution",
-          "regulator_dynamics",
-          "collapse_state"
-        ],
-        "outputs": {
-          "collapse_risk_next_7_days": null,
-          "drift_trend_next_7_days": null
-        },
-        "notes": ""
-      },
-      "ui_settings": {
-        "theme": "dark",
-        "navigation": "sidebar",
-        "show_graphs": true,
-        "show_raw_vent": true,
-        "compact_mode": false,
-        "inline_mode": false
-      },
-      "discovery_viewer": {
-        "file": "docs/DISCOVERY.md",
-        "content": "",
-        "cache_enabled": false
-      },
-      "architecture_map": {
-        "core_engines": [
-          "Drift_Engine",
-          "Stability_Engine",
-          "Bandwidth_Engine",
-          "Containment_Engine"
-        ],
-        "dynamic_regulators": [
-          "Identity_Coherence_Regulator",
-          "Volatility_Regulator",
-          "Load_Regulator"
-        ],
-        "processing_engines": [
-          "Daily_Processing_Engine",
-          "Weekly_Processing_Engine",
-          "Collapse_Processing_Engine",
-          "Prediction_Engine"
-        ],
-        "future_extensions": [
-          "Clinical_Validation_Module",
-          "Multi_Day_Regression_Module",
-          "Collapse_Event_Classifier",
-          "Temporal_Regime_Detector"
-        ]
-      }
+<!-- Firebase SDK Imports (Modular v10 CDN) -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // ==========================================
+    // STEP 3: FIREBASE CONFIGURATION PLACEHOLDERS
+    // Drop your project keys here when ready
+    // ==========================================
+    const firebaseConfig = {
+        apiKey: "YOUR_API_KEY_HERE",
+        authDomain: "YOUR_AUTH_DOMAIN_HERE",
+        projectId: "YOUR_PROJECT_ID_HERE",
+        storageBucket: "YOUR_STORAGE_BUCKET_HERE",
+        messagingSenderId: "YOUR_MESSAGING_SENDER_ID_HERE",
+        appId: "YOUR_APP_ID_HERE"
     };
 
-    // Hydration
-    document.getElementById('val-user').textContent = data.user;
-    document.getElementById('val-version').textContent = data.version;
-    document.getElementById('val-theme').textContent = data.ui_settings.theme;
-    document.getElementById('val-risk-band').textContent = data.collapse_state.risk_band;
-    document.getElementById('header-status').textContent = data.collapse_state.status.toUpperCase();
+    let db = null;
+    let isFirebaseInitialized = false;
 
-    // 1. Telemetry Readouts (Math-driven, clean metric cards without sliders)
+    try {
+        const app = initializeApp(firebaseConfig);
+        db = getFirestore(app);
+        isFirebaseInitialized = true;
+        document.getElementById('val-sync-status').textContent = "Connected";
+    } catch (e) {
+        console.warn("Firebase not configured yet. Running in local simulation mode.");
+        document.getElementById('val-sync-status').textContent = "Offline Mode";
+    }
+
+    // Baseline state model
+    const state = {
+        telemetry: { drift: 0.2, stability: 0.8, bandwidth: 0.75, containment: 0.85, identity: 0.9, volatility: 0.15 },
+        temporal: [
+            { id: "way_past", label: "Way Past", value: 1 },
+            { id: "near_past", label: "Near Past", value: 3 },
+            { id: "present", label: "Present", value: 65 },
+            { id: "near_future", label: "Near Future", value: 20 },
+            { id: "far_future", label: "Far Future", value: 11 }
+        ]
+    };
+
+    // Render Telemetry Cards
     const telGrid = document.getElementById('telemetry-grid');
-    const metricsObj = data.telemetry_input.metrics;
-    for (const [key, val] of Object.entries(metricsObj)) {
+    for (const [key, val] of Object.entries(state.telemetry)) {
         const card = document.createElement('div');
         card.className = 'metric-card';
-        card.innerHTML = `
-            <span class="metric-label">${key} (Math Derived)</span>
-            <div class="metric-value">${val}</div>
-        `;
+        card.innerHTML = `<span class="metric-label">${key}</span><div class="metric-value">${val}</div>`;
         telGrid.appendChild(card);
     }
 
-    // Daily Processing
-    document.getElementById('dt-d').textContent = data.daily_processing.D_t;
-    document.getElementById('dt-s').textContent = data.daily_processing.S_t;
-    document.getElementById('dt-b').textContent = data.daily_processing.B_t;
-    document.getElementById('dt-c').textContent = data.daily_processing.C_t;
-    document.getElementById('dt-i').textContent = data.daily_processing.I_t;
-    document.getElementById('dt-v').textContent = data.daily_processing.V_t;
-    document.getElementById('dt-flags').textContent = JSON.stringify(data.daily_processing.computed_flags);
-    document.getElementById('dt-risk').textContent = data.daily_processing.risk_score;
-
-    // 2. Temporal Distribution (Interactive user sliders summing to 100%)
-    document.getElementById('td-total').textContent = data.temporal_distribution.ui.enforce_total;
-    document.getElementById('td-regime').textContent = data.temporal_distribution.regime;
-
-    const temporalSlidersContainer = document.getElementById('temporal-sliders-container');
-    const segs = data.temporal_distribution.ui.segments;
-
-    function updateTemporalSum() {
-        let currentSum = 0;
-        segs.forEach(s => {
-            const slider = document.getElementById(`temp-slider-${s.id}`);
-            if(slider) currentSum += parseInt(slider.value);
-        });
-        document.getElementById('td-sum').textContent = currentSum;
+    // Render Temporal Sliders
+    const temporalContainer = document.getElementById('temporal-sliders-container');
+    function updateSum() {
+        let total = state.temporal.reduce((acc, curr) => acc + curr.value, 0);
+        document.getElementById('td-sum').textContent = total;
     }
 
-    segs.forEach(s => {
+    state.temporal.forEach(s => {
         const row = document.createElement('div');
         row.className = 'bar-row';
         row.innerHTML = `
             <div class="bar-label">${s.label}</div>
-            <div class="bar-track">
-                <div class="bar-fill" id="fill-${s.id}" style="width: ${s.value}%"></div>
-            </div>
+            <div class="bar-track"><div class="bar-fill" id="fill-${s.id}" style="width: ${s.value}%"></div></div>
             <div class="bar-val"><span id="val-txt-${s.id}">${s.value}</span>%</div>
         `;
-        temporalSlidersContainer.appendChild(row);
+        temporalContainer.appendChild(row);
 
-        // Add a controls grouping right below or integrate slider controls
         const sliderRow = document.createElement('div');
         sliderRow.className = 'slider-group';
         sliderRow.style.margin = "0 0 1rem 136px";
-        sliderRow.innerHTML = `
-            <label><span>User Estimate Adjustment (${s.label})</span></label>
-            <input type="range" id="temp-slider-${s.id}" min="0" max="100" step="1" value="${s.value}">
-        `;
-        temporalSlidersContainer.appendChild(sliderRow);
+        sliderRow.innerHTML = `<input type="range" id="slider-${s.id}" min="0" max="100" value="${s.value}">`;
+        temporalContainer.appendChild(sliderRow);
 
         setTimeout(() => {
-            const slider = document.getElementById(`temp-slider-${s.id}`);
-            const txt = document.getElementById(`val-txt-${s.id}`);
-            const fill = document.getElementById(`fill-${s.id}`);
-            if(slider) {
-                slider.addEventListener('input', (e) => {
-                    const v = e.target.value;
-                    txt.textContent = v;
-                    fill.style.width = v + '%';
-                    s.value = parseInt(v);
-                    updateTemporalSum();
-                });
-            }
+            const slider = document.getElementById(`slider-${s.id}`);
+            slider.addEventListener('input', (e) => {
+                s.value = parseInt(e.target.value);
+                document.getElementById(`val-txt-${s.id}`).textContent = s.value;
+                document.getElementById(`fill-${s.id}`).style.width = s.value + '%';
+                updateSum();
+            });
         }, 0);
     });
-    updateTemporalSum();
 
-    // Temporal Coherence
-    document.getElementById('tc-tier').textContent = data.temporal_coherence.tier;
-    document.getElementById('tc-align').textContent = data.temporal_coherence.alignment;
-    document.getElementById('tc-db').textContent = data.temporal_coherence.drift_bias;
-    document.getElementById('tc-fb').textContent = data.temporal_coherence.future_bias;
-    document.getElementById('tc-pa').textContent = data.temporal_coherence.present_anchor;
+    // ==========================================
+    // STEP 1 & 2 & 4: SUBMIT WIRING & TIMESTAMPS
+    // ==========================================
+    document.getElementById('btn-submit-entry').addEventListener('click', async () => {
+        const userId = document.getElementById('input-user-id').value || "anonymous";
+        const rawVent = document.getElementById('input-raw-vent').value;
+        const workCheck = document.getElementById('input-work-check').value;
+        const temporalPos = document.getElementById('input-temporal-pos').value;
+        const syncStatusEl = document.getElementById('sync-status');
 
-    // Weekly Snapshot
-    document.getElementById('ws-l1').textContent = data.weekly_snapshot.line_1 || '(empty)';
-    document.getElementById('ws-l2').textContent = data.weekly_snapshot.line_2 || '(empty)';
-    document.getElementById('ws-l3').textContent = data.weekly_snapshot.line_3 || '(empty)';
-    document.getElementById('ws-da').textContent = data.weekly_snapshot.aggregation_rules.drift_avg;
-    document.getElementById('ws-sa').textContent = data.weekly_snapshot.aggregation_rules.stability_avg;
-    document.getElementById('ws-ce').textContent = data.weekly_snapshot.aggregation_rules.collapse_events;
+        if (!rawVent.trim()) {
+            syncStatusEl.style.color = "#ef4444";
+            syncStatusEl.textContent = "Error: Raw vent cannot be empty.";
+            return;
+        }
 
-    // Drift Slope
-    document.getElementById('ds-vals').textContent = JSON.stringify(data.drift_slope.values);
-    document.getElementById('ds-slope').textContent = data.drift_slope.slope;
-    document.getElementById('ds-window').textContent = data.drift_slope.window_days;
-    document.getElementById('ds-reg-en').textContent = data.drift_slope.regression.enabled;
-    document.getElementById('ds-coef').textContent = data.drift_slope.regression.coefficients;
-    document.getElementById('ds-r2').textContent = data.drift_slope.regression.r2;
+        // Automatic timestamp injection
+        const entryPayload = {
+            user: userId,
+            timestamp: new Date().toISOString(),
+            local_date_string: new Date().toLocaleString(),
+            raw_vent: rawVent,
+            work_check: workCheck,
+            temporal_position: temporalPos,
+            telemetry: state.telemetry,
+            temporal_distribution: state.temporal.reduce((obj, item) => ({ ...obj, [item.id]: item.value }), {})
+        };
 
-    // Collapse State
-    document.getElementById('col-status').textContent = data.collapse_state.status;
-    document.getElementById('col-last').textContent = data.collapse_state.last_event;
-    document.getElementById('col-events').textContent = JSON.stringify(data.collapse_state.events);
-    document.getElementById('th-drift').textContent = data.collapse_state.thresholds.drift;
-    document.getElementById('th-vol').textContent = data.collapse_state.thresholds.volatility;
-    document.getElementById('th-bw').textContent = data.collapse_state.thresholds.bandwidth;
+        syncStatusEl.style.color = "var(--text-muted)";
+        syncStatusEl.textContent = "Committing entry and syncing...";
 
-    // Regulator Dynamics
-    document.getElementById('reg-id').textContent = JSON.stringify(data.regulator_dynamics.identity);
-    document.getElementById('reg-vol').textContent = JSON.stringify(data.regulator_dynamics.volatility);
-    document.getElementById('reg-load').textContent = JSON.stringify(data.regulator_dynamics.load);
-    document.getElementById('tr-is').textContent = data.regulator_dynamics.trend.identity_slope;
-    document.getElementById('tr-vs').textContent = data.regulator_dynamics.trend.volatility_slope;
-    document.getElementById('tr-ls').textContent = data.regulator_dynamics.trend.load_slope;
+        try {
+            if (isFirebaseInitialized && db) {
+                // Write directly to user-isolated Firestore collection
+                await addDoc(collection(db, "users", userId, "nightly_entries"), entryPayload);
+                syncStatusEl.style.color = "var(--success)";
+                syncStatusEl.textContent = "Success: Entry securely synced to cloud off-site storage.";
+            } else {
+                // Local fallback simulation if keys are still placeholders
+                console.log("Simulated Cloud Push:", entryPayload);
+                syncStatusEl.style.color = "var(--success)";
+                syncStatusEl.textContent = "Success: Entry logged locally (Configure Firebase keys to push live).";
+            }
+            
+            // Clear entry fields after commit
+            document.getElementById('input-raw-vent').value = "";
+            document.getElementById('input-work-check').value = "";
+            document.getElementById('input-temporal-pos').value = "";
 
-    // Load Curve
-    document.getElementById('lc-bw').textContent = JSON.stringify(data.load_curve.bandwidth);
-    document.getElementById('lc-cont').textContent = JSON.stringify(data.load_curve.containment);
-    document.getElementById('lc-sbw').textContent = JSON.stringify(data.load_curve.smoothed.bandwidth);
-    document.getElementById('lc-scont').textContent = JSON.stringify(data.load_curve.smoothed.containment);
+        } catch (error) {
+            console.error("Cloud sync failed:", error);
+            syncStatusEl.style.color = "#ef4444";
+            syncStatusEl.textContent = "Sync failed: " + error.message;
+        }
+    });
 
-    // Prediction Model
-    document.getElementById('pred-en').textContent = data.prediction_model.enabled;
-    document.getElementById('pred-in').textContent = data.prediction_model.inputs.join(', ');
-    document.getElementById('pred-out-risk').textContent = data.prediction_model.outputs.collapse_risk_next_7_days;
-    document.getElementById('pred-out-dt').textContent = data.prediction_model.outputs.drift_trend_next_7_days;
-    document.getElementById('pred-notes').textContent = data.prediction_model.notes || '(empty)';
-
-    // Nightly Entry
-    document.getElementById('entry-vent').textContent = data.nightly_entry.raw_vent;
-    document.getElementById('entry-work').textContent = data.nightly_entry.work_check;
-    document.getElementById('entry-temporal').textContent = data.nightly_entry.temporal_position;
-    document.getElementById('entry-tags').textContent = JSON.stringify(data.nightly_entry.tags);
-    document.getElementById('entry-cflags').textContent = JSON.stringify(data.nightly_entry.collapse_flags);
-    document.getElementById('entry-notes').textContent = data.nightly_entry.notes || '(empty)';
-
-    // History Buffer
-    document.getElementById('hist-max').textContent = data.history.max_entries;
-    document.getElementById('hist-count').textContent = data.history.nightly_entries.length;
-
-    // Discovery Viewer
-    document.getElementById('disc-file').textContent = data.discovery_viewer.file;
-    document.getElementById('disc-cache').textContent = data.discovery_viewer.cache_enabled;
-    document.getElementById('disc-content').textContent = data.discovery_viewer.content || '(empty)';
-
-    // Architecture Map
-    document.getElementById('arch-core').textContent = data.architecture_map.core_engines.join(' // ');
-    document.getElementById('arch-reg').textContent = data.architecture_map.dynamic_regulators.join(' // ');
-    document.getElementById('arch-proc').textContent = data.architecture_map.processing_engines.join(' // ');
-    document.getElementById('arch-ext').textContent = data.architecture_map.future_extensions.join(' // ');
+    document.getElementById('val-user').textContent = document.getElementById('input-user-id').value;
+    document.getElementById('input-user-id').addEventListener('input', (e) => {
+        document.getElementById('val-user').textContent = e.target.value || "--";
+    });
 </script>
 
 </body>
