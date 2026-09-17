@@ -415,6 +415,7 @@
             <h2>Studio Navigation</h2>
             <ul class="nav-links">
                 <li><a href="#valve-input">Valve Entry Panel</a></li>
+                <li><a href="#weekly-trends">Weekly Trends & Synthesis</a></li>
                 <li><a href="#status">System Status</a></li>
                 <li><a href="#history">Local Buffer Log</a></li>
             </ul>
@@ -423,8 +424,8 @@
         <div class="sidebar-folksy">
             <h3>How to Use & Workflow</h3>
             <p><strong>1. Log Daily (Once Only):</strong> One entry allowed per calendar day. Keep it honest and lock it in.</p>
-            <p><strong>2. Export Text Report:</strong> At the end of the week, click "Export Text Report" to download your rolling log.</p>
-            <p><strong>3. The Second Opinion:</strong> Paste your exported text file into an LLM for trend analysis and pattern checks.</p>
+            <p><strong>2. Export Text Report:</strong> At the end of the week, click "Export Text Report" to download your rolling log complete with automated trends.</p>
+            <p><strong>3. The Second Opinion:</strong> Paste your exported text file into an LLM for pattern checks.</p>
             <p style="margin-top: 0.75rem; color: var(--warning);"><strong>Note on Storage:</strong> Data lives strictly in this browser on this device. If you switch computers or clear your browser data without exporting first, your history will be lost.</p>
         </div>
 
@@ -539,6 +540,33 @@
             <p id="sync-status" style="margin-top: 0.75rem; font-size: 11px; color: var(--text-muted);"></p>
         </section>
 
+        <!-- WEEKLY TRENDS & SYNTHESIS -->
+        <section id="weekly-trends">
+            <h2>Weekly Rolling Trends & Synthesis (Last 7 Days)</h2>
+            <div class="grid" style="margin-bottom: 1rem;">
+                <div class="metric-card">
+                    <span class="metric-label">Entries in Window</span>
+                    <div class="metric-value" id="trend-entry-count">0 / 7</div>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-label">Avg Vent Length</span>
+                    <div class="metric-value" id="trend-avg-chars">0 chars</div>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-label">Dominant Drift</span>
+                    <div class="metric-value" id="trend-dominant-drift" style="font-size: 12px; color: var(--accent);">--</div>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-label">Target Continuity</span>
+                    <div class="metric-value" id="trend-targets-logged" style="color: var(--success);">Active</div>
+                </div>
+            </div>
+            <div class="content-block" id="trend-synthesis-notes">
+                <span class="label">Synthesis Summary</span>
+                <p style="color: var(--text-muted); font-size: 11px;">Save at least one entry to initialize rolling weekly synthesis calculations.</p>
+            </div>
+        </section>
+
         <!-- SYSTEM STATUS -->
         <section id="status">
             <h2>System Status & Core Config</h2>
@@ -549,7 +577,7 @@
                 </div>
                 <div class="metric-card">
                     <span class="metric-label">Version</span>
-                    <div class="metric-value">1.0</div>
+                    <div class="metric-value">1.1</div>
                 </div>
                 <div class="metric-card">
                     <span class="metric-label">Storage Mode</span>
@@ -682,10 +710,69 @@
         }
     }
 
+    // Weekly Trends & Aggregation Engine
+    function calculateWeeklyTrends() {
+        const entryCountEl = document.getElementById('trend-entry-count');
+        const avgCharsEl = document.getElementById('trend-avg-chars');
+        const dominantDriftEl = document.getElementById('trend-dominant-drift');
+        const targetsLoggedEl = document.getElementById('trend-targets-logged');
+        const synthesisNotesEl = document.getElementById('trend-synthesis-notes');
+
+        if (localSessionEntries.length === 0) {
+            entryCountEl.textContent = "0 / 7";
+            avgCharsEl.textContent = "0 chars";
+            dominantDriftEl.textContent = "--";
+            targetsLoggedEl.textContent = "Active";
+            synthesisNotesEl.innerHTML = `<span class="label">Synthesis Summary</span><p style="color: var(--text-muted); font-size: 11px;">Save at least one entry to initialize rolling weekly synthesis calculations.</p>`;
+            return;
+        }
+
+        // Take up to last 7 entries
+        const recentEntries = localSessionEntries.slice(0, 7);
+        entryCountEl.textContent = `${recentEntries.length} / 7`;
+
+        // Calculate average vent length
+        const totalChars = recentEntries.reduce((sum, e) => sum + e.raw_vent.length, 0);
+        const avgChars = Math.round(totalChars / recentEntries.length);
+        avgCharsEl.textContent = `${avgChars} chars`;
+
+        // Calculate average temporal distribution across recent entries
+        const temporalTotals = { way_past: 0, near_past: 0, present: 0, near_future: 0, far_future: 0 };
+        recentEntries.forEach(e => {
+            if (e.temporal_distribution) {
+                for (const [k, v] of Object.entries(e.temporal_distribution)) {
+                    temporalTotals[k] = (temporalTotals[k] || 0) + v;
+                }
+            }
+        });
+
+        const labelsMap = { way_past: "Way Past", near_past: "Near Past", present: "Present", near_future: "Near Future", far_future: "Far Future" };
+        let dominantKey = "present";
+        let maxVal = -1;
+        for (const [k, v] of Object.entries(temporalTotals)) {
+            if (v > maxVal) {
+                maxVal = v;
+                dominantKey = k;
+            }
+        }
+        dominantDriftEl.textContent = labelsMap[dominantKey];
+
+        // Targets presence check
+        const entriesWithTargets = recentEntries.filter(e => e.tomorrow_targets && e.tomorrow_targets.trim().length > 0).length;
+        targetsLoggedEl.textContent = `${entriesWithTargets}/${recentEntries.length} logged`;
+
+        // Synthesis narrative generation
+        synthesisNotesEl.innerHTML = `
+            <span class="label">Synthesis Summary</span>
+            <p style="font-size: 11px; margin-bottom: 0.5ln;">Over your last <strong>${recentEntries.length} logged entries</strong>, your somatic log volume averages <strong>${avgChars} characters</strong> per session.</p>
+            <p style="font-size: 11px; margin-bottom: 0;">Your primary temporal orientation is anchored around <strong>${labelsMap[dominantKey]}</strong>. Use this overview when exporting your rolling log for secondary LLM trend audits.</p>
+        `;
+    }
+
     function renderHistoryUI() {
         const container = document.getElementById('history-log-container');
         if (localSessionEntries.length === 0) {
-            container.innerHTML = `<p style="color: var(--text-muted);">No entries saved in browser storage yet.</p>`;
+            container.innerHTML = `<p style="color: var(--text-muted);">No entries saved in browser storage yet.</p>';
             return;
         }
         container.innerHTML = "";
@@ -703,6 +790,7 @@
     
     renderHistoryUI();
     checkDailyLock();
+    calculateWeeklyTrends();
 
     // Save Entry Locally to Persistent Storage
     document.getElementById('btn-save-entry').addEventListener('click', () => {
@@ -750,6 +838,7 @@
 
         renderHistoryUI();
         checkDailyLock();
+        calculateWeeklyTrends();
 
         syncStatusEl.style.color = "var(--success)";
         syncStatusEl.textContent = "Success: Entry securely saved. Daily lock engaged.";
@@ -762,15 +851,24 @@
         document.getElementById('input-tomorrow-targets').value = "";
     });
 
-    // Export as clean, human-readable Text Report (.txt)
+    // Export as clean, human-readable Text Report (.txt) with Rolling Aggregates
     document.getElementById('btn-export-data').addEventListener('click', () => {
         if (localSessionEntries.length === 0) {
             alert("No entries to export.");
             return;
         }
 
+        const recentEntries = localSessionEntries.slice(0, 7);
+        const totalChars = recentEntries.reduce((sum, e) => sum + e.raw_vent.length, 0);
+        const avgChars = Math.round(totalChars / recentEntries.length);
+
         let reportText = "========================================\n";
         reportText += "CBSA STUDIO - WEEKLY/ROLLING LOG REPORT\n";
+        reportText += "========================================\n";
+        reportText += `Export Timestamp: ${new Date().toLocaleString()}\n`;
+        reportText += `Total Stored Buffer Entries: ${localSessionEntries.length}\n`;
+        reportText += `Active Window Entries: ${recentEntries.length} / 7\n`;
+        reportText += `Average Vent Length: ${avgChars} chars\n`;
         reportText += "========================================\n\n";
 
         localSessionEntries.forEach((entry, idx) => {
