@@ -511,11 +511,20 @@
             </div>
 
             <!-- 4. REACTIVE SITUATIONS & HANDLING LOG -->
-            <div class="content-block" style="border-color: var(--accent);">
-                <span class="label" style="color: var(--accent);">4. Reactive Situations & Friction Handling</span>
+            <div class="content-block" style="border-color: var(--border);">
+                <span class="label">4. Reactive Situations & Friction Handling</span>
                 <textarea id="input-reactive-log" rows="3" maxlength="400" placeholder="Describe any reactive triggers from today and evaluate how you handled them..."></textarea>
                 <div class="example-hint">
                     <strong>Format Example:</strong> <code>"Trigger: Sudden shift in project requirements mid-day. Handling: Initial defensive spike, but caught it within 10 minutes and recalibrated scope cleanly."</code>
+                </div>
+            </div>
+
+            <!-- 5. SCHEDULE DELTA // TOMORROW'S OBJECTIVES -->
+            <div class="content-block" style="border-color: var(--accent);">
+                <span class="label" style="color: var(--accent);">5. Schedule Delta & Tomorrow's Target List</span>
+                <textarea id="input-tomorrow-targets" rows="3" maxlength="400" placeholder="List concrete objectives or tasks planned for tomorrow..."></textarea>
+                <div class="example-hint">
+                    <strong>Format Example:</strong> <code>"- Finalize documentation pass\n- Run live integration smoke test\n- Take afternoon completely offline"</code>
                 </div>
             </div>
 
@@ -726,7 +735,7 @@
             item.innerHTML = `
                 <strong>[Session #${localSessionEntries.length - idx}] User: ${itemData.user}</strong> (${itemData.local_date_string})<br>
                 <span style="color: var(--text-muted);">Vent:</span> ${itemData.raw_vent}<br>
-                <span style="color: var(--accent);">Reactive Log:</span> ${itemData.reactive_log || 'None recorded'}<br>
+                <span style="color: var(--accent);">Tomorrow's Targets:</span> ${itemData.tomorrow_targets || 'None recorded'}<br>
             `;
             container.appendChild(item);
         });
@@ -750,6 +759,7 @@
         const workCheck = document.getElementById('input-work-check').value;
         const temporalPos = document.getElementById('input-temporal-pos').value;
         const reactiveLog = document.getElementById('input-reactive-log').value;
+        const tomorrowTargets = document.getElementById('input-tomorrow-targets').value;
 
         if (rawVent.length < 40) {
             syncStatusEl.style.color = "var(--error)";
@@ -777,6 +787,7 @@
             work_check: workCheck,
             temporal_position: temporalPos,
             reactive_log: reactiveLog,
+            tomorrow_targets: tomorrowTargets,
             loads: loadsData,
             telemetry: state.telemetry,
             temporal_distribution: state.temporal.reduce((obj, item) => ({ ...obj, [item.id]: item.value }), {})
@@ -820,6 +831,7 @@
             document.getElementById('input-work-check').value = "";
             document.getElementById('input-temporal-pos').value = "";
             document.getElementById('input-reactive-log').value = "";
+            document.getElementById('input-tomorrow-targets').value = "";
             updateTelemetry();
         } catch (e) {
             console.error(e);
