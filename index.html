@@ -299,6 +299,7 @@
 
         .example-hint code {
             color: var(--text-main);
+            white-space: pre-wrap;
         }
 
         #go-deeper-panel {
@@ -414,26 +415,26 @@
         <div>
             <h2>Studio Navigation</h2>
             <ul class="nav-links">
-                <li><a href="#valve-input">Valve Entry Panel</a></li>
-                <li><a href="#weekly-trends">Weekly Trends & Synthesis</a></li>
+                <li><a href="#valve-input">Daily Log Form</a></li>
+                <li><a href="#weekly-trends">Weekly Trends & Summary</a></li>
                 <li><a href="#status">System Status</a></li>
-                <li><a href="#history">Local Buffer Log</a></li>
+                <li><a href="#history">Saved History Log</a></li>
             </ul>
         </div>
 
         <div class="sidebar-folksy">
-            <h3>How to Use & Workflow</h3>
-            <p><strong>1. Log Daily (Once Only):</strong> One entry allowed per calendar day. Keep it honest and lock it in.</p>
-            <p><strong>2. Export Text Report:</strong> At the end of the week, click "Export Text Report" to download your rolling log complete with automated trends.</p>
-            <p><strong>3. The Second Opinion:</strong> Paste your exported text file into an LLM for pattern checks.</p>
-            <p style="margin-top: 0.75rem; color: var(--warning);"><strong>Note on Storage:</strong> Data lives strictly in this browser on this device. If you switch computers or clear your browser data without exporting first, your history will be lost.</p>
+            <h3>How to Use This Tool</h3>
+            <p><strong>1. Log Once a Day:</strong> You can save one entry per calendar day. Just write down how your day actually went.</p>
+            <p><strong>2. Export Your Report:</strong> At the end of the week, hit "Export Text Report" to download your rolling log file.</p>
+            <p><strong>3. Get a Second Opinion:</strong> Drop that text file into any AI chat to check for patterns, habits, or burnout signs over time.</p>
+            <p style="margin-top: 0.75rem; color: var(--warning);"><strong>Where your data lives:</strong> Everything stays securely right inside this browser on your computer. If you clear your browser data without exporting first, your history will vanish.</p>
         </div>
 
         <div class="sidebar-folksy">
-            <h3>What's CBSA, Anyway?</h3>
-            <p>Think of CBSA as a quiet gauge under the hood of your day. You don't have to think about complex metrics — it's built to track something simpler: how are you actually doing, over time, not just today?</p>
-            <p>Every day, you jot a few honest lines — how the day felt, whether work went the way you planned, where your head's been living. That's it. No forms, no scoring yourself.</p>
-            <p><strong>A quick, honest note:</strong> CBSA is a personal reflection tool. It's not a doctor, therapist, or crisis service. If you're genuinely struggling, please reach out to a real person.</p>
+            <h3>What is This For?</h3>
+            <p>Think of this as a straightforward dashboard for your day-to-day life. Instead of guessing how you felt last week, you get a clear record of your energy, habits, and focus over time.</p>
+            <p>No complicated scoring or grading yourself—just plain notes on what happened and how you handled it.</p>
+            <p style="margin-top: 0.5rem; color: var(--text-muted); font-size: 10px;"><em>Note: This is a personal reflection tool, not medical or mental health advice. If you're going through a tough time, talk to someone who can help.</em></p>
         </div>
     </aside>
 
@@ -442,47 +443,47 @@
         <header>
             <div>
                 <h1>VALVE // TENSILE</h1>
-                <div class="subtitle">Cognitive Boundary & Stability Architecture (Local-First Edition)</div>
+                <div class="subtitle">Daily Reflection & Tracking Studio (Local-First Edition)</div>
             </div>
             <div class="header-controls">
-                <div class="status-badge" style="color: var(--success);">Local Secure Storage Active</div>
+                <div class="status-badge" style="color: var(--success);">Local Storage Active</div>
             </div>
         </header>
 
         <!-- VALVE ACTIVE INPUT PANEL -->
         <section id="valve-input">
-            <h2>Valve Active Entry Panel</h2>
+            <h2>Daily Log Entry Form</h2>
             <div class="content-block">
-                <span class="label">User Identifier</span>
-                <input type="text" id="input-user-id" value="example_user" placeholder="Enter user identifier...">
+                <span class="label">Your Name / Identifier</span>
+                <input type="text" id="input-user-id" value="example_user" placeholder="Enter your name or tag...">
             </div>
 
             <div class="content-block">
-                <span class="label">1. Raw Vent (Zero-Friction Somatic Log)</span>
-                <textarea id="input-raw-vent" rows="3" maxlength="500" placeholder="Type general somatic noise or background state here..."></textarea>
+                <span class="label">1. Daily Run-Through (What actually happened today)</span>
+                <textarea id="input-raw-vent" rows="4" maxlength="500" placeholder="Jot down how your day went from start to finish..."></textarea>
                 <div class="char-counter"><span id="char-count">0</span> / 500 chars (Min 40 required)</div>
                 <div class="example-hint">
-                    <strong>Format Example:</strong> <code>"Small interruptions felt heavier than usual today. Low physical pacing in the morning."</code>
+                    <strong>Real Example:</strong> <code>Day started on time, got to the gym on time, good workout, traded til 11:30, doordash went irritation free, had productive project progress, decent energy all day.</code>
                 </div>
             </div>
 
             <div class="content-block">
-                <span class="label">2. Work / Structural Check</span>
-                <textarea id="input-work-check" rows="2" maxlength="300" placeholder="Record daily operational check..."></textarea>
+                <span class="label">2. Work & Task Check</span>
+                <textarea id="input-work-check" rows="3" maxlength="300" placeholder="How did your main work or projects go today?"></textarea>
                 <div class="example-hint">
-                    <strong>Format Example:</strong> <code>"Core task finished, but administrative drag ate up buffer time."</code>
+                    <strong>Real Example:</strong> <code>Knocked out the main coding block by noon. Afternoon got a bit bogged down with fixing unexpected bugs, but got everything tested and pushed live before logging off.</code>
                 </div>
             </div>
             
             <div class="content-block">
-                <span class="label">3. Temporal Position Assessment</span>
-                <input type="text" id="input-temporal-pos" maxlength="150" placeholder="Where is your mind anchored today?">
+                <span class="label">3. Mindset & Mental Focus</span>
+                <input type="text" id="input-temporal-pos" maxlength="150" placeholder="Where was your head mostly at today?">
                 <div class="example-hint">
-                    <strong>Format Example:</strong> <code>"Mostly present due to active project deadlines, minor pull toward past friction."</code>
+                    <strong>Real Example:</strong> <code>Mostly stayed locked into the present task list. Didn't catch myself worrying too much about next week's deadlines.</code>
                 </div>
                 
                 <p style="margin-top: 0.75rem; color: var(--text-main); font-size: 11px;">
-                    <strong>Slider Distribution:</strong> Adjust sliders below so they balance and equal 100%. 
+                    <strong>Where was your focus distributed today?</strong> Adjust the sliders so they total 100%. 
                     <span id="td-sum-wrap" style="margin-left: 0.5rem;">Current Sum: <span id="td-sum" style="font-weight: bold;">100</span>% <span id="td-warning" style="color: var(--success);">(Balanced)</span></span>
                 </p>
 
@@ -495,46 +496,46 @@
 
             <!-- 4. REACTIVE SITUATIONS & HANDLING LOG -->
             <div class="content-block" style="border-color: var(--border);">
-                <span class="label">4. Reactive Situations & Friction Handling</span>
-                <textarea id="input-reactive-log" rows="3" maxlength="400" placeholder="Describe any reactive triggers from today and evaluate how you handled them..."></textarea>
+                <span class="label">4. Friction & How You Handled It</span>
+                <textarea id="input-reactive-log" rows="3" maxlength="400" placeholder="Did anything annoy you or throw you off balance today? How did you deal with it?"></textarea>
                 <div class="example-hint">
-                    <strong>Format Example:</strong> <code>"Trigger: Sudden shift in project requirements mid-day. Handling: Initial defensive spike, but caught it within 10 minutes and recalibrated scope cleanly."</code>
+                    <strong>Real Example:</strong> <code>Ran into a frustrating roadblock with an API integration right before lunch. Felt an instant spike of annoyance, but took a 15-minute walk outside to reset instead of spinning my wheels angrily.</code>
                 </div>
             </div>
 
             <!-- 5. SCHEDULE DELTA // TOMORROW'S OBJECTIVES -->
             <div class="content-block" style="border-color: var(--accent);">
-                <span class="label" style="color: var(--accent);">5. Schedule Delta & Tomorrow's Target List</span>
-                <textarea id="input-tomorrow-targets" rows="3" maxlength="400" placeholder="List concrete objectives or tasks planned for tomorrow..."></textarea>
+                <span class="label" style="color: var(--accent);">5. Game Plan for Tomorrow</span>
+                <textarea id="input-tomorrow-targets" rows="3" maxlength="400" placeholder="What are your main goals for tomorrow?"></textarea>
                 <div class="example-hint">
-                    <strong>Format Example:</strong> <code>"- Finalize documentation pass\n- Run live integration smoke test\n- Take afternoon completely offline"</code>
+                    <strong>Real Example:</strong> <code>- Wake up at 6:30 AM and hit the gym early\n- Finish the client reporting spreadsheet\n- Take the entire evening offline to relax</code>
                 </div>
             </div>
 
             <!-- GO DEEPER TOGGLE BUTTON & EXTENDED PANEL -->
-            <button class="btn-toggle" id="btn-toggle-deeper">+ Go Deeper: Map 6 Load Types</button>
+            <button class="btn-toggle" id="btn-toggle-deeper">+ Go Deeper: Check 6 Specific Life Loads (Optional)</button>
             
             <div id="go-deeper-panel">
-                <span class="label" style="color: var(--accent); margin-bottom: 0.75rem;">Deep Diagnostic: Load Type Mapping</span>
-                <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 1rem;">Detail how each of the 6 core structural loads impacted your bandwidth today.</p>
+                <span class="label" style="color: var(--accent); margin-bottom: 0.75rem;">Detailed Load Check</span>
+                <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 1rem;">If you want to track where your energy went across specific areas today, fill these in:</p>
                 
-                <div class="content-block"><span class="label">1. Somatic Load (Physical tension, sleep, fatigue)</span>
-                <textarea id="load-somatic" rows="2" maxlength="200" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
+                <div class="content-block"><span class="label">1. Physical Load (Sleep, physical fatigue, body tension)</span>
+                <textarea id="load-somatic" rows="2" maxlength="200" placeholder="e.g. [Med] Felt a bit sluggish in the morning after sleeping poorly, but bounced back."></textarea></div>
 
-                <div class="content-block"><span class="label">2. Cognitive Load (Context switching, mental clutter)</span>
-                <textarea id="load-cognitive" rows="2" maxlength="200" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
+                <div class="content-block"><span class="label">2. Mental Load (Jumping between tasks, mental clutter)</span>
+                <textarea id="load-cognitive" rows="2" maxlength="200" placeholder="e.g. [Low] Kept a clean focus block today with minimal distractions."></textarea></div>
 
-                <div class="content-block"><span class="label">3. Temporal Load (Rushing, backlog pressure, future anxiety)</span>
-                <textarea id="load-temporal" rows="2" maxlength="200" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
+                <div class="content-block"><span class="label">3. Time Pressure (Rushing, backlog anxiety, running late)</span>
+                <textarea id="load-temporal" rows="2" maxlength="200" placeholder="e.g. [Low] Felt plenty of breathing room in the schedule today."></textarea></div>
 
-                <div class="content-block"><span class="label">4. Relational Load (Interpersonal friction, communication drag)</span>
-                <textarea id="load-relational" rows="2" maxlength="200" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
+                <div class="content-block"><span class="label">4. People & Social Load (Difficult conversations, social drain)</span>
+                <textarea id="load-relational" rows="2" maxlength="200" placeholder="e.g. [Med] Had a long client meeting that required a lot of energy to navigate."></textarea></div>
 
-                <div class="content-block"><span class="label">5. Environmental Load (Noise, sensory friction, workspace state)</span>
-                <textarea id="load-environmental" rows="2" maxlength="200" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
+                <div class="content-block"><span class="label">5. Environment Load (Noise, clutter, workspace comfort)</span>
+                <textarea id="load-environmental" rows="2" maxlength="200" placeholder="e.g. [Low] Worked from a quiet room all day; very smooth."></textarea></div>
 
-                <div class="content-block"><span class="label">6. Operational Load (Process friction, tools, maintenance overhead)</span>
-                <textarea id="load-operational" rows="2" maxlength="200" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
+                <div class="content-block"><span class="label">6. System & Tools Load (Tech bugs, computer issues, slow processes)</span>
+                <textarea id="load-operational" rows="2" maxlength="200" placeholder="e.g. [High] Spent an hour dealing with broken software dependencies."></textarea></div>
             </div>
 
             <button class="btn" id="btn-save-entry">Save Today's Entry</button>
@@ -544,37 +545,37 @@
 
         <!-- WEEKLY TRENDS & SYNTHESIS -->
         <section id="weekly-trends">
-            <h2>Weekly Rolling Trends & Synthesis (Last 7 Days)</h2>
+            <h2>Weekly Trends & Summary (Last 7 Days)</h2>
             <div class="grid" style="margin-bottom: 1rem;">
                 <div class="metric-card">
                     <span class="metric-label">Entries in Window</span>
                     <div class="metric-value" id="trend-entry-count">0 / 7</div>
                 </div>
                 <div class="metric-card">
-                    <span class="metric-label">Avg Vent Length</span>
+                    <span class="metric-label">Avg Note Length</span>
                     <div class="metric-value" id="trend-avg-chars">0 chars</div>
                 </div>
                 <div class="metric-card">
-                    <span class="metric-label">Dominant Drift</span>
+                    <span class="metric-label">Main Focus Trend</span>
                     <div class="metric-value" id="trend-dominant-drift" style="font-size: 12px; color: var(--accent);">--</div>
                 </div>
                 <div class="metric-card">
-                    <span class="metric-label">Target Continuity</span>
+                    <span class="metric-label">Target Consistency</span>
                     <div class="metric-value" id="trend-targets-logged" style="color: var(--success);">Active</div>
                 </div>
             </div>
             <div class="content-block" id="trend-synthesis-notes">
-                <span class="label">Synthesis Summary</span>
-                <p style="color: var(--text-muted); font-size: 11px;">Save at least one entry to initialize rolling weekly synthesis calculations.</p>
+                <span class="label">Weekly Summary</span>
+                <p style="color: var(--text-muted); font-size: 11px;">Save at least one daily entry to see your rolling weekly summary here.</p>
             </div>
         </section>
 
         <!-- SYSTEM STATUS -->
         <section id="status">
-            <h2>System Status & Core Config</h2>
+            <h2>System Status</h2>
             <div class="grid">
                 <div class="metric-card">
-                    <span class="metric-label">User Active</span>
+                    <span class="metric-label">Active User</span>
                     <div class="metric-value" id="val-user">--</div>
                 </div>
                 <div class="metric-card">
@@ -586,7 +587,7 @@
                     <div class="metric-value" style="color: var(--success);">Local Browser</div>
                 </div>
                 <div class="metric-card">
-                    <span class="metric-label">Daily Lock Status</span>
+                    <span class="metric-label">Today's Lock Status</span>
                     <div class="metric-value" id="val-daily-lock" style="color: var(--success);">Open</div>
                 </div>
             </div>
@@ -594,14 +595,14 @@
 
         <!-- LOCAL HISTORY BUFFER -->
         <section id="history">
-            <h2>Local History Buffer (Saved Submissions)</h2>
+            <h2>Saved History Log</h2>
             <div class="content-block" id="history-log-container">
-                <p style="color: var(--text-muted);">No entries saved in browser storage yet.</p>
+                <p style="color: var(--text-muted);">No entries saved in your browser yet.</p>
             </div>
         </section>
 
         <footer>
-            CBSA STUDIO &mdash; Local-First Privacy Architecture Layer
+            VALVE // TENSILE &mdash; Local-First Personal Tracking Studio
         </footer>
     </main>
 </div>
@@ -621,7 +622,7 @@
     const deeperPanel = document.getElementById('go-deeper-panel');
     toggleBtn.addEventListener('click', () => {
         deeperPanel.classList.toggle('active');
-        toggleBtn.textContent = deeperPanel.classList.contains('active') ? "- Hide Go Deeper Loads" : "+ Go Deeper: Map 6 Load Types";
+        toggleBtn.textContent = deeperPanel.classList.contains('active') ? "- Hide Specific Life Loads" : "+ Go Deeper: Check 6 Specific Life Loads (Optional)";
     });
 
     const state = {
@@ -701,10 +702,10 @@
 
         if (hasLoggedToday) {
             saveBtn.disabled = true;
-            lockStatusEl.textContent = "Locked (Done)";
+            lockStatusEl.textContent = "Locked (Already Saved)";
             lockStatusEl.style.color = "var(--warning)";
             syncStatusEl.style.color = "var(--warning)";
-            syncStatusEl.textContent = "Notice: You have already completed your entry for today. Come back tomorrow!";
+            syncStatusEl.textContent = "Notice: You already logged your entry for today. Come back tomorrow!";
         } else {
             saveBtn.disabled = false;
             lockStatusEl.textContent = "Open";
@@ -725,7 +726,7 @@
             avgCharsEl.textContent = "0 chars";
             dominantDriftEl.textContent = "--";
             targetsLoggedEl.textContent = "Active";
-            synthesisNotesEl.innerHTML = `<span class="label">Synthesis Summary</span><p style="color: var(--text-muted); font-size: 11px;">Save at least one entry to initialize rolling weekly synthesis calculations.</p>`;
+            synthesisNotesEl.innerHTML = `<span class="label">Weekly Summary</span><p style="color: var(--text-muted); font-size: 11px;">Save at least one daily entry to see your rolling weekly summary here.</p>`;
             return;
         }
 
@@ -760,16 +761,16 @@
         targetsLoggedEl.textContent = `${entriesWithTargets}/${recentEntries.length} logged`;
 
         synthesisNotesEl.innerHTML = `
-            <span class="label">Synthesis Summary</span>
-            <p style="font-size: 11px; margin-bottom: 0.5rem;">Over your last <strong>${recentEntries.length} logged entries</strong>, your somatic log volume averages <strong>${avgChars} characters</strong> per session.</p>
-            <p style="font-size: 11px; margin-bottom: 0;">Your primary temporal orientation is anchored around <strong>${labelsMap[dominantKey]}</strong>. Use this overview when exporting your rolling log for secondary LLM trend audits.</p>
+            <span class="label">Weekly Summary</span>
+            <p style="font-size: 11px; margin-bottom: 0.5rem;">Over your last <strong>${recentEntries.length} entries</strong>, your daily notes average <strong>${avgChars} characters</strong>.</p>
+            <p style="font-size: 11px; margin-bottom: 0;">Your primary focus trend is anchored around <strong>${labelsMap[dominantKey]}</strong>. You can export this log anytime to review patterns with an AI chat assistant.</p>
         `;
     }
 
     function renderHistoryUI() {
         const container = document.getElementById('history-log-container');
         if (localSessionEntries.length === 0) {
-            container.innerHTML = `<p style="color: var(--text-muted);">No entries saved in browser storage yet.</p>`;
+            container.innerHTML = `<p style="color: var(--text-muted);">No entries saved in your browser yet.</p>`;
             return;
         }
         container.innerHTML = "";
@@ -777,9 +778,9 @@
             const item = document.createElement('div');
             item.className = 'history-item';
             item.innerHTML = `
-                <strong>[Log #${localSessionEntries.length - idx}] User: ${itemData.user}</strong> (${itemData.local_date_string})<br>
-                <span style="color: var(--text-muted);">Vent:</span> ${itemData.raw_vent}<br>
-                <span style="color: var(--accent);">Tomorrow's Targets:</span> ${itemData.tomorrow_targets || 'None recorded'}<br>
+                <strong>[Entry #${localSessionEntries.length - idx}] User: ${itemData.user}</strong> (${itemData.local_date_string})<br>
+                <span style="color: var(--text-muted);">Notes:</span> ${itemData.raw_vent}<br>
+                <span style="color: var(--accent);">Tomorrow's Plan:</span> ${itemData.tomorrow_targets || 'None recorded'}<br>
             `;
             container.appendChild(item);
         });
@@ -801,7 +802,7 @@
 
         if (rawVent.length < 40) {
             syncStatusEl.style.color = "var(--error)";
-            syncStatusEl.textContent = "Error: Raw vent is too short (minimum 40 characters required).";
+            syncStatusEl.textContent = "Error: Your main daily note is too short (minimum 40 characters required).";
             return;
         }
 
@@ -838,7 +839,7 @@
         calculateWeeklyTrends();
 
         syncStatusEl.style.color = "var(--success)";
-        syncStatusEl.textContent = "Success: Entry securely saved. Daily lock engaged.";
+        syncStatusEl.textContent = "Success: Entry saved securely. Today's entry is now locked.";
 
         rawVentInput.value = "";
         charCountEl.textContent = "0";
@@ -851,7 +852,7 @@
     // Export as clean, human-readable Text Report (.txt) with Rolling Aggregates
     document.getElementById('btn-export-data').addEventListener('click', () => {
         if (localSessionEntries.length === 0) {
-            alert("No entries to export.");
+            alert("No entries to export yet.");
             return;
         }
 
@@ -860,27 +861,27 @@
         const avgChars = Math.round(totalChars / recentEntries.length);
 
         let reportText = "========================================\n";
-        reportText += "CBSA STUDIO - WEEKLY/ROLLING LOG REPORT\n";
+        reportText += "VALVE // TENSILE - WEEKLY LOG REPORT\n";
         reportText += "========================================\n";
         reportText += `Export Timestamp: ${new Date().toLocaleString()}\n`;
-        reportText += `Total Stored Buffer Entries: ${localSessionEntries.length}\n`;
+        reportText += `Total Stored Entries: ${localSessionEntries.length}\n`;
         reportText += `Active Window Entries: ${recentEntries.length} / 7\n`;
-        reportText += `Average Vent Length: ${avgChars} chars\n`;
+        reportText += `Average Note Length: ${avgChars} chars\n`;
         reportText += "========================================\n\n";
 
         localSessionEntries.forEach((entry, idx) => {
             reportText += `--- ENTRY #${localSessionEntries.length - idx} ---\n`;
             reportText += `User: ${entry.user}\n`;
             reportText += `Timestamp: ${entry.local_date_string}\n\n`;
-            reportText += `[1. Raw Vent]:\n${entry.raw_vent}\n\n`;
+            reportText += `[1. Daily Run-Through]:\n${entry.raw_vent}\n\n`;
             reportText += `[2. Work Check]:\n${entry.work_check || 'N/A'}\n\n`;
-            reportText += `[3. Temporal Position]:\n${entry.temporal_position || 'N/A'}\n`;
-            reportText += `Temporal Distribution: ${JSON.stringify(entry.temporal_distribution)}\n\n`;
-            reportText += `[4. Reactive Log]:\n${entry.reactive_log || 'N/A'}\n\n`;
-            reportText += `[5. Tomorrow's Targets]:\n${entry.tomorrow_targets || 'N/A'}\n\n`;
+            reportText += `[3. Mindset & Focus]:\n${entry.temporal_position || 'N/A'}\n`;
+            reportText += `Focus Distribution: ${JSON.stringify(entry.temporal_distribution)}\n\n`;
+            reportText += `[4. Friction Log]:\n${entry.reactive_log || 'N/A'}\n\n`;
+            reportText += `[5. Tomorrow's Plan]:\n${entry.tomorrow_targets || 'N/A'}\n\n`;
             
             if (entry.loads) {
-                reportText += `[Deep Diagnostic Loads]:\n`;
+                reportText += `[Specific Life Loads]:\n`;
                 for (const [loadType, loadVal] of Object.entries(entry.loads)) {
                     reportText += `  - ${loadType}: ${loadVal || 'N/A'}\n`;
                 }
