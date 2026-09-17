@@ -198,7 +198,7 @@
         }
 
         .metric-value {
-            font-size: 20px;
+            font-size: 14px;
             font-weight: 600;
             margin-top: 0.35rem;
             color: var(--text-main);
@@ -416,7 +416,6 @@
             <ul class="nav-links">
                 <li><a href="#valve-input">Valve Entry Panel</a></li>
                 <li><a href="#status">System Status</a></li>
-                <li><a href="#telemetry">Telemetry Readouts</a></li>
                 <li><a href="#history">Local Buffer Log</a></li>
             </ul>
         </div>
@@ -431,9 +430,8 @@
 
         <div class="sidebar-folksy">
             <h3>What's CBSA, Anyway?</h3>
-            <p>Think of CBSA as a quiet gauge under the hood of your day. You don't have to think about the math — it does that part. What it's built to notice is simpler: how are you actually doing, over time, not just today?</p>
+            <p>Think of CBSA as a quiet gauge under the hood of your day. You don't have to think about complex metrics — it's built to track something simpler: how are you actually doing, over time, not just today?</p>
             <p>Every day, you jot a few honest lines — how the day felt, whether work went the way you planned, where your head's been living. That's it. No forms, no scoring yourself.</p>
-            <p>Behind the scenes, CBSA turns those notes into running numbers — how much you're carrying, how steady you've been, whether you're drifting from your footing. What matters is the pattern over weeks, not a single bad Tuesday.</p>
             <p><strong>A quick, honest note:</strong> CBSA is a personal reflection tool. It's not a doctor, therapist, or crisis service. If you're genuinely struggling, please reach out to a real person.</p>
         </div>
     </aside>
@@ -555,19 +553,13 @@
                 </div>
                 <div class="metric-card">
                     <span class="metric-label">Storage Mode</span>
-                    <div class="metric-value" style="font-size: 14px; color: var(--success);">Local Browser</div>
+                    <div class="metric-value" style="color: var(--success);">Local Browser</div>
                 </div>
                 <div class="metric-card">
                     <span class="metric-label">Daily Lock Status</span>
-                    <div class="metric-value" id="val-daily-lock" style="font-size: 12px; color: var(--success);">Open</div>
+                    <div class="metric-value" id="val-daily-lock" style="color: var(--success);">Open</div>
                 </div>
             </div>
-        </section>
-
-        <!-- TELEMETRY READOUTS -->
-        <section id="telemetry">
-            <h2>Telemetry Input (Live Computed Math Readouts)</h2>
-            <div class="grid" id="telemetry-grid"></div>
         </section>
 
         <!-- LOCAL HISTORY BUFFER -->
@@ -593,7 +585,6 @@
         const len = rawVentInput.value.length;
         charCountEl.textContent = len;
         charCountEl.style.color = len < 40 ? "var(--warning)" : "var(--success)";
-        updateTelemetry();
     });
 
     const toggleBtn = document.getElementById('btn-toggle-deeper');
@@ -610,36 +601,8 @@
             { id: "present", label: "Present", value: 86 },
             { id: "near_future", label: "Near Future", value: 11 },
             { id: "far_future", label: "Far Future", value: 1 }
-        ],
-        telemetry: { drift: 0.2, stability: 0.8, bandwidth: 0.75, containment: 0.85, identity: 0.9, volatility: 0.15 }
+        ]
     };
-
-    // Live Telemetry Calculation Function
-    function updateTelemetry() {
-        const presentVal = (state.temporal.find(s => s.id === 'present')?.value || 86) / 100;
-        const pastFutureVal = ((state.temporal.find(s => s.id === 'way_past')?.value || 1) + (state.temporal.find(s => s.id === 'far_future')?.value || 1)) / 100;
-        const rawLen = rawVentInput.value.length;
-
-        state.telemetry.stability = Number((0.3 + (presentVal * 0.65)).toFixed(2));
-        state.telemetry.drift = Number((0.05 + (pastFutureVal * 0.8)).toFixed(2));
-        state.telemetry.containment = Number((0.4 + (presentVal * 0.55)).toFixed(2));
-        state.telemetry.bandwidth = Number((0.5 + Math.min(rawLen / 500, 0.45)).toFixed(2));
-        state.telemetry.volatility = Number((0.1 + (pastFutureVal * 0.5)).toFixed(2));
-        state.telemetry.identity = Number((0.7 + (presentVal * 0.25)).toFixed(2));
-
-        renderTelemetry();
-    }
-
-    function renderTelemetry() {
-        const telGrid = document.getElementById('telemetry-grid');
-        telGrid.innerHTML = '';
-        for (const [key, val] of Object.entries(state.telemetry)) {
-            const card = document.createElement('div');
-            card.className = 'metric-card';
-            card.innerHTML = `<span class="metric-label">${key}</span><div class="metric-value">${val}</div>`;
-            telGrid.appendChild(card);
-        }
-    }
 
     const temporalContainer = document.getElementById('temporal-sliders-container');
     function updateSum() {
@@ -679,17 +642,14 @@
                 document.getElementById(`val-txt-${s.id}`).textContent = s.value;
                 document.getElementById(`fill-${s.id}`).style.width = s.value + '%';
                 updateSum();
-                updateTelemetry();
             });
         }, 0);
     });
     updateSum();
-    renderTelemetry();
 
     // Persistent Local Storage History Management
     let localSessionEntries = JSON.parse(localStorage.getItem('cbsa_local_logs') || '[]');
 
-    // Helper to check if an entry already exists for today (YYYY-MM-DD format based on local time)
     function getTodayDateString() {
         const d = new Date();
         const year = d.getFullYear();
@@ -704,7 +664,6 @@
         const lockStatusEl = document.getElementById('val-daily-lock');
         const syncStatusEl = document.getElementById('sync-status');
 
-        // Search if any existing entry matches today's date string
         const hasLoggedToday = localSessionEntries.some(entry => {
             const entryDateOnly = new Date(entry.timestamp).toISOString().split('T')[0];
             return entryDateOnly === todayStr;
@@ -783,11 +742,9 @@
             reactive_log: reactiveLog,
             tomorrow_targets: tomorrowTargets,
             loads: loadsData,
-            telemetry: state.telemetry,
             temporal_distribution: state.temporal.reduce((obj, item) => ({ ...obj, [item.id]: item.value }), {})
         };
 
-        // Push to array and save permanently into browser localStorage
         localSessionEntries.unshift(entryPayload);
         localStorage.setItem('cbsa_local_logs', JSON.stringify(localSessionEntries));
 
@@ -797,14 +754,12 @@
         syncStatusEl.style.color = "var(--success)";
         syncStatusEl.textContent = "Success: Entry securely saved. Daily lock engaged.";
 
-        // Clear form fields
         rawVentInput.value = "";
         charCountEl.textContent = "0";
         document.getElementById('input-work-check').value = "";
         document.getElementById('input-temporal-pos').value = "";
         document.getElementById('input-reactive-log').value = "";
         document.getElementById('input-tomorrow-targets').value = "";
-        updateTelemetry();
     });
 
     // Export as clean, human-readable Text Report (.txt)
@@ -837,11 +792,7 @@
                 reportText += `\n`;
             }
 
-            reportText += `[Telemetry Snapshot]:\n`;
-            for (const [telKey, telVal] of Object.entries(entry.telemetry)) {
-                reportText += `  - ${telKey}: ${telVal}\n`;
-            }
-            reportText += `\n----------------------------------------\n\n`;
+            reportText += `----------------------------------------\n\n`;
         });
 
         const blob = new Blob([reportText], { type: "text/plain;charset=utf-8" });
