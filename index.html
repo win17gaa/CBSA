@@ -255,8 +255,14 @@
             transition: opacity 0.2s ease;
         }
 
-        .btn:hover {
+        .btn:hover:not(:disabled) {
             opacity: 0.9;
+        }
+
+        .btn:disabled {
+            background: var(--border);
+            color: var(--text-muted);
+            cursor: not-allowed;
         }
 
         .btn-secondary {
@@ -354,12 +360,6 @@
             text-align: right;
         }
 
-        .sub-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 1rem;
-        }
-
         .content-block {
             background: var(--bg);
             border: 1px solid var(--border);
@@ -409,7 +409,7 @@
 <body>
 
 <div class="studio-layout">
-    <!-- Navigation Sidebar with Folksy Guide & Workflow -->
+    <!-- Navigation Sidebar -->
     <aside>
         <div>
             <h2>Studio Navigation</h2>
@@ -423,9 +423,9 @@
 
         <div class="sidebar-folksy">
             <h3>How to Use & Workflow</h3>
-            <p><strong>1. Log Daily:</strong> Fill out your entry and click save. Your data stays 100% private in your browser's local storage.</p>
-            <p><strong>2. Export Weekly:</strong> At the end of the week, click "Export All JSON History" to download your rolling log.</p>
-            <p><strong>3. The Second Opinion:</strong> Paste your weekly export into an LLM with a prompt like: <em>"Review my past week of logs. Do you see any hidden friction loops or compounding trends I should look out for?"</em></p>
+            <p><strong>1. Log Daily (Once Only):</strong> One entry allowed per calendar day. Keep it honest and lock it in.</p>
+            <p><strong>2. Export Text Report:</strong> At the end of the week, click "Export Text Report" to download your rolling log.</p>
+            <p><strong>3. The Second Opinion:</strong> Paste your exported text file into an LLM for trend analysis and pattern checks.</p>
         </div>
 
         <div class="sidebar-folksy">
@@ -535,8 +535,8 @@
                 <textarea id="load-operational" rows="2" maxlength="200" placeholder="Format: [Level: Low/Med/High] + brief note..."></textarea></div>
             </div>
 
-            <button class="btn" id="btn-save-entry">Save Entry Locally</button>
-            <button class="btn btn-secondary" id="btn-export-data">Export All JSON History</button>
+            <button class="btn" id="btn-save-entry">Save Today's Entry</button>
+            <button class="btn btn-secondary" id="btn-export-data">Export Text Report</button>
             <p id="sync-status" style="margin-top: 0.75rem; font-size: 11px; color: var(--text-muted);"></p>
         </section>
 
@@ -557,8 +557,8 @@
                     <div class="metric-value" style="font-size: 14px; color: var(--success);">Local Browser</div>
                 </div>
                 <div class="metric-card">
-                    <span class="metric-label">Risk Band</span>
-                    <div class="metric-value">Low</div>
+                    <span class="metric-label">Daily Lock Status</span>
+                    <div class="metric-value" id="val-daily-lock" style="font-size: 12px; color: var(--success);">Open</div>
                 </div>
             </div>
         </section>
@@ -688,6 +688,40 @@
     // Persistent Local Storage History Management
     let localSessionEntries = JSON.parse(localStorage.getItem('cbsa_local_logs') || '[]');
 
+    // Helper to check if an entry already exists for today (YYYY-MM-DD format based on local time)
+    function getTodayDateString() {
+        const d = new Date();
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    function checkDailyLock() {
+        const todayStr = getTodayDateString();
+        const saveBtn = document.getElementById('btn-save-entry');
+        const lockStatusEl = document.getElementById('val-daily-lock');
+        const syncStatusEl = document.getElementById('sync-status');
+
+        // Search if any existing entry matches today's date string
+        const hasLoggedToday = localSessionEntries.some(entry => {
+            const entryDateOnly = new Date(entry.timestamp).toISOString().split('T')[0];
+            return entryDateOnly === todayStr;
+        });
+
+        if (hasLoggedToday) {
+            saveBtn.disabled = true;
+            lockStatusEl.textContent = "Locked (Done)";
+            lockStatusEl.style.color = "var(--warning)";
+            syncStatusEl.style.color = "var(--warning)";
+            syncStatusEl.textContent = "Notice: You have already completed your entry for today. Come back tomorrow!";
+        } else {
+            saveBtn.disabled = false;
+            lockStatusEl.textContent = "Open";
+            lockStatusEl.style.color = "var(--success)";
+        }
+    }
+
     function renderHistoryUI() {
         const container = document.getElementById('history-log-container');
         if (localSessionEntries.length === 0) {
@@ -706,7 +740,9 @@
             container.appendChild(item);
         });
     }
+    
     renderHistoryUI();
+    checkDailyLock();
 
     // Save Entry Locally to Persistent Storage
     document.getElementById('btn-save-entry').addEventListener('click', () => {
@@ -755,9 +791,10 @@
         localStorage.setItem('cbsa_local_logs', JSON.stringify(localSessionEntries));
 
         renderHistoryUI();
+        checkDailyLock();
 
         syncStatusEl.style.color = "var(--success)";
-        syncStatusEl.textContent = "Success: Entry securely saved to local browser storage.";
+        syncStatusEl.textContent = "Success: Entry securely saved. Daily lock engaged.";
 
         // Clear form fields
         rawVentInput.value = "";
@@ -769,16 +806,48 @@
         updateTelemetry();
     });
 
+    // Export as clean, human-readable Text Report (.txt)
     document.getElementById('btn-export-data').addEventListener('click', () => {
         if (localSessionEntries.length === 0) {
             alert("No entries to export.");
             return;
         }
-        const blob = new Blob([JSON.stringify(localSessionEntries, null, 2)], { type: "application/json" });
+
+        let reportText = "========================================\n";
+        reportText += "CBSA STUDIO - WEEKLY/ROLLING LOG REPORT\n";
+        reportText += "========================================\n\n";
+
+        localSessionEntries.forEach((entry, idx) => {
+            reportText += `--- ENTRY #${localSessionEntries.length - idx} ---\n`;
+            reportText += `User: ${entry.user}\n`;
+            reportText += `Timestamp: ${entry.local_date_string}\n\n`;
+            reportText += `[1. Raw Vent]:\n${entry.raw_vent}\n\n`;
+            reportText += `[2. Work Check]:\n${entry.work_check || 'N/A'}\n\n`;
+            reportText += `[3. Temporal Position]:\n${entry.temporal_position || 'N/A'}\n`;
+            reportText += `Temporal Distribution: ${JSON.stringify(entry.temporal_distribution)}\n\n`;
+            reportText += `[4. Reactive Log]:\n${entry.reactive_log || 'N/A'}\n\n`;
+            reportText += `[5. Tomorrow's Targets]:\n${entry.tomorrow_targets || 'N/A'}\n\n`;
+            
+            if (entry.loads) {
+                reportText += `[Deep Diagnostic Loads]:\n`;
+                for (const [loadType, loadVal] of Object.entries(entry.loads)) {
+                    reportText += `  - ${loadType}: ${loadVal || 'N/A'}\n`;
+                }
+                reportText += `\n`;
+            }
+
+            reportText += `[Telemetry Snapshot]:\n`;
+            for (const [telKey, telVal] of Object.entries(entry.telemetry)) {
+                reportText += `  - ${telKey}: ${telVal}\n`;
+            }
+            reportText += `\n----------------------------------------\n\n`;
+        });
+
+        const blob = new Blob([reportText], { type: "text/plain;charset=utf-8" });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `cbsa_full_local_export.json`;
+        a.download = `cbsa_weekly_report.txt`;
         a.click();
         URL.revokeObjectURL(url);
     });
