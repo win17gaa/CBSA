@@ -38,7 +38,7 @@
             max-width: 1320px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: 240px 1fr;
+            grid-template-columns: 280px 1fr;
             gap: 1.5rem;
         }
 
@@ -55,6 +55,9 @@
             height: fit-content;
             position: sticky;
             top: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
         }
 
         aside h2 {
@@ -62,7 +65,7 @@
             text-transform: uppercase;
             letter-spacing: 0.05em;
             color: var(--text-muted);
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
             border-bottom: 1px solid var(--border);
             padding-bottom: 0.5rem;
         }
@@ -88,6 +91,30 @@
             color: var(--text-main);
             background: var(--surface-hover);
             border-color: var(--border);
+        }
+
+        .sidebar-folksy {
+            font-size: 11px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            border-top: 1px solid var(--border);
+            padding-top: 1rem;
+        }
+
+        .sidebar-folksy h3 {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-folksy p {
+            margin-bottom: 0.75rem;
+        }
+
+        .sidebar-folksy p:last-child {
+            margin-bottom: 0;
         }
 
         main {
@@ -382,16 +409,27 @@
 <body>
 
 <div class="studio-layout">
-    <!-- Navigation Sidebar -->
+    <!-- Navigation Sidebar with Folksy Guide -->
     <aside>
-        <h2>Studio Navigation</h2>
-        <ul class="nav-links">
-            <li><a href="#valve-input">Valve Entry Panel</a></li>
-            <li><a href="#github-settings">GitHub Sync Settings</a></li>
-            <li><a href="#status">System Status</a></li>
-            <li><a href="#telemetry">Telemetry Readouts</a></li>
-            <li><a href="#history">Local Buffer Log</a></li>
-        </ul>
+        <div>
+            <h2>Studio Navigation</h2>
+            <ul class="nav-links">
+                <li><a href="#valve-input">Valve Entry Panel</a></li>
+                <li><a href="#github-settings">GitHub Sync Settings</a></li>
+                <li><a href="#status">System Status</a></li>
+                <li><a href="#telemetry">Telemetry Readouts</a></li>
+                <li><a href="#history">Local Buffer Log</a></li>
+            </ul>
+        </div>
+
+        <div class="sidebar-folksy">
+            <h3>What's CBSA, Anyway?</h3>
+            <p>Think of CBSA as a quiet gauge under the hood of your day. You don't have to think about the math — it does that part. What it's built to notice is simpler: how are you actually doing, over time, not just today?</p>
+            <p>Every day, you jot a few honest lines — how the day felt, whether work went the way you planned, where your head's been living. That's it. No forms, no scoring yourself.</p>
+            <p>Behind the scenes, CBSA turns those notes into running numbers — how much you're carrying, how steady you've been, whether you're drifting from your footing. What matters is the pattern over weeks, not a single bad Tuesday.</p>
+            <p>Every week, it checks the bigger picture. And quietly, it watches for sustained pressure and real drift. If both line up for days on end, it raises "the Mirror" — a single-fire nudge so you can see what's happening from inside the week.</p>
+            <p><strong>A quick, honest note:</strong> CBSA is a personal reflection tool. It's not a doctor, therapist, or crisis service. If you're genuinely struggling, please reach out to a real person. CBSA helps you see yourself clearer over time; it's not here to catch you if you fall.</p>
+        </div>
     </aside>
 
     <!-- Main Workspace -->
