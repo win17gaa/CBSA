@@ -424,17 +424,16 @@
 
         <div class="sidebar-folksy">
             <h3>How to Use This Tool</h3>
-            <p><strong>1. Log Once a Day:</strong> You can save one entry per calendar day. Just write down how your day actually went.</p>
-            <p><strong>2. Export Your Report:</strong> At the end of the week, hit "Export Text Report" to download your rolling log file.</p>
-            <p><strong>3. Get a Second Opinion:</strong> Drop that text file into any AI chat to check for patterns, habits, or burnout signs over time.</p>
-            <p style="margin-top: 0.75rem; color: var(--warning);"><strong>Where your data lives:</strong> Everything stays securely right inside this browser on your computer. If you clear your browser data without exporting first, your history will vanish.</p>
+            <p><strong>1. Log Once a Day:</strong> Save one entry per calendar day reflecting how your day actually went.</p>
+            <p><strong>2. Export Report:</strong> At week's end, hit "Export Text Report" to download your rolling log file.</p>
+            <p><strong>3. AI Audit:</strong> Drop that text file into any AI chat for a pattern check over time.</p>
+            <p style="margin-top: 0.75rem; color: var(--warning);"><strong>Data Storage:</strong> Everything stays securely right inside your browser.</p>
         </div>
 
         <div class="sidebar-folksy">
-            <h3>What is This For?</h3>
-            <p>Think of this as a straightforward dashboard for your day-to-day life. Instead of guessing how you felt last week, you get a clear record of your energy, habits, and focus over time.</p>
-            <p>No complicated scoring or grading yourself—just plain notes on what happened and how you handled it.</p>
-            <p style="margin-top: 0.5rem; color: var(--text-muted); font-size: 10px;"><em>Note: This is a personal reflection tool, not medical or mental health advice. If you're going through a tough time, talk to someone who can help.</em></p>
+            <h3>Core Practice: Pacing & Latches</h3>
+            <p><strong>Watch Your Pace:</strong> If your physical or internal pace runs faster than normal, briefly slow down on purpose. Feel the drop, then keep going. Repetition retrains your baseline.</p>
+            <p><strong>Log Thought Latches:</strong> Let background thoughts drift by, but notice what you actually latch onto. Don't fight it—just log it as clean data.</p>
         </div>
     </aside>
 
@@ -476,10 +475,10 @@
             </div>
             
             <div class="content-block">
-                <span class="label">3. Mindset & Mental Focus</span>
-                <input type="text" id="input-temporal-pos" maxlength="150" placeholder="Where was your head mostly at today?">
+                <span class="label">3. Mindset & Mental Focus (Notice what you latch onto)</span>
+                <input type="text" id="input-temporal-pos" maxlength="150" placeholder="What thoughts caught your attention today?">
                 <div class="example-hint">
-                    <strong>Real Example:</strong> <code>Mostly stayed locked into the present task list. Didn't catch myself worrying too much about next week's deadlines.</code>
+                    <strong>Real Example:</strong> <code>Noticed I kept latching onto an email from a client. Let the other passing thoughts go, but logged the client worry since it grabbed my focus.</code>
                 </div>
                 
                 <p style="margin-top: 0.75rem; color: var(--text-main); font-size: 11px;">
@@ -513,29 +512,29 @@
             </div>
 
             <!-- GO DEEPER TOGGLE BUTTON & EXTENDED PANEL -->
-            <button class="btn-toggle" id="btn-toggle-deeper">+ Go Deeper: Check 6 Specific Life Loads (Optional)</button>
+            <button class="btn-toggle" id="btn-toggle-deeper">+ Go Deeper: Check Specific Life Loads (Optional)</button>
             
             <div id="go-deeper-panel">
-                <span class="label" style="color: var(--accent); margin-bottom: 0.75rem;">Detailed Load Check</span>
-                <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 1rem;">If you want to track where your energy went across specific areas today, fill these in:</p>
+                <span class="label" style="color: var(--accent); margin-bottom: 0.75rem;">Detailed Load Check (Optional Expansion)</span>
+                <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 1rem;">You don't need to complete every section to catch useful data. Only fill out the specific areas below if a load flared up or felt notable today. Blank fields are ignored.</p>
                 
                 <div class="content-block"><span class="label">1. Physical Load (Sleep, physical fatigue, body tension)</span>
-                <textarea id="load-somatic" rows="2" maxlength="200" placeholder="e.g. [Med] Felt a bit sluggish in the morning after sleeping poorly, but bounced back."></textarea></div>
+                <textarea id="load-somatic" rows="2" maxlength="200" placeholder="e.g. [Med] Felt a bit sluggish in the morning..."></textarea></div>
 
                 <div class="content-block"><span class="label">2. Mental Load (Jumping between tasks, mental clutter)</span>
-                <textarea id="load-cognitive" rows="2" maxlength="200" placeholder="e.g. [Low] Kept a clean focus block today with minimal distractions."></textarea></div>
+                <textarea id="load-cognitive" rows="2" maxlength="200" placeholder="e.g. [Low] Kept a clean focus block today..."></textarea></div>
 
                 <div class="content-block"><span class="label">3. Time Pressure (Rushing, backlog anxiety, running late)</span>
-                <textarea id="load-temporal" rows="2" maxlength="200" placeholder="e.g. [Low] Felt plenty of breathing room in the schedule today."></textarea></div>
+                <textarea id="load-temporal" rows="2" maxlength="200" placeholder="e.g. [Low] Felt plenty of breathing room..."></textarea></div>
 
                 <div class="content-block"><span class="label">4. People & Social Load (Difficult conversations, social drain)</span>
-                <textarea id="load-relational" rows="2" maxlength="200" placeholder="e.g. [Med] Had a long client meeting that required a lot of energy to navigate."></textarea></div>
+                <textarea id="load-relational" rows="2" maxlength="200" placeholder="e.g. [Med] Had a long client meeting..."></textarea></div>
 
                 <div class="content-block"><span class="label">5. Environment Load (Noise, clutter, workspace comfort)</span>
-                <textarea id="load-environmental" rows="2" maxlength="200" placeholder="e.g. [Low] Worked from a quiet room all day; very smooth."></textarea></div>
+                <textarea id="load-environmental" rows="2" maxlength="200" placeholder="e.g. [Low] Worked from a quiet room..."></textarea></div>
 
                 <div class="content-block"><span class="label">6. System & Tools Load (Tech bugs, computer issues, slow processes)</span>
-                <textarea id="load-operational" rows="2" maxlength="200" placeholder="e.g. [High] Spent an hour dealing with broken software dependencies."></textarea></div>
+                <textarea id="load-operational" rows="2" maxlength="200" placeholder="e.g. [High] Spent an hour dealing with broken software..."></textarea></div>
             </div>
 
             <button class="btn" id="btn-save-entry">Save Today's Entry</button>
@@ -622,7 +621,7 @@
     const deeperPanel = document.getElementById('go-deeper-panel');
     toggleBtn.addEventListener('click', () => {
         deeperPanel.classList.toggle('active');
-        toggleBtn.textContent = deeperPanel.classList.contains('active') ? "- Hide Specific Life Loads" : "+ Go Deeper: Check 6 Specific Life Loads (Optional)";
+        toggleBtn.textContent = deeperPanel.classList.contains('active') ? "- Hide Specific Life Loads" : "+ Go Deeper: Check Specific Life Loads (Optional)";
     });
 
     const state = {
@@ -790,7 +789,7 @@
     checkDailyLock();
     calculateWeeklyTrends();
 
-    // Save Entry Locally to Persistent Storage
+    // Save Entry Locally to Persistent Storage (Only saves non-empty optional loads)
     document.getElementById('btn-save-entry').addEventListener('click', () => {
         const syncStatusEl = document.getElementById('sync-status');
         const userId = document.getElementById('input-user-id').value.trim() || "anonymous";
@@ -808,14 +807,23 @@
 
         let loadsData = null;
         if (deeperPanel.classList.contains('active')) {
-            loadsData = {
-                somatic: document.getElementById('load-somatic').value,
-                cognitive: document.getElementById('load-cognitive').value,
-                temporal: document.getElementById('load-temporal').value,
-                relational: document.getElementById('load-relational').value,
-                environmental: document.getElementById('load-environmental').value,
-                operational: document.getElementById('load-operational').value
+            const potentialLoads = {
+                somatic: document.getElementById('load-somatic').value.trim(),
+                cognitive: document.getElementById('load-cognitive').value.trim(),
+                temporal: document.getElementById('load-temporal').value.trim(),
+                relational: document.getElementById('load-relational').value.trim(),
+                environmental: document.getElementById('load-environmental').value.trim(),
+                operational: document.getElementById('load-operational').value.trim()
             };
+            
+            // Filter out empty loads so only filled ones are kept
+            const activeLoads = {};
+            for (const [k, v] of Object.entries(potentialLoads)) {
+                if (v.length > 0) activeLoads[k] = v;
+            }
+            if (Object.keys(activeLoads).length > 0) {
+                loadsData = activeLoads;
+            }
         }
 
         const entryPayload = {
@@ -881,9 +889,9 @@
             reportText += `[5. Tomorrow's Plan]:\n${entry.tomorrow_targets || 'N/A'}\n\n`;
             
             if (entry.loads) {
-                reportText += `[Specific Life Loads]:\n`;
+                reportText += `[Specific Life Loads (Optional Expansion)]:\n`;
                 for (const [loadType, loadVal] of Object.entries(entry.loads)) {
-                    reportText += `  - ${loadType}: ${loadVal || 'N/A'}\n`;
+                    reportText += `  - ${loadType}: ${loadVal}\n`;
                 }
                 reportText += `\n`;
             }
