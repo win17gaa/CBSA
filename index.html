@@ -727,16 +727,13 @@
             return;
         }
 
-        // Take up to last 7 entries
         const recentEntries = localSessionEntries.slice(0, 7);
         entryCountEl.textContent = `${recentEntries.length} / 7`;
 
-        // Calculate average vent length
         const totalChars = recentEntries.reduce((sum, e) => sum + e.raw_vent.length, 0);
         const avgChars = Math.round(totalChars / recentEntries.length);
         avgCharsEl.textContent = `${avgChars} chars`;
 
-        // Calculate average temporal distribution across recent entries
         const temporalTotals = { way_past: 0, near_past: 0, present: 0, near_future: 0, far_future: 0 };
         recentEntries.forEach(e => {
             if (e.temporal_distribution) {
@@ -757,14 +754,12 @@
         }
         dominantDriftEl.textContent = labelsMap[dominantKey];
 
-        // Targets presence check
         const entriesWithTargets = recentEntries.filter(e => e.tomorrow_targets && e.tomorrow_targets.trim().length > 0).length;
         targetsLoggedEl.textContent = `${entriesWithTargets}/${recentEntries.length} logged`;
 
-        // Synthesis narrative generation
         synthesisNotesEl.innerHTML = `
             <span class="label">Synthesis Summary</span>
-            <p style="font-size: 11px; margin-bottom: 0.5ln;">Over your last <strong>${recentEntries.length} logged entries</strong>, your somatic log volume averages <strong>${avgChars} characters</strong> per session.</p>
+            <p style="font-size: 11px; margin-bottom: 0.5rem;">Over your last <strong>${recentEntries.length} logged entries</strong>, your somatic log volume averages <strong>${avgChars} characters</strong> per session.</p>
             <p style="font-size: 11px; margin-bottom: 0;">Your primary temporal orientation is anchored around <strong>${labelsMap[dominantKey]}</strong>. Use this overview when exporting your rolling log for secondary LLM trend audits.</p>
         `;
     }
@@ -772,7 +767,7 @@
     function renderHistoryUI() {
         const container = document.getElementById('history-log-container');
         if (localSessionEntries.length === 0) {
-            container.innerHTML = `<p style="color: var(--text-muted);">No entries saved in browser storage yet.</p>';
+            container.innerHTML = `<p style="color: var(--text-muted);">No entries saved in browser storage yet.</p>`;
             return;
         }
         container.innerHTML = "";
