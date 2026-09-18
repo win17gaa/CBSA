@@ -446,7 +446,7 @@
             <h2>Studio Navigation</h2>
             <ul class="nav-links">
                 <li><a href="#valve-input">Daily Log Form</a></li>
-                <li><a href="#corny-tools">Load Wrangling Tools</a></li>
+                <li><a href="#mitigation-options">Load Reduction Options</a></li>
                 <li><a href="#weekly-trends">Weekly Trends & Summary</a></li>
                 <li><a href="#status">System Status</a></li>
                 <li><a href="#history">Saved History Log</a></li>
@@ -463,7 +463,7 @@
         <div class="sidebar-folksy">
             <h3>Core Practice: Pacing & Latches</h3>
             <p><strong>Watch Your Pace:</strong> If your internal pace runs faster than normal, briefly slow down on purpose. Feel the drop, then keep going.</p>
-            <p><strong>Log Thought Latches:</strong> Notice what background thoughts you actually latch onto, and log them cleanly.</p>
+            <p><strong>Catch the Latch:</strong> Notice what background thoughts you consciously latch onto during the day. If you don't remember them for the night log, they weren't important enough to track.</p>
         </div>
     </aside>
 
@@ -585,16 +585,30 @@
             <p id="sync-status" style="margin-top: 0.75rem; font-size: 11px; color: var(--text-muted);"></p>
         </section>
 
-        <!-- CORNY LOAD WRANGLING TOOLS DROPDOWN -->
-        <section id="corny-tools" style="padding: 1rem 1.5rem;">
-            <button class="btn-toggle" id="btn-toggle-corny" style="margin-bottom: 0;">🤠 Corny Lists to Wrangle Reduced Load // Quick Tactical Hacks</button>
-            <div id="corny-panel" style="display: none; background: var(--bg); border: 1px solid var(--border); padding: 1rem; margin-top: 0.5rem; font-size: 11px; color: var(--text-muted);">
-                <p style="color: var(--text-main); margin-bottom: 0.75rem;"><strong>Because sometimes your brain is just a raccoon in a dumpster fire:</strong></p>
+        <!-- TACTICAL LOAD MITIGATION TOOLS DROPDOWN -->
+        <section id="mitigation-options" style="padding: 1rem 1.5rem;">
+            <button class="btn-toggle" id="btn-toggle-mitigation" style="margin-bottom: 0;">⚙ Tactical Load-Reduction Options // Reference Library</button>
+            <div id="mitigation-panel" style="display: none; background: var(--bg); border: 1px solid var(--border); padding: 1rem; margin-top: 0.5rem; font-size: 11px; color: var(--text-muted);">
+                <p style="color: var(--text-main); margin-bottom: 0.75rem;"><strong>Informational choices reference list for load reduction:</strong></p>
                 <ul style="padding-left: 1.25rem; display: flex; flex-direction: column; gap: 0.5rem;">
-                    <li><strong>The 2-Second Brain Speed Bump:</strong> Feeling rushed? Force yourself to stare at a stationary object for 2 seconds before making a choice. Your inner panic loop hates waiting.</li>
-                    <li><strong>The "One Thing, Dammit" Rule:</strong> If you're multitasking and spinning out, close 4 tabs, drop 2 tasks, and finish just one minor thing so your nervous system stops crying.</li>
-                    <li><strong>Name That Gremlin:</strong> Literally mutter out loud what emotion or annoyance is bugging you ("Ah yes, the classic 3 PM existential dread"). Giving it a dumb name strips its power.</li>
-                    <li><strong>The Environment Reset:</strong> Move 3 things off your immediate desk space. If your room looks like a hurricane hit it, your working memory thinks the world is ending.</li>
+                    <li><strong>Financial // Actionable Step:</strong> Reduce worry loops by shifting from open-ended anxiety to a single concrete action, such as checking due dates or setting a reminder to restore clarity.</li>
+                    <li><strong>Financial // Micro Budgeting:</strong> Break financial tasks into small actions to prevent overload, such as reviewing one specific account balance instead of all accounts at once.</li>
+                    <li><strong>Financial // Decision Pacing:</strong> Pause spending decisions when rushed to slow the cognitive loop, such as waiting two minutes before buying something under pressure.</li>
+                    <li><strong>Relational // Pacing Pauses:</strong> Use a brief pause before responding to prevent drift and misinterpretation, such as waiting two seconds before replying to a confusing statement.</li>
+                    <li><strong>Relational // Clarifying Intent:</strong> Ask direct questions to reduce relational load and avoid unnecessary conflict, such as saying "What did you mean by that?" instead of assuming negative intent.</li>
+                    <li><strong>Relational // Emotional De-escalation:</strong> Focus on one relational issue at a time to reduce emotional multitasking, such as addressing a single topic in a conversation instead of multiple grievances at once.</li>
+                    <li><strong>Environmental // Sensory Reduction:</strong> Lower noise or visual clutter to decrease load and improve clarity, such as turning off background media or moving to a quieter room before deciding.</li>
+                    <li><strong>Environmental // Workspace Simplification:</strong> Remove small sources of clutter to reduce cognitive friction, such as clearing a single small area of a desk instead of an entire room.</li>
+                    <li><strong>Environmental // Predictable Anchors:</strong> Maintain fixed physical placements to stabilize pacing, such as keeping keys, wallet, and phone in the exact same location daily.</li>
+                    <li><strong>Cognitive // Rush Interrupt:</strong> Slow the cognitive loop for two to three seconds when feeling hurried to allow the system to auto-correct, such as pausing briefly before leaving the house to check for essentials.</li>
+                    <li><strong>Cognitive // Multitasking Limitation:</strong> Focus on one action at a time to preserve working memory, such as finishing a text message before initiating another task.</li>
+                    <li><strong>Cognitive // Micro Breaks:</strong> Take short pauses to reduce drift and restore baseline regulation, such as looking away from a screen for ten seconds during high-load periods.</li>
+                    <li><strong>Emotional // Naming the Emotion:</strong> Identify feelings directly to reduce internal friction and prevent drift, such as stating "I feel overwhelmed" out loud.</li>
+                    <li><strong>Emotional // Emotional Stacking Prevention:</strong> Address one feeling at a time rather than compounding them, such as resolving frustration before tackling underlying worry.</li>
+                    <li><strong>Emotional // Grounding Actions:</strong> Use simple physical movements to reset internal pacing, such as standing up, stretching, or taking a slow breath.</li>
+                    <li><strong>Decision // Decision Pacing:</strong> Slow down choice generation because rushing increases load, such as pausing for two seconds before making a selection under time pressure.</li>
+                    <li><strong>Decision // Option Reduction:</strong> Limit available choices to reduce cognitive friction, such as choosing between two alternatives instead of five.</li>
+                    <li><strong>Decision // Relevance Resets:</strong> Restate core priorities to prevent distortion, such as asking "What is the main goal here?" before committing to a path.</li>
                 </ul>
             </div>
         </section>
@@ -697,13 +711,13 @@
         toggleDeeperBtn.textContent = deeperPanel.classList.contains('active') ? "- Hide 6 CBSA Load Types" : "+ Go Deeper: Check 6 CBSA Load Types (Optional)";
     });
 
-    // Corny List Toggle Handler
-    const toggleCornyBtn = document.getElementById('btn-toggle-corny');
-    const cornyPanel = document.getElementById('corny-panel');
-    toggleCornyBtn.addEventListener('click', () => {
-        const isActive = cornyPanel.style.display === 'block';
-        cornyPanel.style.display = isActive ? 'none' : 'block';
-        toggleCornyBtn.textContent = isActive ? "🤠 Corny Lists to Wrangle Reduced Load // Quick Tactical Hacks" : "🤠 Hide Corny Wrangling Hacks";
+    // Mitigation Options Toggle Handler
+    const toggleMitigationBtn = document.getElementById('btn-toggle-mitigation');
+    const mitigationPanel = document.getElementById('mitigation-panel');
+    toggleMitigationBtn.addEventListener('click', () => {
+        const isActive = mitigationPanel.style.display === 'block';
+        mitigationPanel.style.display = isActive ? 'none' : 'block';
+        toggleMitigationBtn.textContent = isActive ? "⚙ Tactical Load-Reduction Options // Reference Library" : "⚙ Hide Reference Library";
     });
 
     const state = {
@@ -844,7 +858,7 @@
         synthesisNotesEl.innerHTML = `
             <span class="label">Weekly Summary</span>
             <p style="font-size: 11px; margin-bottom: 0.5rem;">Over your last <strong>${recentEntries.length} entries</strong>, your daily notes average <strong>${avgChars} characters</strong>.</p>
-            <p style="font-size: 11px; margin-bottom: 0;">Your primary focus trend is anchored around <strong>${labelsMap[dominantKey]}</strong>. You can export this log anytime to review patterns with an AI chat assistant.</p>
+            <p style="font-size: 11px; margin-bottom: 0;">Your primary focus trend is anchored around <strong>${labelsMap[dominantKey]}</strong>. Try one or two hacks from the relevant load type lists for load reduction.</p>
         `;
 
         // --- SILENT ALIGNMENT MATH (A x B x C) ---
