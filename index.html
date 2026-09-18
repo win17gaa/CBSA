@@ -161,6 +161,19 @@
             font-weight: 600;
         }
 
+        .warning-box {
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid var(--error);
+            padding: 1rem 1.25rem;
+            font-size: 11px;
+            color: #fca5a5;
+            line-height: 1.5;
+        }
+
+        .warning-box strong {
+            color: var(--error);
+        }
+
         section {
             background: var(--surface);
             border: 1px solid var(--border);
@@ -433,6 +446,7 @@
             <h2>Studio Navigation</h2>
             <ul class="nav-links">
                 <li><a href="#valve-input">Daily Log Form</a></li>
+                <li><a href="#corny-tools">Load Wrangling Tools</a></li>
                 <li><a href="#weekly-trends">Weekly Trends & Summary</a></li>
                 <li><a href="#status">System Status</a></li>
                 <li><a href="#history">Saved History Log</a></li>
@@ -441,16 +455,15 @@
 
         <div class="sidebar-folksy">
             <h3>How to Use This Tool</h3>
-            <p><strong>1. Log Once a Day:</strong> Save one entry per calendar day reflecting how your day actually went.</p>
-            <p><strong>2. Export Report:</strong> At week's end, hit "Export Text Report" to download your rolling log file.</p>
-            <p><strong>3. AI Audit:</strong> Drop that text file into any AI chat for a pattern check over time.</p>
-            <p style="margin-top: 0.75rem; color: var(--warning);"><strong>Data Storage:</strong> Everything stays securely right inside your browser.</p>
+            <p><strong>1. Log at Your Pace:</strong> Submit records when there is data to capture. 7 logs within a 14-day tracking window keep your metrics active.</p>
+            <p><strong>2. Export Report:</strong> Regularly download your local JSON backups.</p>
+            <p><strong>3. AI Audit:</strong> Drop exported files into an AI chat for deep pattern checks.</p>
         </div>
 
         <div class="sidebar-folksy">
             <h3>Core Practice: Pacing & Latches</h3>
-            <p><strong>Watch Your Pace:</strong> If your physical or internal pace runs faster than normal, briefly slow down on purpose. Feel the drop, then keep going. Repetition retrains your baseline.</p>
-            <p><strong>Log Thought Latches:</strong> Let background thoughts drift by, but notice what you actually latch onto. Don't fight it—just log it as clean data.</p>
+            <p><strong>Watch Your Pace:</strong> If your internal pace runs faster than normal, briefly slow down on purpose. Feel the drop, then keep going.</p>
+            <p><strong>Log Thought Latches:</strong> Notice what background thoughts you actually latch onto, and log them cleanly.</p>
         </div>
     </aside>
 
@@ -465,6 +478,11 @@
                 <div class="status-badge" style="color: var(--success);">Local Storage Active</div>
             </div>
         </header>
+
+        <!-- CRITICAL DATA LOSS WARNING -->
+        <div class="warning-box">
+            <strong>CRITICAL STORAGE NOTICE:</strong> This environment operates entirely via local browser storage. If browser history, cache, profile data, or the local machine changes/wipes, <strong>all logs are lost for good unless exported</strong>. Use the export functions regularly to back up your structures.
+        </div>
 
         <!-- CBSA FRAMEWORK REFERENCE PANEL -->
         <section style="padding: 1rem 1.5rem;">
@@ -513,7 +531,7 @@
 
                 <div class="chart-container">
                     <div class="bar-chart" id="temporal-sliders-container">
-                        <!-- Dynamic sliders will be injected here -->
+                        <!-- Dynamic sliders injected via script -->
                     </div>
                 </div>
             </div>
@@ -567,6 +585,20 @@
             <p id="sync-status" style="margin-top: 0.75rem; font-size: 11px; color: var(--text-muted);"></p>
         </section>
 
+        <!-- CORNY LOAD WRANGLING TOOLS DROPDOWN -->
+        <section id="corny-tools" style="padding: 1rem 1.5rem;">
+            <button class="btn-toggle" id="btn-toggle-corny" style="margin-bottom: 0;">🤠 Corny Lists to Wrangle Reduced Load // Quick Tactical Hacks</button>
+            <div id="corny-panel" style="display: none; background: var(--bg); border: 1px solid var(--border); padding: 1rem; margin-top: 0.5rem; font-size: 11px; color: var(--text-muted);">
+                <p style="color: var(--text-main); margin-bottom: 0.75rem;"><strong>Because sometimes your brain is just a raccoon in a dumpster fire:</strong></p>
+                <ul style="padding-left: 1.25rem; display: flex; flex-direction: column; gap: 0.5rem;">
+                    <li><strong>The 2-Second Brain Speed Bump:</strong> Feeling rushed? Force yourself to stare at a stationary object for 2 seconds before making a choice. Your inner panic loop hates waiting.</li>
+                    <li><strong>The "One Thing, Dammit" Rule:</strong> If you're multitasking and spinning out, close 4 tabs, drop 2 tasks, and finish just one minor thing so your nervous system stops crying.</li>
+                    <li><strong>Name That Gremlin:</strong> Literally mutter out loud what emotion or annoyance is bugging you ("Ah yes, the classic 3 PM existential dread"). Giving it a dumb name strips its power.</li>
+                    <li><strong>The Environment Reset:</strong> Move 3 things off your immediate desk space. If your room looks like a hurricane hit it, your working memory thinks the world is ending.</li>
+                </ul>
+            </div>
+        </section>
+
         <!-- WEEKLY TRENDS & SYNTHESIS -->
         <section id="weekly-trends">
             <h2>Weekly Trends & Summary (Last 7 Days)</h2>
@@ -588,9 +620,19 @@
                     <div class="metric-value" id="trend-targets-logged" style="color: var(--success);">Active</div>
                 </div>
             </div>
+
             <div class="content-block" id="trend-synthesis-notes">
                 <span class="label">Weekly Summary</span>
                 <p style="color: var(--text-muted); font-size: 11px;">Save at least one daily entry to see your rolling weekly summary here.</p>
+            </div>
+
+            <!-- SILENT ALIGNMENT SCORE OUTPUT BLOCK -->
+            <div class="content-block" style="border-color: var(--accent); margin-top: 1rem;">
+                <span class="label" style="color: var(--accent);">System-Level Alignment & Stability Index</span>
+                <div id="alignment-output-panel" style="font-size: 11px; color: var(--text-main); margin-top: 0.5rem;">
+                    <p><strong>Calculated Score:</strong> <span id="alignment-score-val">--</span> (<span id="alignment-category-val">Pending sufficient data</span>)</p>
+                    <p style="color: var(--text-muted); margin-top: 0.25rem;"><em>Silent metric evaluated via rolling window consistency, pacing distribution, and loop closure.</em></p>
+                </div>
             </div>
         </section>
 
@@ -653,6 +695,15 @@
     toggleDeeperBtn.addEventListener('click', () => {
         deeperPanel.classList.toggle('active');
         toggleDeeperBtn.textContent = deeperPanel.classList.contains('active') ? "- Hide 6 CBSA Load Types" : "+ Go Deeper: Check 6 CBSA Load Types (Optional)";
+    });
+
+    // Corny List Toggle Handler
+    const toggleCornyBtn = document.getElementById('btn-toggle-corny');
+    const cornyPanel = document.getElementById('corny-panel');
+    toggleCornyBtn.addEventListener('click', () => {
+        const isActive = cornyPanel.style.display === 'block';
+        cornyPanel.style.display = isActive ? 'none' : 'block';
+        toggleCornyBtn.textContent = isActive ? "🤠 Corny Lists to Wrangle Reduced Load // Quick Tactical Hacks" : "🤠 Hide Corny Wrangling Hacks";
     });
 
     const state = {
@@ -755,6 +806,8 @@
             dominantDriftEl.textContent = "--";
             targetsLoggedEl.textContent = "Active";
             synthesisNotesEl.innerHTML = `<span class="label">Weekly Summary</span><p style="color: var(--text-muted); font-size: 11px;">Save at least one daily entry to see your rolling weekly summary here.</p>`;
+            document.getElementById('alignment-score-val').textContent = "--";
+            document.getElementById('alignment-category-val').textContent = "Pending sufficient data";
             return;
         }
 
@@ -793,6 +846,28 @@
             <p style="font-size: 11px; margin-bottom: 0.5rem;">Over your last <strong>${recentEntries.length} entries</strong>, your daily notes average <strong>${avgChars} characters</strong>.</p>
             <p style="font-size: 11px; margin-bottom: 0;">Your primary focus trend is anchored around <strong>${labelsMap[dominantKey]}</strong>. You can export this log anytime to review patterns with an AI chat assistant.</p>
         `;
+
+        // --- SILENT ALIGNMENT MATH (A x B x C) ---
+        // A: Consistency ratio over window
+        const a = Math.min(1.0, recentEntries.length / 7);
+        
+        // B: Pacing stability from present focus slider averages
+        const totalPresent = recentEntries.reduce((sum, e) => sum + (e.temporal_distribution?.present || 50), 0);
+        const avgPresent = totalPresent / recentEntries.length;
+        const b = Math.min(1.0, Math.max(0.3, avgPresent / 100));
+        
+        // C: Loop closure ratio via target completion
+        const c = entriesWithTargets / recentEntries.length;
+
+        const finalScore = Math.round((a * b * c) * 100);
+        
+        let cat = "Open Gap (Contradictory / High Load)";
+        if (finalScore > 85) cat = "Fully Closed (Clean Architecture)";
+        else if (finalScore > 60) cat = "Mostly Closed (Stable Pacing)";
+        else if (finalScore > 25) cat = "Partially Closed (Bending Under Load)";
+
+        document.getElementById('alignment-score-val').textContent = `${finalScore}%`;
+        document.getElementById('alignment-category-val').textContent = cat;
     }
 
     function renderHistoryUI() {
