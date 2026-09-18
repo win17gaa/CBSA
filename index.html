@@ -282,6 +282,8 @@
             margin-top: 0.5rem;
             margin-bottom: 1rem;
             text-transform: uppercase;
+            width: 100%;
+            text-align: left;
         }
 
         .btn-toggle:hover {
@@ -311,6 +313,21 @@
         }
 
         #go-deeper-panel.active {
+            display: block;
+        }
+
+        #framework-panel {
+            display: none;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            padding: 1rem;
+            margin-top: 0.5rem;
+            font-size: 11px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        #framework-panel.active {
             display: block;
         }
 
@@ -449,6 +466,14 @@
             </div>
         </header>
 
+        <!-- CBSA FRAMEWORK REFERENCE PANEL -->
+        <section style="padding: 1rem 1.5rem;">
+            <button class="btn-toggle" id="btn-toggle-framework" style="margin-bottom: 0;">📖 What is CBSA? // Click to View Framework Summary</button>
+            <div id="framework-panel">
+                <p><strong>CBSA (Cognitive-Behavioral System Architecture)</strong> is a framework designed to measure, monitor, and stabilize mental load, focus distribution, and friction over time. Instead of relying on vague impressions, it turns subjective mental states into structured, trackable data points.</p>
+            </div>
+        </section>
+
         <!-- VALVE ACTIVE INPUT PANEL -->
         <section id="valve-input">
             <h2>Daily Log Entry Form</h2>
@@ -512,29 +537,29 @@
             </div>
 
             <!-- GO DEEPER TOGGLE BUTTON & EXTENDED PANEL -->
-            <button class="btn-toggle" id="btn-toggle-deeper">+ Go Deeper: Check Specific Life Loads (Optional)</button>
+            <button class="btn-toggle" id="btn-toggle-deeper">+ Go Deeper: Check 6 CBSA Load Types (Optional)</button>
             
             <div id="go-deeper-panel">
-                <span class="label" style="color: var(--accent); margin-bottom: 0.75rem;">Detailed Load Check (Optional Expansion)</span>
-                <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 1rem;">You don't need to complete every section to catch useful data. Only fill out the specific areas below if a load flared up or felt notable today. Blank fields are ignored.</p>
+                <span class="label" style="color: var(--accent); margin-bottom: 0.75rem;">CBSA Load Breakdown (Optional Expansion)</span>
+                <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 1rem;">Not all sections need to be completed to catch useful data. Only fill out the specific load types below if they flared up or felt notable today. Blank fields are ignored.</p>
                 
-                <div class="content-block"><span class="label">1. Physical Load (Sleep, physical fatigue, body tension)</span>
-                <textarea id="load-somatic" rows="2" maxlength="200" placeholder="e.g. [Med] Felt a bit sluggish in the morning..."></textarea></div>
+                <div class="content-block"><span class="label">1. Cognitive Load</span>
+                <textarea id="load-cognitive" rows="2" maxlength="200" placeholder="e.g. Heavy problem solving block today..."></textarea></div>
 
-                <div class="content-block"><span class="label">2. Mental Load (Jumping between tasks, mental clutter)</span>
-                <textarea id="load-cognitive" rows="2" maxlength="200" placeholder="e.g. [Low] Kept a clean focus block today..."></textarea></div>
+                <div class="content-block"><span class="label">2. Emotional Load</span>
+                <textarea id="load-emotional" rows="2" maxlength="200" placeholder="e.g. Mild irritation carrying over from a discussion..."></textarea></div>
 
-                <div class="content-block"><span class="label">3. Time Pressure (Rushing, backlog anxiety, running late)</span>
-                <textarea id="load-temporal" rows="2" maxlength="200" placeholder="e.g. [Low] Felt plenty of breathing room..."></textarea></div>
+                <div class="content-block"><span class="label">3. Symbolic Load</span>
+                <textarea id="load-symbolic" rows="2" maxlength="200" placeholder="e.g. Over-analyzed how my feedback was received..."></textarea></div>
 
-                <div class="content-block"><span class="label">4. People & Social Load (Difficult conversations, social drain)</span>
-                <textarea id="load-relational" rows="2" maxlength="200" placeholder="e.g. [Med] Had a long client meeting..."></textarea></div>
+                <div class="content-block"><span class="label">4. Environmental Load</span>
+                <textarea id="load-environmental" rows="2" maxlength="200" placeholder="e.g. Loud construction outside made focus harder..."></textarea></div>
 
-                <div class="content-block"><span class="label">5. Environment Load (Noise, clutter, workspace comfort)</span>
-                <textarea id="load-environmental" rows="2" maxlength="200" placeholder="e.g. [Low] Worked from a quiet room..."></textarea></div>
+                <div class="content-block"><span class="label">5. Transitional Load</span>
+                <textarea id="load-transitional" rows="2" maxlength="200" placeholder="e.g. Constant context switching between support chats and coding..."></textarea></div>
 
-                <div class="content-block"><span class="label">6. System & Tools Load (Tech bugs, computer issues, slow processes)</span>
-                <textarea id="load-operational" rows="2" maxlength="200" placeholder="e.g. [High] Spent an hour dealing with broken software..."></textarea></div>
+                <div class="content-block"><span class="label">6. Residual Load</span>
+                <textarea id="load-residual" rows="2" maxlength="200" placeholder="e.g. Unresolved client bug kept lingering in the back of my mind..."></textarea></div>
             </div>
 
             <button class="btn" id="btn-save-entry">Save Today's Entry</button>
@@ -579,7 +604,7 @@
                 </div>
                 <div class="metric-card">
                     <span class="metric-label">Version</span>
-                    <div class="metric-value">1.1</div>
+                    <div class="metric-value">1.2</div>
                 </div>
                 <div class="metric-card">
                     <span class="metric-label">Storage Mode</span>
@@ -607,7 +632,6 @@
 </div>
 
 <script>
-    // Character Counter & Toggles
     const rawVentInput = document.getElementById('input-raw-vent');
     const charCountEl = document.getElementById('char-count');
     
@@ -617,11 +641,18 @@
         charCountEl.style.color = len < 40 ? "var(--warning)" : "var(--success)";
     });
 
-    const toggleBtn = document.getElementById('btn-toggle-deeper');
+    const toggleFrameworkBtn = document.getElementById('btn-toggle-framework');
+    const frameworkPanel = document.getElementById('framework-panel');
+    toggleFrameworkBtn.addEventListener('click', () => {
+        frameworkPanel.classList.toggle('active');
+        toggleFrameworkBtn.textContent = frameworkPanel.classList.contains('active') ? "📖 What is CBSA? // Click to Hide Framework Summary" : "📖 What is CBSA? // Click to View Framework Summary";
+    });
+
+    const toggleDeeperBtn = document.getElementById('btn-toggle-deeper');
     const deeperPanel = document.getElementById('go-deeper-panel');
-    toggleBtn.addEventListener('click', () => {
+    toggleDeeperBtn.addEventListener('click', () => {
         deeperPanel.classList.toggle('active');
-        toggleBtn.textContent = deeperPanel.classList.contains('active') ? "- Hide Specific Life Loads" : "+ Go Deeper: Check Specific Life Loads (Optional)";
+        toggleDeeperBtn.textContent = deeperPanel.classList.contains('active') ? "- Hide 6 CBSA Load Types" : "+ Go Deeper: Check 6 CBSA Load Types (Optional)";
     });
 
     const state = {
@@ -677,7 +708,6 @@
     });
     updateSum();
 
-    // Persistent Local Storage History Management
     let localSessionEntries = JSON.parse(localStorage.getItem('cbsa_local_logs') || '[]');
 
     function getTodayDateString() {
@@ -712,7 +742,6 @@
         }
     }
 
-    // Weekly Trends & Aggregation Engine
     function calculateWeeklyTrends() {
         const entryCountEl = document.getElementById('trend-entry-count');
         const avgCharsEl = document.getElementById('trend-avg-chars');
@@ -789,7 +818,6 @@
     checkDailyLock();
     calculateWeeklyTrends();
 
-    // Save Entry Locally to Persistent Storage (Only saves non-empty optional loads)
     document.getElementById('btn-save-entry').addEventListener('click', () => {
         const syncStatusEl = document.getElementById('sync-status');
         const userId = document.getElementById('input-user-id').value.trim() || "anonymous";
@@ -808,15 +836,14 @@
         let loadsData = null;
         if (deeperPanel.classList.contains('active')) {
             const potentialLoads = {
-                somatic: document.getElementById('load-somatic').value.trim(),
                 cognitive: document.getElementById('load-cognitive').value.trim(),
-                temporal: document.getElementById('load-temporal').value.trim(),
-                relational: document.getElementById('load-relational').value.trim(),
+                emotional: document.getElementById('load-emotional').value.trim(),
+                symbolic: document.getElementById('load-symbolic').value.trim(),
                 environmental: document.getElementById('load-environmental').value.trim(),
-                operational: document.getElementById('load-operational').value.trim()
+                transitional: document.getElementById('load-transitional').value.trim(),
+                residual: document.getElementById('load-residual').value.trim()
             };
             
-            // Filter out empty loads so only filled ones are kept
             const activeLoads = {};
             for (const [k, v] of Object.entries(potentialLoads)) {
                 if (v.length > 0) activeLoads[k] = v;
@@ -857,7 +884,6 @@
         document.getElementById('input-tomorrow-targets').value = "";
     });
 
-    // Export as clean, human-readable Text Report (.txt) with Rolling Aggregates
     document.getElementById('btn-export-data').addEventListener('click', () => {
         if (localSessionEntries.length === 0) {
             alert("No entries to export yet.");
@@ -889,9 +915,9 @@
             reportText += `[5. Tomorrow's Plan]:\n${entry.tomorrow_targets || 'N/A'}\n\n`;
             
             if (entry.loads) {
-                reportText += `[Specific Life Loads (Optional Expansion)]:\n`;
+                reportText += `[CBSA Load Breakdown (Optional Expansion)]:\n`;
                 for (const [loadType, loadVal] of Object.entries(entry.loads)) {
-                    reportText += `  - ${loadType}: ${loadVal}\n`;
+                    reportText += `  - ${loadType.toUpperCase()}: ${loadVal}\n`;
                 }
                 reportText += `\n`;
             }
