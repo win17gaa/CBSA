@@ -711,7 +711,6 @@
         toggleDeeperBtn.textContent = deeperPanel.classList.contains('active') ? "- Hide 6 CBSA Load Types" : "+ Go Deeper: Check 6 CBSA Load Types (Optional)";
     });
 
-    // Mitigation Options Toggle Handler
     const toggleMitigationBtn = document.getElementById('btn-toggle-mitigation');
     const mitigationPanel = document.getElementById('mitigation-panel');
     toggleMitigationBtn.addEventListener('click', () => {
@@ -861,20 +860,14 @@
             <p style="font-size: 11px; margin-bottom: 0;">Your primary focus trend is anchored around <strong>${labelsMap[dominantKey]}</strong>. Try one or two hacks from the relevant load type lists for load reduction.</p>
         `;
 
-        // --- SILENT ALIGNMENT MATH (A x B x C) ---
-        // A: Consistency ratio over window
+        // --- ALIGNMENT MATH ---
         const a = Math.min(1.0, recentEntries.length / 7);
-        
-        // B: Pacing stability from present focus slider averages
         const totalPresent = recentEntries.reduce((sum, e) => sum + (e.temporal_distribution?.present || 50), 0);
         const avgPresent = totalPresent / recentEntries.length;
         const b = Math.min(1.0, Math.max(0.3, avgPresent / 100));
-        
-        // C: Loop closure ratio via target completion
         const c = entriesWithTargets / recentEntries.length;
 
         const finalScore = Math.round((a * b * c) * 100);
-        
         let cat = "Open Gap (Contradictory / High Load)";
         if (finalScore > 85) cat = "Fully Closed (Clean Architecture)";
         else if (finalScore > 60) cat = "Mostly Closed (Stable Pacing)";
@@ -934,7 +927,7 @@
             };
             
             const activeLoads = {};
-            for (const [k, v] of Object.entries(potentialLoads)) {
+            for (const [k, v] of Object.entries(potentialRails = potentialLoads)) {
                 if (v.length > 0) activeLoads[k] = v;
             }
             if (Object.keys(activeLoads).length > 0) {
@@ -973,52 +966,151 @@
         document.getElementById('input-tomorrow-targets').value = "";
     });
 
+    // --- DYNAMIC PATTERN MATH EXPORT HANDLER ---
     document.getElementById('btn-export-data').addEventListener('click', () => {
         if (localSessionEntries.length === 0) {
             alert("No entries to export yet.");
             return;
         }
 
-        const recentEntries = localSessionEntries.slice(0, 7);
-        const totalChars = recentEntries.reduce((sum, e) => sum + e.raw_vent.length, 0);
-        const avgChars = Math.round(totalChars / recentEntries.length);
+        const recentEntries = localSessionEntries.slice(0, 7).reverse(); // Oldest to newest for slope evaluation
+        const count = recentEntries.length;
 
-        let reportText = "========================================\n";
-        reportText += "VALVE // TENSILE - WEEKLY LOG REPORT\n";
-        reportText += "========================================\n";
-        reportText += `Export Timestamp: ${new Date().toLocaleString()}\n`;
-        reportText += `Total Stored Entries: ${localSessionEntries.length}\n`;
-        reportText += `Active Window Entries: ${recentEntries.length} / 7\n`;
-        reportText += `Average Note Length: ${avgChars} chars\n`;
-        reportText += "========================================\n\n";
+        // 1. DRIFT SLOPE MATH (Evaluating character length velocity across sequence halves)
+        let driftSlope = "flat";
+        if (count >= 4) {
+            const mid = Math.floor(count / 2);
+            const firstHalfLen = recentEntries.slice(0, mid).reduce((sum, e) => sum + e.raw_vent.length, 0) / mid;
+            const secondHalfLen = recentEntries.slice(mid).reduce((sum, e) => sum + e.raw_vent.length, 0) / (count - mid);
+            if (secondHalfLen > firstHalfLen * 1.15) driftSlope = "rising";
+            else if (secondHalfLen < firstHalfLen * 0.85) driftSlope = "falling";
+        }
 
-        localSessionEntries.forEach((entry, idx) => {
-            reportText += `--- ENTRY #${localSessionEntries.length - idx} ---\n`;
+        // 2. VOLATILITY PATTERN MATH (Friction count and cluster timing)
+        const entriesWithFriction = recentEntries.filter(e => e.reactive_log && e.reactive_log.trim().length > 0);
+        const spikeCount = entriesWithFriction.length;
+        let volatilityShape = "negligible";
+        let spikeDist = "none";
+
+        if (spikeCount > 0) {
+            volatilityShape = spikeCount >= 3 ? "sustained" : "episodic";
+            const midPoint = count / 2;
+            const earlySpikes = entriesWithFriction.filter(e => recentEntries.indexOf(e) < midPoint).length;
+            const lateSpikes = spikeCount - earlySpikes;
+            if (earlySpikes > lateSpikes) spikeDist = "early‑week";
+            else if (lateSpikes > earlySpikes) spikeDist = "late‑week";
+            else spikeDist = "mid‑week";
+        }
+
+        // 3. LOAD ACCUMULATION MATH (Based on explicit load text presence or note density)
+        let loadTrend = "oscillating";
+        const loadCounts = recentEntries.map(e => e.loads ? Object.keys(e.loads).length : 0);
+        const firstLoadSum = loadCounts.slice(0, Math.floor(count / 2)).reduce((a, b) => a + b, 0);
+        const secondLoadSum = loadCounts.slice(Math.floor(count / 2)).reduce((a, b) => a + b, 0);
+        if (secondLoadSum > firstLoadSum) loadTrend = "increasing";
+        else if (secondLoadSum < firstLoadSum) loadTrend = "decreasing";
+
+        // 4. TEMPORAL POSITION DRIFT MATH
+        let pastSum = 0, presentSum = 0, futureSum = 0;
+        recentEntries.forEach(e => {
+            const dist = e.temporal_distribution || { way_past: 0, near_past: 0, present: 100, near_future: 0, far_future: 0 };
+            pastSum += (dist.way_past || 0) + (dist.near_past || 0);
+            presentSum += (dist.present || 0);
+            futureSum += (dist.near_future || 0) + (dist.far_future || 0);
+        });
+        const avgPast = Math.round(pastSum / count);
+        const avgPresent = Math.round(presentSum / count);
+        const avgFuture = Math.round(futureSum / count);
+
+        let temporalDriftVal = "toward present";
+        if (avgPast > avgPresent && avgPast > avgFuture) temporalDriftVal = "toward past";
+        else if (avgFuture > avgPresent && avgFuture > avgPast) temporalDriftVal = "toward future";
+
+        // 5. STABILITY ARC MATH (Based on target closure consistency across halves)
+        let stabilityTrend = "oscillating";
+        const closureRates = recentEntries.map(e => (e.tomorrow_targets && e.tomorrow_targets.trim().length > 0) ? 1 : 0);
+        const firstHalfClosure = closureRates.slice(0, Math.floor(count / 2)).reduce((a, b) => a + b, 0);
+        const secondHalfClosure = closureRates.slice(Math.floor(count / 2)).reduce((a, b) => a + b, 0);
+        if (secondHalfClosure >= firstHalfClosure && closureRates[closureRates.length - 1] === 1) stabilityTrend = "improving";
+        else if (secondHalfClosure < firstHalfClosure) stabilityTrend = "degrading";
+
+        // Build Final Report File Structure
+        let reportText = "──────────────────────────────────────────────────────────────────────────────\n";
+        reportText += "CBSA WEEKLY PATTERN REPORT\n";
+        reportText += "──────────────────────────────────────────────────────────────────────────────\n\n";
+        reportText += "SUMMARY WINDOW\n";
+        reportText += `This report covers the last ${recentEntries.length} daily entries logged in CBSA Studio. It reflects\n`;
+        reportText += "pattern shape only. No advice, no interpretation, no wellness framing.\n\n";
+
+        reportText += "──────────────────────────────────────────────────────────────────────────────\n";
+        reportText += "1. DRIFT SLOPE (WEEKLY)\n";
+        reportText += "──────────────────────────────────────────────────────────────────────────────\n";
+        reportText += "Measures directional movement of cognitive drift across the week.\n\n";
+        reportText += `• Drift Slope: ${driftSlope}\n`;
+        reportText += `• Drift Notes: Note volume velocity evaluated across window sequence.\n\n`;
+
+        reportText += "──────────────────────────────────────────────────────────────────────────────\n";
+        reportText += "2. VOLATILITY PATTERN (EPISODIC VS SUSTAINED)\n";
+        reportText += "──────────────────────────────────────────────────────────────────────────────\n";
+        reportText += "Tracks how often volatility spikes occurred and whether they clustered.\n\n";
+        reportText += `• Volatility Shape: ${volatilityShape}\n`;
+        reportText += `• Spike Count: ${spikeCount}\n`;
+        reportText += `• Spike Distribution: ${spikeDist}\n\n`;
+
+        reportText += "──────────────────────────────────────────────────────────────────────────────\n";
+        reportText += "3. LOAD ACCUMULATION (WEEKLY)\n";
+        reportText += "──────────────────────────────────────────────────────────────────────────────\n";
+        reportText += "Shows how operational load built up or discharged across the week.\n\n";
+        reportText += `• Load Trend: ${loadTrend}\n`;
+        reportText += "• Load Notes: Sequence evaluated via active load expansion flags and text length.\n\n";
+
+        reportText += "──────────────────────────────────────────────────────────────────────────────\n";
+        reportText += "4. TEMPORAL POSITION DRIFT\n";
+        reportText += "──────────────────────────────────────────────────────────────────────────────\n";
+        reportText += "Aggregates slider distributions to show where the mind lived this week.\n\n";
+        reportText += `• Past Focus (Way + Near): ${avgPast}%\n`;
+        reportText += `• Present Focus: ${avgPresent}%\n`;
+        reportText += `• Future Focus (Near + Far): ${avgFuture}%\n\n`;
+        reportText += `• Weekly Temporal Drift: ${temporalDriftVal}\n\n`;
+
+        reportText += "──────────────────────────────────────────────────────────────────────────────\n";
+        reportText += "5. STABILITY ARC (WEEKLY)\n";
+        reportText += "──────────────────────────────────────────────────────────────────────────────\n";
+        reportText += "Tracks stability movement across the week.\n\n";
+        reportText += `• Stability Trend: ${stabilityTrend}\n`;
+        reportText += "• Stability Notes: Evaluated via target logging consistency and closure rates.\n\n";
+
+        reportText += "──────────────────────────────────────────────────────────────────────────────\n";
+        reportText += "6. WEEKLY SHAPE SUMMARY (HUMAN‑READABLE)\n";
+        reportText += "──────────────────────────────────────────────────────────────────────────────\n";
+        reportText += "A compact, non‑interpretive description of the week’s pattern.\n\n";
+        reportText += `\"Week showed ${driftSlope} drift, ${volatilityShape} volatility, ${loadTrend} load, and a mostly\n`;
+        reportText += `${avgPresent > 70 ? 'present‑anchored' : 'distributed'} temporal profile. Stability trended ${stabilityTrend}.\"\n\n`;
+
+        reportText += "──────────────────────────────────────────────────────────────────────────────\n";
+        reportText += "7. RAW WEEKLY EXPORT (FULL TEXT)\n";
+        reportText += "──────────────────────────────────────────────────────────────────────────────\n";
+        reportText += "All daily entries for the week are included below exactly as logged.\n\n";
+
+        recentEntries.slice().reverse().forEach((entry, idx) => {
+            reportText += `[Daily Entry #${idx + 1}] (${entry.local_date_string})\n`;
             reportText += `User: ${entry.user}\n`;
-            reportText += `Timestamp: ${entry.local_date_string}\n\n`;
-            reportText += `[1. Daily Run-Through]:\n${entry.raw_vent}\n\n`;
-            reportText += `[2. Work Check]:\n${entry.work_check || 'N/A'}\n\n`;
-            reportText += `[3. Mindset & Focus]:\n${entry.temporal_position || 'N/A'}\n`;
-            reportText += `Focus Distribution: ${JSON.stringify(entry.temporal_distribution)}\n\n`;
-            reportText += `[4. Friction Log]:\n${entry.reactive_log || 'N/A'}\n\n`;
-            reportText += `[5. Tomorrow's Plan]:\n${entry.tomorrow_targets || 'N/A'}\n\n`;
-            
-            if (entry.loads) {
-                reportText += `[CBSA Load Breakdown (Optional Expansion)]:\n`;
-                for (const [loadType, loadVal] of Object.entries(entry.loads)) {
-                    reportText += `  - ${loadType.toUpperCase()}: ${loadVal}\n`;
-                }
-                reportText += `\n`;
-            }
-
-            reportText += `----------------------------------------\n\n`;
+            reportText += `Run-Through: ${entry.raw_vent}\n`;
+            reportText += `Work Check: ${entry.work_check || 'None'}\n`;
+            reportText += `Mindset: ${entry.temporal_position || 'None'}\n`;
+            reportText += `Friction Log: ${entry.reactive_log || 'None'}\n`;
+            reportText += `Tomorrow Plan: ${entry.tomorrow_targets || 'None'}\n\n`;
         });
 
-        const blob = new Blob([reportText], { type: "text/plain;charset=utf-8" });
+        reportText += "──────────────────────────────────────────────────────────────────────────────\n";
+        reportText += "CBSA STUDIO — Local‑First Privacy Architecture Layer\n";
+        reportText += "──────────────────────────────────────────────────────────────────────────────\n";
+
+        const blob = new Blob([reportText], { type: "text/plain;charset=utf-8" >> 0 });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `cbsa_weekly_report.txt`;
+        a.download = `cbsa_weekly_pattern_report.txt`;
         a.click();
         URL.revokeObjectURL(url);
     });
